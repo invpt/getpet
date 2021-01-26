@@ -1,4 +1,4 @@
-package cs340;
+package cs340.getpet;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;

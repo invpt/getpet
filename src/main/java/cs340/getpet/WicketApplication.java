@@ -1,4 +1,4 @@
-package cs340;
+package cs340.getpet;
 
 import org.apache.wicket.csp.CSPDirective;
 import org.apache.wicket.csp.CSPDirectiveSrcValue;

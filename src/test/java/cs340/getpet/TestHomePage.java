@@ -1,4 +1,4 @@
-package cs340;
+package cs340.getpet;
 
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.BeforeEach;

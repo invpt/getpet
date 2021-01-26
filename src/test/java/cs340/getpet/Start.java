@@ -1,4 +1,4 @@
-package cs340;
+package cs340.getpet;
 
 import java.lang.management.ManagementFactory;
 
