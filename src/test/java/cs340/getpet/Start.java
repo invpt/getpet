@@ -53,7 +53,7 @@ public class Start
 			// use this certificate anywhere important as the passwords are
 			// available in the source.
 
-			SslContextFactory sslContextFactory = new SslContextFactory();
+			SslContextFactory sslContextFactory = new SslContextFactory.Server();
 			sslContextFactory.setKeyStoreResource(keystore);
 			sslContextFactory.setKeyStorePassword("wicket");
 			sslContextFactory.setKeyManagerPassword("wicket");
@@ -67,10 +67,6 @@ public class Start
 			https.setIdleTimeout(500000);
 
 			server.addConnector(https);
-			System.out.println("SSL access to the examples has been enabled on port 8443");
-			System.out
-				.println("You can access the application using SSL on https://localhost:8443");
-			System.out.println();
 		}
 
 		WebAppContext bb = new WebAppContext();
