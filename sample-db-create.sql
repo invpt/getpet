@@ -10,181 +10,130 @@ CREATE TABLE Animals (
     species VARCHAR(50) NOT NULL,
     vaccinated BOOLEAN,
     breed VARCHAR(50),
-    sex CHAR(1) NOT NULL,
+    gender CHAR(1) NOT NULL,
     name VARCHAR(50),
     color VARCHAR(50),
     weight DOUBLE NOT NULL, -- Pounds
     cage_number INT NOT NULL,
     owner_customer_id INT,
     missing BOOLEAN,
-    date DATE NOT NULL
+    date DATE NOT NULL,
+    spayneuter BOOLEAN
 );
 
 INSERT INTO Animals SET
     species = 'dog',
     vaccinated = TRUE,
     breed = 'Shiba Inu',
-    sex = 'm',
+    gender = 'm',
     name = 'Doge',
-    color = NULL,
+    color = 'gold',
     weight = 42.0,
     cage_number = 2,
     owner_customer_id = NULL,
     missing = FALSE,
-    date = CURRENT_DATE;
+    date = CURRENT_DATE,spayneuter = true;
 
 INSERT INTO Animals SET
-    species = 'Short hair cat',
+    species = 'cat',
     vaccinated = TRUE,
-    breed = 'm',
-    sex = 'm',
+    breed = 'Short hair',
+    gender = 'm',
     name = 'Tupac',
-    color = 'Orange',
+    color = 'gold',
     weight = 8,
     cage_number = 1,
     owner_customer_id = 1,
     missing = FALSE,
-    date = CURRENT_DATE;
+    date = CURRENT_DATE,spayneuter = true;
 
 INSERT INTO Animals SET
     species = 'dog',
     vaccinated = TRUE,
     breed = 'Goberian',
-    sex = 'm',
+    gender = 'm',
     name = 'Napolean',
-    color = 'Golden',
+    color = 'gold',
     weight = 79,
     cage_number = 2,
     owner_customer_id = 2,
     missing = TRUE,
-    date = CURRENT_DATE;
+    date = CURRENT_DATE,spayneuter = true;
 
 INSERT INTO Animals SET
     species = 'Bird',
     vaccinated = TRUE,
     breed = 'Scarlet Macaw',
-    sex = 'f',
+    gender = 'f',
     name = 'baron',
     color = 'Red',
     weight = 3.2,
     cage_number = 3,
     owner_customer_id = 3,
     missing = FALSE,
-    date = CURRENT_DATE;
+    date = CURRENT_DATE,spayneuter = true;
 
 INSERT INTO Animals SET
     species = 'dog',
     vaccinated = TRUE,
     breed = 'Springer Spaniel',
-    sex = 'm',
+    gender = 'm',
     name = 'Sully',
-    color = 'Brown',
+    color = 'brown',
     weight = 999.0,
     cage_number = 0,
     owner_customer_id = NULL,
     missing = false,
-    date = CURRENT_DATE;
+    date = CURRENT_DATE,spayneuter = true;
 
 INSERT INTO Animals SET
     species = 'cat',
     vaccinated = TRUE,
     breed = 'cat',
-    sex = 'f',
+    gender = 'f',
     name = 'Tammy',
-    color = 'White',
+    color = 'white',
     weight = 10,
     cage_number = 2,
     owner_customer_id = 2,
     missing = FALSE,
-    date = CURRENT_DATE;
+    date = CURRENT_DATE,spayneuter = true;
 
 INSERT INTO Animals SET
-    species = 'Bull',
-    vaccinated = TRUE,
-    breed = 'Cow',
-    sex = 'm',
-    name = 'Cowboy',
-    color = 'Black',
-    weight = 300,
-    cage_number = 5,
-    owner_customer_id = 5,
-    missing = TRUE,
-    date = CURRENT_DATE;
-
-INSERT INTO Animals SET
-    species = 'Dog',
+    species = 'dog',
     vaccinated = true,
     breed = 'Golden Doodle',
-    sex = 'm',
+    gender = 'm',
     name = 'Piper',
-    color = 'Black',
+    color = 'black',
     weight = 46.7,
     cage_number = 8,
     owner_customer_id = 8,
     missing = false,
-    date = CURRENT_DATE;
+    date = CURRENT_DATE,spayneuter = true;
 
 INSERT INTO Animals SET
-    species = 'Dog',
+    species = 'dog',
     vaccinated = TRUE,
     breed = 'German Shepherd',
-    sex = 'm',
+    gender = 'm',
     name = 'Bacon',
-    color = 'Black, Brown',
+    color = 'black brown',
     weight = 15,
     cage_number = 9,
     owner_customer_id = 9,
     missing = FALSE,
-    date = CURRENT_DATE;
-
-INSERT INTO Animals SET
-    species = 'horse',
-    vaccinated = TRUE,
-    breed = 'm',
-    sex = 'm',
-    name = 'Duragno',
-    color = 'White',
-    weight = 300,
-    cage_number = 10,
-    owner_customer_id = 10,
-    missing = FALSE,
-    date = CURRENT_DATE;
-
-INSERT INTO Animals SET
-    species = 'goat',
-    vaccinated = false,
-    breed = 'goat breed?',
-    sex = 'f',
-    name = 'Roger',
-    color = 'Golden',
-    weight = 60.0,
-    cage_number = 11,
-    owner_customer_id = 11,
-    missing = TRUE,
-    date = CURRENT_DATE;
-
-INSERT INTO Animals SET
-    species = 'alligator',
-    vaccinated = TRUE,
-    breed = 'crocodile',
-    sex = 'f',
-    name = 'Crocogator',
-    color = 'Green',
-    weight = 555.555,
-    cage_number = 2,
-    owner_customer_id = 2,
-    missing = FALSE,
-    date = CURRENT_DATE;
+    date = CURRENT_DATE,spayneuter = true;
 
 INSERT INTO Animals SET
     species = 'dog',
     vaccinated = FALSE,
-    breed = 'corgi',
-    sex = 'f',
+    breed = 'Corgi',
+    gender = 'f',
     name = 'Peter Dinklage',
-    color = 'Golden, White',
+    color = 'gold white',
     weight = 5,
     cage_number = 13,
     owner_customer_id = 13,
     missing = FALSE,
-    date = CURRENT_DATE;
+    date = CURRENT_DATE,spayneuter = true;
