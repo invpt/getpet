@@ -16,8 +16,10 @@ import java.sql.*;
  */
 public class GetPetApplication extends WebApplication
 {
+	static final String DATABASE_NAME = "getpet";
+
 	final Logger logger = LoggerFactory.getLogger(GetPetApplication.class);
-	Connection database = null;
+	Persistence persistence;
 
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
@@ -45,15 +47,12 @@ public class GetPetApplication extends WebApplication
 				.add(CSPDirective.FONT_SRC, "https://fonts.gstatic.com");
 
 		// create database connection
-		logger.info("Creating database connection...");
+		logger.info("Setting up persistent storage...");
 		try {
-			if (System.getProperty("wicket.configuration").equals("development"))
-				database = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null);
-			else // TODO: implement deployment DB
-				logger.error("Deployment DB not implemented!");
-			logger.info("Database connection successfully created.");
-		} catch (SQLException e) {
-			logger.error("Failed to create database connection!", e);
+			persistence = new Persistence("localhost", DATABASE_NAME, "root", null);
+			logger.info("Persistent storage setup complete.");
+		} catch (Persistence.PersistenceException e) {
+			logger.error("Failed to initialize persistent storage!", e);
 			// TODO: is there a way to more gracefully exit a WicketApplication?
 			System.exit(1);
 		}

@@ -18,5 +18,37 @@ body {
 }
 
 #content {
-    margin: 5px;
+    margin: 10px;
+}
+
+button {
+    display: inline-block;
+    padding: 1rem 1rem;
+    margin: 0;
+    background: #e4e4e4;
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out,
+                transform 150ms ease;
+
+    /* make sure no default styling is applied */
+    font-size: 1rem;
+    color: black;
+    border: none;
+    text-decoration: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+button:hover,
+button:focus {
+    background: #d4d4d4;
+}
+
+button:focus {
+    outline: 1px solid #aaa;
+}
+
+button:active {
+    transform: scale(0.95);
 }
