@@ -18,7 +18,8 @@ CREATE TABLE Animals (
     owner_customer_id INT,
     missing BOOLEAN,
     date DATE NOT NULL,
-    spayneuter BOOLEAN
+    spayneuter BOOLEAN,
+    size VARCHAR(50)
 );
 
 INSERT INTO Animals SET
@@ -32,7 +33,7 @@ INSERT INTO Animals SET
     cage_number = 2,
     owner_customer_id = NULL,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter = true;
+    date = CURRENT_DATE,spayneuter = true,size = 'medium';
 
 INSERT INTO Animals SET
     species = 'cat',
@@ -45,7 +46,7 @@ INSERT INTO Animals SET
     cage_number = 1,
     owner_customer_id = 1,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter = true;
+    date = CURRENT_DATE,spayneuter = true,size = 'INSERT SIZE HERE';
 
 INSERT INTO Animals SET
     species = 'dog',
@@ -58,7 +59,7 @@ INSERT INTO Animals SET
     cage_number = 2,
     owner_customer_id = 2,
     missing = TRUE,
-    date = CURRENT_DATE,spayneuter = true;
+    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
 
 INSERT INTO Animals SET
     species = 'Bird',
@@ -71,7 +72,7 @@ INSERT INTO Animals SET
     cage_number = 3,
     owner_customer_id = 3,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter = true;
+    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
 
 INSERT INTO Animals SET
     species = 'dog',
@@ -84,7 +85,7 @@ INSERT INTO Animals SET
     cage_number = 0,
     owner_customer_id = NULL,
     missing = false,
-    date = CURRENT_DATE,spayneuter = true;
+    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
 
 INSERT INTO Animals SET
     species = 'cat',
@@ -97,7 +98,7 @@ INSERT INTO Animals SET
     cage_number = 2,
     owner_customer_id = 2,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter = true;
+    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
 
 INSERT INTO Animals SET
     species = 'dog',
@@ -110,7 +111,7 @@ INSERT INTO Animals SET
     cage_number = 8,
     owner_customer_id = 8,
     missing = false,
-    date = CURRENT_DATE,spayneuter = true;
+    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
 
 INSERT INTO Animals SET
     species = 'dog',
@@ -123,7 +124,7 @@ INSERT INTO Animals SET
     cage_number = 9,
     owner_customer_id = 9,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter = true;
+    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
 
 INSERT INTO Animals SET
     species = 'dog',
@@ -136,4 +137,4 @@ INSERT INTO Animals SET
     cage_number = 13,
     owner_customer_id = 13,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter = true;
+    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';

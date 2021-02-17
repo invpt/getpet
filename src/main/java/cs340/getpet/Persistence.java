@@ -1,10 +1,12 @@
 package cs340.getpet;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Persistence {
@@ -14,8 +16,6 @@ public class Persistence {
     Connection conn;
 
     public static class PersistenceException extends Exception {
-        private static final long serialVersionUID = 1062624232678597426L;
-
         PersistenceException(String message) {
             super(message);
         }
@@ -43,14 +43,37 @@ public class Persistence {
     }
 
     /**
+     * Adds an animal to the database.
+     * 
+     * @param animal the animal to add
+     * @throws PersistenceException when the database statement
+     *                              fails to execute
+     */
+    public void addAnimal(Animal animal) throws PersistenceException {
+        // TODO
+    }
+
+    /**
+     * Updates an animal in the database.
+     * 
+     * @param intakeNumber the intake number of the animal to update
+     * @param animal the new information to update the animal with
+     * @throws PersistenceException when the database statement
+     *                              fails to execute
+     */
+    public void updateAnimal(int intakeNumber, Animal animal) throws PersistenceException {
+        // TODO
+    }
+
+    /**
      * Searches for animals in the database.
      * 
      * @param query the search query
      * @return the results of the searc
      * @throws PersistenceException when the database statement
-     *                              failed to execute
+     *                              fails to execute
      */
-    public ResultSet animalSearch(SearchQuery query) throws PersistenceException {
+    public AnimalSearchResult findAnimal(AnimalSearchQuery query) throws PersistenceException {
         // build query string
         String queryString = new StringBuilder("SELECT * FROM Animals WHERE ")
                 .append(String.join(" AND ", query.ands))
@@ -62,16 +85,159 @@ public class Persistence {
             for (DatabaseValue parameter : query.parameters)
                 stmt.setObject(i++, parameter.toDatabaseRepresentation());
             
-            return stmt.executeQuery();
+            return new AnimalSearchResult(stmt.executeQuery());
         } catch (SQLException e) {
             throw new PersistenceException("Failed to create or execute animal search statement", e);
+        }
+    }
+
+    public static class AnimalSearchResult {
+        private final ResultSet resultSet;
+
+        AnimalSearchResult(ResultSet resultSet) {
+            this.resultSet = resultSet;
+        }
+
+		public boolean hasNext() throws PersistenceException {
+            try {
+                return !resultSet.isLast();
+            } catch (SQLException e) {
+                throw new PersistenceException("Error while checking if at end of result set", e);
+            }
+		}
+
+		public Animal next() throws PersistenceException {
+            if (hasNext())
+                try {
+                    resultSet.next();
+
+                    return new Animal.Builder()
+                        .species(Species.fromDatabaseRepresentation(resultSet.getString("species")))
+                        .breed(resultSet.getString("breed"))
+                        .colors((Color[]) Arrays.stream(resultSet.getString("color").split(" ")).map(s -> Color.fromDatabaseRepresentation(s)).toArray())
+                        .weight(resultSet.getDouble("weight"))
+                        .vaccinated(resultSet.getBoolean("vaccinated"))
+                        .spayNeuter(resultSet.getBoolean("spayneuter"))
+                        .name(resultSet.getString("name"))
+                        .date(resultSet.getDate("date"))
+                        .missing(resultSet.getBoolean("missing"))
+                        .build();
+                } catch (SQLException e) {
+                    throw new PersistenceException("Error while getting next search result", e);
+                }
+            else
+                try {
+                    if (!resultSet.isClosed())
+                        resultSet.close();
+                    return null;
+                } catch (SQLException e) {
+                    throw new PersistenceException("Failed to close result set", e);
+                }
+            
+		}
+    }
+
+    /**
+     * An in-memory representation of an entity from the Animals table.
+     */
+    public static class Animal {
+        /**
+         * The species of the animal.
+         */
+        public final Species species;
+        /**
+         * The breed of the animal.
+         */
+        public final String breed;
+        /**
+         * The size of the animal.
+         */
+        public final Size size;
+        /**
+         * The primary colors that the animal's fur has.
+         */
+        public final Color[] colors;
+        /**
+         * The gender of the animal.
+        */
+        public final Gender gender;
+        /**
+         * The weight of the animal.
+         */
+        public final double weight;
+        /**
+         * True if the animal is vaccinated, else false.
+         */
+        public final boolean vaccinated;
+        /**
+         * True if the animal has been spayed or neutered, else false.
+         */
+        public final boolean spayNeuter;
+        /**
+         * The name of the animal.
+         */
+        public final String name;
+        /**
+         * The date the animal was brought into the shelter.
+         */
+        public final Date date;
+        /**
+         * True if the animal is known to be missing, else false.
+         */
+        public boolean missing;
+
+        public static class Builder {
+            Species species;
+            String breed;
+            Size size;
+            Color[] colors;
+            Gender gender;
+            Double weight;
+            Boolean vaccinated;
+            Boolean spayNeuter;
+            String name;
+            Date date;
+            Boolean missing;
+            
+            public Builder() {}
+            public Animal build() {
+                if (species == null || breed == null || size == null || colors == null || gender == null || weight == null || vaccinated == null || spayNeuter == null || name == null || date == null || missing == null)
+                    return null;
+                else
+                    return new Animal(this);
+            }
+            public Builder species(Species species) { this.species = species; return this; }
+            public Builder breed(String breed) { this.breed = breed; return this; }
+            public Builder size(Size size) { this.size = size; return this; }
+            public Builder colors(Color[] colors) { this.colors = colors; return this; }
+            public Builder gender(Gender gender) { this.gender = gender; return this; }
+            public Builder weight(double weight) { this.weight = weight; return this; }
+            public Builder vaccinated(boolean vaccinated) { this.vaccinated = vaccinated; return this; }
+            public Builder spayNeuter(boolean spayNeuter) { this.spayNeuter = spayNeuter; return this; }
+            public Builder name(String name) { this.name = name; return this; }
+            public Builder date(Date date) { this.date = date; return this; }
+            public Builder missing(boolean missing) { this.missing = missing; return this; }
+        }
+
+        Animal(Builder b) {
+            species = b.species;
+            vaccinated = b.vaccinated;
+            breed = b.breed;
+            gender = b.gender;
+            name = b.name;
+            colors = b.colors;
+            weight = b.weight;
+            missing = b.missing;
+            date = b.date;
+            spayNeuter = b.spayNeuter;
+            size = b.size;
         }
     }
 
     /**
      * A search query for animals. Can be built with {@link Builder}. 
      */
-    public static class SearchQuery {
+    public static class AnimalSearchQuery {
         /**
          * The conditions to join with " AND " in the where clause.
          */
@@ -82,13 +248,12 @@ public class Persistence {
         LinkedList<DatabaseValue> parameters = new LinkedList<>();
 
         /**
-         * Builder class for {@link SearchQuery}.
+         * Builder class for {@link AnimalSearchQuery}.
          */
         public static class Builder {
             /**
              * The species of animal to search for. Should not be null.
              */
-            // TODO: enforce nonnull
             private Species species;
             /**
              * The genders of animal to search for. If empty, both are allowed.
@@ -100,15 +265,21 @@ public class Persistence {
              */
             private DatabaseObject<String> breed;
             /**
-             * 
+             * The colors of animal to search for. If empty, all are allowed.
              */
             private LinkedList<Color> colors = new LinkedList<>();
+            /**
+             * The sizes of animal to search for. If empty, all are allowed.
+             */
             private LinkedList<Size> sizes = new LinkedList<>();
 
             public Builder() {}
 
-            public SearchQuery build() {
-                SearchQuery sq = new SearchQuery();
+            public AnimalSearchQuery build() throws PersistenceException {
+                if (species == null)
+                    throw new PersistenceException("Species must not be null in a search query");
+
+                AnimalSearchQuery sq = new AnimalSearchQuery();
 
                 sq.is("species", species);
                 sq.in("gender", genders);
@@ -183,7 +354,7 @@ public class Persistence {
             }
         }
 
-        protected SearchQuery() {}
+        protected AnimalSearchQuery() {}
 
         /**
          * Requires that the given attribute is equal to the given value.
@@ -239,7 +410,7 @@ public class Persistence {
 
                 // add parameters
                 for (DatabaseEnum value : values)
-                    parameters.add(new DatabaseObject<>("%" + value.toDatabaseString() + "%"));
+                    parameters.add(new DatabaseObject<>("%" + value.toDatabaseRepresentation() + "%"));
             }
         }
     }
@@ -256,7 +427,7 @@ public class Persistence {
     }
 
     /**
-     * A generic DatabaseValue that can be directly stored in the database.
+     * A Java value whose type is equal to what should be stored in the database.
      */
     public static class DatabaseObject<T> implements DatabaseValue {
         public final T value;
@@ -274,26 +445,7 @@ public class Persistence {
     /**
      * An enumeration that can be stored and retrieved from the database.
      */
-    public static interface DatabaseEnum extends DatabaseValue {
-        /**
-         * Converts the enum value to the string representation in the database.
-         * 
-         * @return the string representation in the database
-         */
-        public String toDatabaseString();
-        /**
-         * Converts a string representation from the database to an enum value.
-         * 
-         * @param s the string representation
-         * @return the enum value corresponding with the string representation
-         */
-        public static DatabaseEnum fromDatabaseString(String s) { return null; }
-
-        @Override
-        default Object toDatabaseRepresentation() {
-            return toDatabaseString();
-        }
-    }
+    public static interface DatabaseEnum extends DatabaseValue {}
 
     /**
      * Either male or female.
@@ -301,7 +453,8 @@ public class Persistence {
     public static enum Gender implements DatabaseEnum {
         Male, Female;
 
-        public String toDatabaseString() {
+        @Override
+        public Object toDatabaseRepresentation() {
             switch (this) {
                 case Male: return "m";
                 case Female: return "f";
@@ -311,7 +464,7 @@ public class Persistence {
             return null;
         }
 
-        public static Gender fromDatabaseString(String s) {
+        public static Gender fromDatabaseRepresentation(String s) {
             switch (s) {
                 case "m": return Male;
                 case "f": return Female;
@@ -328,7 +481,8 @@ public class Persistence {
     public static enum Species implements DatabaseEnum {
         Dog, Cat;
 
-        public String toDatabaseString() {
+        @Override
+        public Object toDatabaseRepresentation() {
             switch (this) {
                 case Dog: return "dog";
                 case Cat: return "cat";
@@ -338,7 +492,7 @@ public class Persistence {
             return null;
         }
 
-        public static Species fromDatabaseString(String s) {
+        public static Species fromDatabaseRepresentation(String s) {
             switch (s) {
                 case "dog": return Dog;
                 case "cat": return Cat;
@@ -355,7 +509,8 @@ public class Persistence {
     public static enum Color implements DatabaseEnum {
         Black, Gray, White, Brown, Gold;
 
-        public String toDatabaseString() {
+        @Override
+        public Object toDatabaseRepresentation() {
             switch (this) {
                 case Black: return "black";
                 case Gray: return "gray";
@@ -368,7 +523,7 @@ public class Persistence {
             return null;
         }
 
-        public static Color fromDatabaseString(String s) {
+        public static Color fromDatabaseRepresentation(String s) {
             switch (s) {
                 case "black": return Black;
                 case "gray": return Gray;
@@ -388,7 +543,8 @@ public class Persistence {
     public static enum Size implements DatabaseEnum {
         Small, Medium, Large;
 
-        public String toDatabaseString() {
+        @Override
+        public Object toDatabaseRepresentation() {
             switch (this) {
                 case Small: return "small";
                 case Medium: return "medium";
@@ -399,7 +555,7 @@ public class Persistence {
             return null;
         }
 
-        public static Size fromDatabaseString(String s) {
+        public static Size fromDatabaseRepresentation(String s) {
             switch (s) {
                 case "small": return Small;
                 case "medium": return Medium;
