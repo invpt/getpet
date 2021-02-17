@@ -6,60 +6,57 @@
 </head>
 <body>
 <wicket:extend>
-    <div id="parameters">
-        <form>
-            <lable for="species">Species</lable><br>
-            <input type="radio" id="dog" name="animal" value="dog">
-            <lable for="dog">Dog</lable><br>
+    <div id = "flexable">
+        <div id="parameters">
+            <form wicket:id="searchForm" method="get">
+                <div wicket:id="species">
+                    <label>Species</label><br>
+                    <input type="radio" id="dog" name="animal" value="dog">
+                    <label for="dog">Dog</label><br>
 
-            <input type="radio" id="cat" name="animal" value="cat" />
-            <lable for="cat">Cat</lable><br>
+                    <input type="radio" id="cat" name="animal" value="cat" />
+                    <label for="cat">Cat</label><br>
+                </div>
 
-            <lable>Sex</lable><br>
+                <label>Gender</label><br>
+                <input type="checkbox" id ="male" name="gender" value="male" wicket:id="male" />
+                <label for="male">Male</label><br>
+                <input type="checkbox" id ="female" name="gender" value="female" wicket:id="female" />
+                <label for="female">Female</label><br>
 
-            <input type="checkbox" id ="male" name="gender" value="male" />
-            <lable for="male">Male</lable><br>
+                <label for="breed">Breed</label><br>
+                <input type="text" id ="breed" name="breed" wicket:id="breed" ><br>
 
-            <input type="checkbox" id ="female" name="gender" value="female" />
-            <lable for="female">female</lable><br>
+                <label>Color</label><br>
+                <input type="checkbox" id ="gold" name="gold" value="gold" wicket:id="gold" >
+                <label>Gold</label><br>
+                <input type="checkbox" id="brown" name="brown" value="brown" wicket:id="brown" >
+                <label>Brown</label><br>
+                <input type="checkbox" id="black" name="black" value="black" wicket:id="black" >
+                <label>Black</label><br>
+                <input type="checkbox" id="white" name="white" value="white" wicket:id="white" >
+                <label>White</label><br>
+                <input type="checkbox" id="dGray" name="dGray" value="dGray" wicket:id="dGray" >
+                <label>Dark Gray</label><br>
+                <input type="checkbox" id="lGray" name="lGray" value="lGray" wicket:id="lGray" >
+                <label>Light Gray</label><br>
 
-            <lable for="breed">Breed</lable><br>
-            <input type="text" id ="breed" name="breed" ><br>
+                <label>Size</label><br>
+                <input type="checkbox" id ="small" name="small" value="small" wicket:id="small" >
+                <label for="small">Small</label><br>
+                <input type="checkbox" id ="medium" name="medium" value="medium" wicket:id="medium" >
+                <label for="small">Medium</label><br>
+                <input type="checkbox" id ="large" name="large" value="large" wicket:id="large" >
+                <label for="small">Large</label><br />
 
-            <lable for="color">Color</lable><br>
-            <input type="checkbox" id ="gold" name="color" value="gold" >
-            <lable>Gold</lable><br>
+                <input type="submit" value="Search" />
+            </form>
+        </div>
 
-            <input type="checkbox" id="brown" name="color" value="brown" >
-            <lable>Brown</lable><br>
-
-            <input type="checkbox" id="black" name="color" value="black" >
-            <lable>black</lable><br>
-
-            <input type="checkbox" id="white" name="color" value="black" >
-            <lable>White</lable><br>
-
-            <input type="checkbox" id="dGray" name="color" value="dGray" >
-            <lable>Dark Gray</lable><br>
-
-            <input type="checkbox" id="lGray" name="color" value="lGray" >
-            <lable>Light Gray</lable><br>
-
-            <lable>Size</lable><br>
-
-            <input type="checkbox" id ="small" name="size" value="small" >
-            <lable for="small">Small</lable>
-
-            <input type="checkbox" id ="medium" name="size" value="medium" >
-            <lable for="small">Medium</lable>
-
-            <input type="checkbox" id ="large" name="size" value="large" >
-            <lable for="small">Large</lable>
-        </form>
-    </div>
-
-    <div id="results" >
-        <!-- more research required-->
+        <div id="results" >
+            <!-- more research required-->
+            <p>Results</p>
+        </div>
     </div>
 </wicket:extend>
 </body>
