@@ -87,7 +87,7 @@ public class Persistence {
         try (PreparedStatement stmt = conn.prepareStatement(queryString)) {
             // set parameters
             int i = 1;
-            for (DatabaseValue parameter : query.parameters)
+            for (DatabaseValue<?> parameter : query.parameters)
                 stmt.setObject(i++, parameter.toDatabaseRepresentation());
             
             return new AnimalSearchResult(stmt.executeQuery());
@@ -117,12 +117,14 @@ public class Persistence {
                     resultSet.next();
 
                     return new Animal.Builder()
+                        .intakeNumber(new IntakeNumber(resultSet.getInt("intakeNumber")))
                         .species(Species.fromDatabaseRepresentation(resultSet.getString("species")))
                         .breed(resultSet.getString("breed"))
+                        .size(Size.fromDatabaseRepresentation(resultSet.getString("size")))
                         .colors((Color[]) Arrays.stream(resultSet.getString("color").split(" ")).map(s -> Color.fromDatabaseRepresentation(s)).toArray())
                         .weight(resultSet.getDouble("weight"))
                         .vaccinated(resultSet.getBoolean("vaccinated"))
-                        .spayNeuter(resultSet.getBoolean("spayneuter"))
+                        .spayNeuter(resultSet.getBoolean("spayNeuter"))
                         .name(resultSet.getString("name"))
                         .date(resultSet.getDate("date"))
                         .missing(resultSet.getBoolean("missing"))
@@ -146,6 +148,10 @@ public class Persistence {
      * An in-memory representation of an entity from the Animals table.
      */
     public static class Animal {
+        /**
+         * The intake number of the animal. May be null.
+         */
+        public final IntakeNumber intakeNumber;
         /**
          * The species of the animal.
          */
@@ -192,6 +198,7 @@ public class Persistence {
         public boolean missing;
 
         public static class Builder {
+            IntakeNumber intakeNumber;
             Species species;
             String breed;
             Size size;
@@ -211,6 +218,7 @@ public class Persistence {
                 else
                     return new Animal(this);
             }
+            Builder intakeNumber(IntakeNumber intakeNumber) { this.intakeNumber = intakeNumber; return this; }
             public Builder species(Species species) { this.species = species; return this; }
             public Builder breed(String breed) { this.breed = breed; return this; }
             public Builder size(Size size) { this.size = size; return this; }
@@ -225,6 +233,7 @@ public class Persistence {
         }
 
         Animal(Builder b) {
+            intakeNumber = b.intakeNumber;
             species = b.species;
             vaccinated = b.vaccinated;
             breed = b.breed;
@@ -250,7 +259,7 @@ public class Persistence {
         /**
          * The values to use for the parameters of the prepared statement.
          */
-        LinkedList<DatabaseValue> parameters = new LinkedList<>();
+        LinkedList<DatabaseValue<?>> parameters = new LinkedList<>();
 
         /**
          * Builder class for {@link AnimalSearchQuery}.
@@ -367,7 +376,7 @@ public class Persistence {
          * @param attributeName the attribute to check
          * @param value the value to check the attribute against
          */
-        protected void is(String attributeName, DatabaseValue value) {
+        protected void is(String attributeName, DatabaseValue<?> value) {
             if (value != null) {
                 // add query text
                 ands.add(new StringBuilder(attributeName).append(" = ?").toString());
@@ -383,7 +392,7 @@ public class Persistence {
          * @param attributeName the attribute to check
          * @param values the values to check the attribute against
          */
-        protected void in(String attributeName, LinkedList<? extends DatabaseValue> values) {
+        protected void in(String attributeName, LinkedList<? extends DatabaseValue<?>> values) {
             if (!values.isEmpty()) {
                 // add query text
                 StringBuilder sb = new StringBuilder(attributeName).append(" IN (");
@@ -423,18 +432,18 @@ public class Persistence {
     /**
      * A Java value that has a database representation.
      */
-    public static interface DatabaseValue {
+    public static interface DatabaseValue<T> {
         /**
          * @return the representation of the value that
          *         should be given to the JDBC to be stored in the database
          */
-        public Object toDatabaseRepresentation();
+        public T toDatabaseRepresentation();
     }
 
     /**
      * A Java value whose type is equal to what should be stored in the database.
      */
-    public static class DatabaseObject<T> implements DatabaseValue {
+    public static class DatabaseObject<T> implements DatabaseValue<T> {
         public final T value;
 
         public DatabaseObject(T value) {
@@ -442,15 +451,28 @@ public class Persistence {
         }
 
         @Override
-        public Object toDatabaseRepresentation() {
+        public T toDatabaseRepresentation() {
             return value;
+        }
+    }
+
+    public static class IntakeNumber implements DatabaseValue<Integer> {
+        public final int number;
+
+        public IntakeNumber(int number) {
+            this.number = number;
+        }
+
+        @Override
+        public Integer toDatabaseRepresentation() {
+            return number;
         }
     }
 
     /**
      * An enumeration that can be stored and retrieved from the database.
      */
-    public static interface DatabaseEnum extends DatabaseValue {}
+    public static interface DatabaseEnum extends DatabaseValue<String> {}
 
     /**
      * Either male or female.
@@ -459,7 +481,7 @@ public class Persistence {
         Male, Female;
 
         @Override
-        public Object toDatabaseRepresentation() {
+        public String toDatabaseRepresentation() {
             switch (this) {
                 case Male: return "m";
                 case Female: return "f";
@@ -487,7 +509,7 @@ public class Persistence {
         Dog, Cat;
 
         @Override
-        public Object toDatabaseRepresentation() {
+        public String toDatabaseRepresentation() {
             switch (this) {
                 case Dog: return "dog";
                 case Cat: return "cat";
@@ -515,7 +537,7 @@ public class Persistence {
         Black, Gray, White, Brown, Gold;
 
         @Override
-        public Object toDatabaseRepresentation() {
+        public String toDatabaseRepresentation() {
             switch (this) {
                 case Black: return "black";
                 case Gray: return "gray";
@@ -549,7 +571,7 @@ public class Persistence {
         Small, Medium, Large;
 
         @Override
-        public Object toDatabaseRepresentation() {
+        public String toDatabaseRepresentation() {
             switch (this) {
                 case Small: return "small";
                 case Medium: return "medium";

@@ -7,6 +7,7 @@ CREATE DATABASE getpet;
 USE getpet;
 
 CREATE TABLE Animals (
+    intake_number INT,
     species VARCHAR(50) NOT NULL,
     vaccinated BOOLEAN,
     breed VARCHAR(50),
@@ -14,15 +15,16 @@ CREATE TABLE Animals (
     name VARCHAR(50),
     color VARCHAR(50),
     weight DOUBLE NOT NULL, -- Pounds
-    cage_number INT NOT NULL,
-    owner_customer_id INT,
+    cageNumber INT NOT NULL,
+    ownerCustomerId INT,
     missing BOOLEAN,
     date DATE NOT NULL,
-    spayneuter BOOLEAN,
+    spayNeuter BOOLEAN,
     size VARCHAR(50)
 );
 
-INSERT INTO Animals SET
+INSERT INTO Animals
+    intakeNumber = 69,
     species = 'dog',
     vaccinated = TRUE,
     breed = 'Shiba Inu',
@@ -30,12 +32,13 @@ INSERT INTO Animals SET
     name = 'Doge',
     color = 'gold',
     weight = 42.0,
-    cage_number = 2,
-    owner_customer_id = NULL,
+    cageNumber = 2,
+    ownerCustomerId = NULL,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter = true,size = 'medium';
+    date = CURRENT_DATE,spayNeuter = true,size = 'medium';
 
-INSERT INTO Animals SET
+INSERT INTO Animals
+    intakeNumber = 69,
     species = 'cat',
     vaccinated = TRUE,
     breed = 'Short hair',
@@ -43,12 +46,13 @@ INSERT INTO Animals SET
     name = 'Tupac',
     color = 'gold',
     weight = 8,
-    cage_number = 1,
-    owner_customer_id = 1,
+    cageNumber = 1,
+    ownerCustomerId = 1,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter = true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter = true,size = 'INSERT SIZE HERE';
 
-INSERT INTO Animals SET
+INSERT INTO Animals
+    intakeNumber = 69,
     species = 'dog',
     vaccinated = TRUE,
     breed = 'Goberian',
@@ -56,12 +60,13 @@ INSERT INTO Animals SET
     name = 'Napolean',
     color = 'gold',
     weight = 79,
-    cage_number = 2,
-    owner_customer_id = 2,
+    cageNumber = 2,
+    ownerCustomerId = 2,
     missing = TRUE,
-    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
 
-INSERT INTO Animals SET
+INSERT INTO Animals
+    intakeNumber = 69,
     species = 'Bird',
     vaccinated = TRUE,
     breed = 'Scarlet Macaw',
@@ -69,12 +74,13 @@ INSERT INTO Animals SET
     name = 'baron',
     color = 'Red',
     weight = 3.2,
-    cage_number = 3,
-    owner_customer_id = 3,
+    cageNumber = 3,
+    ownerCustomerId = 3,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
 
-INSERT INTO Animals SET
+INSERT INTO Animals
+    intakeNumber = 69,
     species = 'dog',
     vaccinated = TRUE,
     breed = 'Springer Spaniel',
@@ -82,12 +88,13 @@ INSERT INTO Animals SET
     name = 'Sully',
     color = 'brown',
     weight = 999.0,
-    cage_number = 0,
-    owner_customer_id = NULL,
+    cageNumber = 0,
+    ownerCustomerId = NULL,
     missing = false,
-    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
 
-INSERT INTO Animals SET
+INSERT INTO Animals
+    intakeNumber = 69,
     species = 'cat',
     vaccinated = TRUE,
     breed = 'cat',
@@ -95,12 +102,13 @@ INSERT INTO Animals SET
     name = 'Tammy',
     color = 'white',
     weight = 10,
-    cage_number = 2,
-    owner_customer_id = 2,
+    cageNumber = 2,
+    ownerCustomerId = 2,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
 
-INSERT INTO Animals SET
+INSERT INTO Animals
+    intakeNumber = 69,
     species = 'dog',
     vaccinated = true,
     breed = 'Golden Doodle',
@@ -108,12 +116,13 @@ INSERT INTO Animals SET
     name = 'Piper',
     color = 'black',
     weight = 46.7,
-    cage_number = 8,
-    owner_customer_id = 8,
+    cageNumber = 8,
+    ownerCustomerId = 8,
     missing = false,
-    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
 
-INSERT INTO Animals SET
+INSERT INTO Animals
+    intakeNumber = 69,
     species = 'dog',
     vaccinated = TRUE,
     breed = 'German Shepherd',
@@ -121,12 +130,13 @@ INSERT INTO Animals SET
     name = 'Bacon',
     color = 'black brown',
     weight = 15,
-    cage_number = 9,
-    owner_customer_id = 9,
+    cageNumber = 9,
+    ownerCustomerId = 9,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
 
-INSERT INTO Animals SET
+INSERT INTO Animals
+    intakeNumber = 69,
     species = 'dog',
     vaccinated = FALSE,
     breed = 'Corgi',
@@ -134,7 +144,7 @@ INSERT INTO Animals SET
     name = 'Peter Dinklage',
     color = 'gold white',
     weight = 5,
-    cage_number = 13,
-    owner_customer_id = 13,
+    cageNumber = 13,
+    ownerCustomerId = 13,
     missing = FALSE,
-    date = CURRENT_DATE,spayneuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
