@@ -1,15 +1,66 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org" lang="en">
-    <head>
-    </head>
-    <body>
-        <wicket:extend>
-            So now all that's left is to actually make the search page...
-            <label for="species">Species</label>
-            <input type="text" id="species" />
-            <label for="spayneuter">Spayed/Neutered</label>
-            <input type="checkbox" id="spayneuter" />
-            <button>Submit</button>
-        </wicket:extend>
-    </body>
+<head>
+    <link rel="stylesheet" href="index.css">
+    <meta charset="UTF-8">
+</head>
+<body>
+<wicket:extend>
+    <div id="parameters">
+        <form>
+            <lable for="species">Species</lable><br>
+            <input type="radio" id="dog" name="animal" value="dog">
+            <lable for="dog">Dog</lable><br>
+
+            <input type="radio" id="cat" name="animal" value="cat" />
+            <lable for="cat">Cat</lable><br>
+
+            <lable>Sex</lable><br>
+
+            <input type="checkbox" id ="male" name="gender" value="male" />
+            <lable for="male">Male</lable><br>
+
+            <input type="checkbox" id ="female" name="gender" value="female" />
+            <lable for="female">female</lable><br>
+
+            <lable for="breed">Breed</lable><br>
+            <input type="text" id ="breed" name="breed" ><br>
+
+            <lable for="color">Color</lable><br>
+            <input type="checkbox" id ="gold" name="color" value="gold" >
+            <lable>Gold</lable><br>
+
+            <input type="checkbox" id="brown" name="color" value="brown" >
+            <lable>Brown</lable><br>
+
+            <input type="checkbox" id="black" name="color" value="black" >
+            <lable>black</lable><br>
+
+            <input type="checkbox" id="white" name="color" value="black" >
+            <lable>White</lable><br>
+
+            <input type="checkbox" id="dGray" name="color" value="dGray" >
+            <lable>Dark Gray</lable><br>
+
+            <input type="checkbox" id="lGray" name="color" value="lGray" >
+            <lable>Light Gray</lable><br>
+
+            <lable>Size</lable><br>
+
+            <input type="checkbox" id ="small" name="size" value="small" >
+            <lable for="small">Small</lable>
+
+            <input type="checkbox" id ="medium" name="size" value="medium" >
+            <lable for="small">Medium</lable>
+
+            <input type="checkbox" id ="large" name="size" value="large" >
+            <lable for="small">Large</lable>
+        </form>
+    </div>
+
+    <div id="results" >
+        <!-- more research required-->
+    </div>
+</wicket:extend>
+</body>
 </html>
