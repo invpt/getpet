@@ -1,90 +1,137 @@
 html {
-    font-family: 'Roboto', sans-serif;
-}
+    		font-family: 'Roboto', sans-serif;
+      }
 
-body {
-padding: 0;
-margin: 0;
-}
+      body {
+        padding: 0;
+        margin: 0;
+      }
 
-#header {
-height: 50px;
-width: 100%;
-background: #f1f1f1;
-display: flex;
-flex-direction: row;
-justify-content: center;
-align-items: center;
-}
+      #header {
+        height: 50px;
+        width: 100%;
+        background: #f1f1f1;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
 
-#content {
-margin: 10px;
-}
+      #content {
+        margin: 10px;
+      }
 
+      button,
+      input[type="submit"],
+      input[type="button"] {
+        display: inline-block;
+        border-radius: 2px;
+        padding: 8px;
+        width: 70px;
+        margin: 0;
+        background: #0060df;
+        cursor: pointer;
+        text-align: center;
+        transition: background 250ms ease-in-out,
+          transform 150ms ease;
 
+        /* make sure no default styling is applied */
+        font-size: 13px, regular 400;
 
-button,
-input[type="submit"],
-input[type="button"] {
-display: inline-block;
-border-radius: 2px;
-padding: 8px;
-width: 70px;
-margin: 0;
-background: #0060df;
-cursor: pointer;
-text-align: center;
-transition: background 250ms ease-in-out,
-  transform 150ms ease;
+        height: 36px;
+        color: white;
+        border: none;
+        text-decoration: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+      }
 
-/* make sure no default styling is applied */
-font-size: 13px, regular 400;
+      button:hover,
+      button:focus,
+      input[type="submit"]:hover,
+      input[type="submit"]:focus,
+      input[type="button"]:hover,
+      input[type="button"]:focus {
+        background: #003eaa;
+      }
 
-height: 36px;
-color: white;
-border: none;
-text-decoration: none;
--webkit-appearance: none;
--moz-appearance: none;
-}
+      button:focus,
+      input[type="submit"]:focus,
+      input[type="button"]:focus {
+        outline: 1px solid #aaa;
+      }
 
-button:hover,
-button:focus,
-input[type="submit"]:hover,
-input[type="submit"]:focus,
-input[type="button"]:hover,
-input[type="button"]:focus {
-background: #003eaa;
-}
+      button:active,
+      input[type="submit"]:active,
+      input[type="button"]:active {
+        transform: scale(0.95);
+      }
 
-button:focus,
-input[type="submit"]:focus,
-input[type="button"]:focus {
-outline: 1px solid #aaa;
-}
+      #flexable{
+      	display: flex;
+      	flex-wrap:nowrap;
+      	flex-direction:row;
+        justify-content:flex-start;
+        align-content:flex-start;
+      }
 
-button:active,
-input[type="submit"]:active,
-input[type="button"]:active {
-transform: scale(0.95);
-}
+      #parameters{
+      	background-color:#dadada;
+        width:20%;
+        padding-left:15px;
+        padding-bottom:15px;
+        padding-top:10px;
+        margin-top:20px;
+        margin-left:20px;
+        margin-bottom:20px;
+        border-style:solid;
+        border-width:2px;
+        border-color:#acacac;
+        border-radius: 10px;
+      }
 
-#flexable{
-display: flex;
-flex-wrap:nowrap;
-flex-direction:row;
-justify-content:flex-start;
-align-content:flex-start;
-background-color:red;
-}
+      #resultsBox{
+      	margin: 20px;
+        padding-left:15px;
+      	background-color:#eeeded;
+        width:80%;
+        border-style:solid;
+        border-radius:10px;
+        border-color:#acacac;
+        border-width:2px;
+      }
 
-#parameters{
-background-color:#999999;
-width:20%;
-}
+      .option{
+      	margin-bottom:10px;
+      }
 
-#results{
-margin: 20px;
-background-color:#bbbbbb;
-width:70%;
-}
+      .catagory{
+        font-weight:bold;
+      }
+
+      #result{
+      	display: flex;
+      	flex-wrap:nowrap;
+      	flex-direction:row;
+        justify-content:flex-start;
+        align-content:flex-start;
+        background-color:#cfcfcf;
+        border-style:solid;
+        border-color:#acacac;
+        border-width:2px;
+      }
+
+      input[type = "text"]{
+      	width:90%;
+        margin-right:20px;
+        min-width: 20px;
+        max-width: 500px;
+      }
+
+      #result{
+        margin: 15px 10px 15px 10px;
+      }
+
+      .resultAttribute{
+        margin: 15px;
+      }
