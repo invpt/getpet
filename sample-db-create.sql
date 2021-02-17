@@ -7,7 +7,7 @@ CREATE DATABASE getpet;
 USE getpet;
 
 CREATE TABLE Animals (
-    intake_number INT,
+    intakeNumber INT,
     species VARCHAR(50) NOT NULL,
     vaccinated BOOLEAN,
     breed VARCHAR(50),
@@ -23,7 +23,7 @@ CREATE TABLE Animals (
     size VARCHAR(50)
 );
 
-INSERT INTO Animals
+INSERT INTO Animals SET
     intakeNumber = 69,
     species = 'dog',
     vaccinated = TRUE,
@@ -37,7 +37,7 @@ INSERT INTO Animals
     missing = FALSE,
     date = CURRENT_DATE,spayNeuter = true,size = 'medium';
 
-INSERT INTO Animals
+INSERT INTO Animals SET
     intakeNumber = 69,
     species = 'cat',
     vaccinated = TRUE,
@@ -49,9 +49,9 @@ INSERT INTO Animals
     cageNumber = 1,
     ownerCustomerId = 1,
     missing = FALSE,
-    date = CURRENT_DATE,spayNeuter = true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter = true,size = 'medium';
 
-INSERT INTO Animals
+INSERT INTO Animals SET
     intakeNumber = 69,
     species = 'dog',
     vaccinated = TRUE,
@@ -63,9 +63,9 @@ INSERT INTO Animals
     cageNumber = 2,
     ownerCustomerId = 2,
     missing = TRUE,
-    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'medium';
 
-INSERT INTO Animals
+INSERT INTO Animals SET
     intakeNumber = 69,
     species = 'Bird',
     vaccinated = TRUE,
@@ -77,9 +77,9 @@ INSERT INTO Animals
     cageNumber = 3,
     ownerCustomerId = 3,
     missing = FALSE,
-    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'medium';
 
-INSERT INTO Animals
+INSERT INTO Animals SET
     intakeNumber = 69,
     species = 'dog',
     vaccinated = TRUE,
@@ -91,9 +91,9 @@ INSERT INTO Animals
     cageNumber = 0,
     ownerCustomerId = NULL,
     missing = false,
-    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'medium';
 
-INSERT INTO Animals
+INSERT INTO Animals SET
     intakeNumber = 69,
     species = 'cat',
     vaccinated = TRUE,
@@ -105,9 +105,9 @@ INSERT INTO Animals
     cageNumber = 2,
     ownerCustomerId = 2,
     missing = FALSE,
-    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'medium';
 
-INSERT INTO Animals
+INSERT INTO Animals SET
     intakeNumber = 69,
     species = 'dog',
     vaccinated = true,
@@ -119,9 +119,9 @@ INSERT INTO Animals
     cageNumber = 8,
     ownerCustomerId = 8,
     missing = false,
-    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'medium';
 
-INSERT INTO Animals
+INSERT INTO Animals SET
     intakeNumber = 69,
     species = 'dog',
     vaccinated = TRUE,
@@ -133,9 +133,9 @@ INSERT INTO Animals
     cageNumber = 9,
     ownerCustomerId = 9,
     missing = FALSE,
-    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'medium';
 
-INSERT INTO Animals
+INSERT INTO Animals SET
     intakeNumber = 69,
     species = 'dog',
     vaccinated = FALSE,
@@ -147,4 +147,4 @@ INSERT INTO Animals
     cageNumber = 13,
     ownerCustomerId = 13,
     missing = FALSE,
-    date = CURRENT_DATE,spayNeuter=true,size = 'INSERT SIZE HERE';
+    date = CURRENT_DATE,spayNeuter=true,size = 'medium';

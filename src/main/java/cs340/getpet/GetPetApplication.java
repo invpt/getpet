@@ -1,5 +1,10 @@
 package cs340.getpet;
 
+import cs340.getpet.Persistence.Animal;
+import cs340.getpet.Persistence.AnimalSearchResult;
+import cs340.getpet.Persistence.Color;
+import cs340.getpet.Persistence.PersistenceException;
+import cs340.getpet.Persistence.Species;
 import cs340.getpet.pages.AnimalSearch;
 import cs340.getpet.pages.Login;
 import org.apache.wicket.csp.CSPDirective;
@@ -55,6 +60,21 @@ public class GetPetApplication extends WebApplication
 			logger.error("Failed to initialize persistent storage!", e);
 			// TODO: is there a way to more gracefully exit a WicketApplication?
 			System.exit(1);
+		}
+
+		try {
+			AnimalSearchResult result = persistence.findAnimal(new Persistence.AnimalSearchQuery.Builder()
+				.species(Species.Dog)
+				.color(Color.Brown)
+				.build());
+			
+			while (result.hasNext()) {
+				Animal animal = result.next();
+				if (animal != null)
+					System.out.println(animal.name);
+			}
+		} catch (PersistenceException e) {
+			logger.error("Failed to test search", e);
 		}
 
 		// mount each page to its respective URL; this is where we define

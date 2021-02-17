@@ -116,12 +116,19 @@ public class Persistence {
                 try {
                     resultSet.next();
 
+                    String[] colorStrings = resultSet.getString("color").split(" ");
+                    Color[] colors = new Color[colorStrings.length];
+                    for (int i = 0; i < colorStrings.length; ++i) {
+                        colors[i] = Color.fromDatabaseRepresentation(colorStrings[i]);
+                    }
+
                     return new Animal.Builder()
                         .intakeNumber(new IntakeNumber(resultSet.getInt("intakeNumber")))
                         .species(Species.fromDatabaseRepresentation(resultSet.getString("species")))
                         .breed(resultSet.getString("breed"))
                         .size(Size.fromDatabaseRepresentation(resultSet.getString("size")))
-                        .colors((Color[]) Arrays.stream(resultSet.getString("color").split(" ")).map(s -> Color.fromDatabaseRepresentation(s)).toArray())
+                        .colors(colors)
+                        .gender(Gender.fromDatabaseRepresentation(resultSet.getString("gender")))
                         .weight(resultSet.getDouble("weight"))
                         .vaccinated(resultSet.getBoolean("vaccinated"))
                         .spayNeuter(resultSet.getBoolean("spayNeuter"))
@@ -214,7 +221,7 @@ public class Persistence {
             public Builder() {}
             public Animal build() {
                 if (species == null || breed == null || size == null || colors == null || gender == null || weight == null || vaccinated == null || spayNeuter == null || name == null || date == null || missing == null)
-                    return null;
+                    throw new RuntimeException();
                 else
                     return new Animal(this);
             }
