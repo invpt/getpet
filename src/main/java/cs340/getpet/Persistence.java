@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.stream.Stream;
 
 public class Persistence {
     /**
@@ -79,7 +78,7 @@ public class Persistence {
      * @throws PersistenceException when the database statement
      *                              fails to execute
      */
-    public Stream<Animal> findAnimal(AnimalSearchQuery query) throws PersistenceException {
+    public AnimalSearchResult findAnimal(AnimalSearchQuery query) throws PersistenceException {
         // build query string
         String queryString = new StringBuilder("SELECT * FROM Animals WHERE ")
                 .append(String.join(" AND ", query.ands))
@@ -91,27 +90,56 @@ public class Persistence {
             for (DatabaseValue parameter : query.parameters)
                 stmt.setObject(i++, parameter.toDatabaseRepresentation());
             
-            ResultSet queryResult = stmt.executeQuery();
-            return Stream.generate(() -> {
-                try {
-                    return new Animal.Builder()
-                            .species(Species.fromDatabaseRepresentation(queryResult.getString("species")))
-                            .breed(queryResult.getString("breed"))
-                            .colors((Color[]) Arrays.stream(queryResult.getString("color").split(" ")).map(s -> Color.fromDatabaseRepresentation(s)).toArray())
-                            .weight(queryResult.getDouble("weight"))
-                            .vaccinated(queryResult.getBoolean("vaccinated"))
-                            .spayNeuter(queryResult.getBoolean("spayneuter"))
-                            .name(queryResult.getString("name"))
-                            .date(queryResult.getDate("date"))
-                            .missing(queryResult.getBoolean("missing"))
-                            .build();
-                } catch (SQLException e) {
-                    throw new RuntimeException(new PersistenceException("Failed to get next search result"));
-                }
-            });
+            return new AnimalSearchResult(stmt.executeQuery());
         } catch (SQLException e) {
             throw new PersistenceException("Failed to create or execute animal search statement", e);
         }
+    }
+
+    public static class AnimalSearchResult {
+        private final ResultSet resultSet;
+
+        AnimalSearchResult(ResultSet resultSet) {
+            this.resultSet = resultSet;
+        }
+
+		public boolean hasNext() throws PersistenceException {
+            try {
+                return !resultSet.isLast();
+            } catch (SQLException e) {
+                throw new PersistenceException("Error while checking if at end of result set", e);
+            }
+		}
+
+		public Animal next() throws PersistenceException {
+            if (hasNext())
+                try {
+                    resultSet.next();
+
+                    return new Animal.Builder()
+                        .species(Species.fromDatabaseRepresentation(resultSet.getString("species")))
+                        .breed(resultSet.getString("breed"))
+                        .colors((Color[]) Arrays.stream(resultSet.getString("color").split(" ")).map(s -> Color.fromDatabaseRepresentation(s)).toArray())
+                        .weight(resultSet.getDouble("weight"))
+                        .vaccinated(resultSet.getBoolean("vaccinated"))
+                        .spayNeuter(resultSet.getBoolean("spayneuter"))
+                        .name(resultSet.getString("name"))
+                        .date(resultSet.getDate("date"))
+                        .missing(resultSet.getBoolean("missing"))
+                        .build();
+                } catch (SQLException e) {
+                    throw new PersistenceException("Error while getting next search result", e);
+                }
+            else
+                try {
+                    if (!resultSet.isClosed())
+                        resultSet.close();
+                    return null;
+                } catch (SQLException e) {
+                    throw new PersistenceException("Failed to close result set", e);
+                }
+            
+		}
     }
 
     /**
