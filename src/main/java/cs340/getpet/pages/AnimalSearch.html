@@ -149,63 +149,66 @@
     <div id="flexable">
         <div id="parameters">
             <form wicket:id="searchForm">
-                <div class="option">
-                    <label class="category" for="species">Species</label><br>
-                    <div id="species" wicket:id="species">
-                        <input type="radio" id="dog" name="animal" value="dog">
-                        <label for="dog">Dog</label><br>
+                <label class="category" for="species">Species</label><br>
+                <div class="option" id="species" wicket:id="species">
+                    <input type="radio" id="dog" name="animal" value="dog">
+                    <label for="dog">Dog</label><br>
 
-                        <input type="radio" id="cat" name="animal" value="cat" />
-                        <label for="cat">Cat</label><br>
-                    </div>
+                    <input type="radio" id="cat" name="animal" value="cat" />
+                    <label for="cat">Cat</label><br>
                 </div>
 
-                <div class="option">
-                    <label class="category">Gender</label><br>
-                    <input type="checkbox" id="male" name="gender" value="male" wicket:id="male" />
+                <label for="gender">Gender</label><br>
+                <div class="option" id="gender">
+                    <input type="checkbox" id="male" wicket:id="male" />
                     <label for="male">Male</label><br>
-                    <input type="checkbox" id="female" name="gender" value="female" wicket:id="female" />
+                    <input type="checkbox" id="female" wicket:id="female" />
                     <label for="female">Female</label><br>
                 </div>
 
-                <div class="option">
-                    <label class="category" for="breed">Breed</label><br>
-                    <input type="text" id="breed" name="breed" wicket:id="breed" ><br>
+                <label for="breed">Breed</label><br>
+                <div class="option" id="breed">
+                    <input type="text" wicket:id="breed" /><br>
                 </div>
 
-                <div class="option">
-                    <label class="category">Color</label><br>
-                    <input type="checkbox" id="gold" name="gold" value="gold" wicket:id="gold" >
-                    <label>Gold</label><br>
-                    <input type="checkbox" id="brown" name="brown" value="brown" wicket:id="brown" >
-                    <label>Brown</label><br>
-                    <input type="checkbox" id="black" name="black" value="black" wicket:id="black" >
-                    <label>Black</label><br>
-                    <input type="checkbox" id="white" name="white" value="white" wicket:id="white" >
-                    <label>White</label><br>
-                    <input type="checkbox" id="dGray" name="dGray" value="dGray" wicket:id="dGray" >
-                    <label>Dark Gray</label><br>
-                    <input type="checkbox" id="lGray" name="lGray" value="lGray" wicket:id="lGray" >
-                    <label>Light Gray</label><br>
+                <label for="colors">Color</label><br>
+                <div class="option" id="colors">
+                    <input type="checkbox" id="gold" wicket:id="gold" />
+                    <label for="gold">Gold</label><br>
+
+                    <input type="checkbox" id="brown" wicket:id="brown" />
+                    <label for="brown">Brown</label><br>
+
+                    <input type="checkbox" id="black" wicket:id="black" />
+                    <label for="black">Black</label><br>
+
+                    <input type="checkbox" id="white" wicket:id="white" />
+                    <label for="white">White</label><br>
+
+                    <input type="checkbox" id="dGray" wicket:id="dGray" />
+                    <label for="dGray">Dark Gray</label><br>
+
+                    <input type="checkbox" id="lGray" wicket:id="lGray" />
+                    <label for="lGray">Light Gray</label><br>
                 </div>
 
-                <div class="option">
-                    <label>Size</label><br>
-                    <input type="checkbox" id="small" name="small" value="small" wicket:id="small" >
+                <label for="size">Size</label><br>
+                <div class="option" id="size">
+                    <input type="checkbox" id="small" wicket:id="small" >
                     <label for="small">Small</label><br>
-                    <input type="checkbox" id="medium" name="medium" value="medium" wicket:id="medium" >
+
+                    <input type="checkbox" id="medium" wicket:id="medium" >
                     <label for="small">Medium</label><br>
-                    <input type="checkbox" id="large" name="large" value="large" wicket:id="large" >
+
+                    <input type="checkbox" id="large" wicket:id="large" >
                     <label for="small">Large</label><br />
                 </div>
 
                 <input type="submit" value="Search" />
-
             </form>
         </div>
 
         <div id="resultsBox" >
-            <!-- more research required-->
             <h1>Results</h1>
 
             <div id="result">
@@ -216,17 +219,6 @@
                 <div class='resultAttribute'> Color: </div>
                 <div class='resultAttribute'> Size: </div>
             </div>
-
-            <!-- only here for UI design purposes feel free to delete-->
-            <div id="result">
-              <div class='resultAttribute'> Name: </div>
-              <div class='resultAttribute'> Species: </div>
-              <div class='resultAttribute'> Gender: </div>
-              <div class='resultAttribute'> Breed: </div>
-              <div class='resultAttribute'> Color: </div>
-              <div class='resultAttribute'> Size: </div>
-          </div>
-            
         </div>
     </div>
 </wicket:extend>
