@@ -112,14 +112,20 @@ html {
 
       .result{
       	display: flex;
-      	flex-wrap:nowrap;
-      	flex-direction:row;
-        justify-content:flex-start;
-        align-content:flex-start;
+      	flex-direction:column;
+        padding: 3px;
         background-color:#cfcfcf;
         border-style:solid;
         border-color:#acacac;
         border-width:2px;
+      }
+
+      .attributes {
+      	display: flex;
+      	flex-wrap:nowrap;
+      	flex-direction:row;
+        justify-content:flex-start;
+        align-content:flex-start;
       }
 
       input[type = "text"]{
@@ -134,15 +140,20 @@ html {
       }
 
       .resultAttribute{
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-        text-align: center;
-        margin: 10px;
-        min-width: 100px;
-        max-width: 100px;
+        border-left: 2px solid #bbb;
+        padding-left: 4px;
+        margin: 2px;
       }
 
       .resultAttributeName {
         font-weight: bold;
+      }
+
+      .leftResultAttribute {
+        margin-left: 0px;
+        width: 200px;
+      }
+
+      .rightResultAttribute {
+        width: 150px;
       }

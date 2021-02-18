@@ -13,7 +13,6 @@ public class SearchResultPanel extends Panel {
         super(id);
 
         add(new Label("name", animal.name));
-        add(new Label("species", animal.species.toString()));
         add(new Label("gender", animal.gender.toString()));
         add(new Label("breed", animal.breed));
         add(new Label("color", Arrays.stream(animal.colors).map(Enum::toString).collect(Collectors.joining(", "))));
