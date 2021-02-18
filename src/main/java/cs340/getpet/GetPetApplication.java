@@ -1,10 +1,10 @@
 package cs340.getpet;
 
-import cs340.getpet.Persistence.Animal;
 import cs340.getpet.Persistence.AnimalSearchResult;
-import cs340.getpet.Persistence.Color;
 import cs340.getpet.Persistence.PersistenceException;
-import cs340.getpet.Persistence.Species;
+import cs340.getpet.data.Animal;
+import cs340.getpet.data.Color;
+import cs340.getpet.data.Species;
 import cs340.getpet.pages.AnimalSearch;
 import cs340.getpet.pages.Login;
 import org.apache.wicket.csp.CSPDirective;
@@ -14,17 +14,15 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
-
 /**
  * This is the application class. It's the big daddy of everything else.
  */
 public class GetPetApplication extends WebApplication
 {
 	static final String DATABASE_NAME = "getpet";
+	private static Persistence persistence;
 
 	final Logger logger = LoggerFactory.getLogger(GetPetApplication.class);
-	Persistence persistence;
 
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
@@ -62,23 +60,12 @@ public class GetPetApplication extends WebApplication
 			System.exit(1);
 		}
 
-		try {
-			AnimalSearchResult result = persistence.findAnimal(new Persistence.AnimalSearchQuery.Builder()
-				.species(Species.Dog)
-				.color(Color.Brown)
-				.build());
-			
-			while (result.hasNext()) {
-				Animal animal = result.next();
-				if (animal != null)
-					System.out.println(animal.name);
-			}
-		} catch (PersistenceException e) {
-			logger.error("Failed to test search", e);
-		}
-
 		// mount each page to its respective URL; this is where we define
 		// the paths of each page in the application.
 		mountPage("/search", AnimalSearch.class);
+	}
+
+	public static Persistence getPersistence() {
+		return persistence;
 	}
 }

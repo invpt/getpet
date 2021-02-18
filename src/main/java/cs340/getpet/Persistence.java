@@ -1,13 +1,14 @@
 package cs340.getpet;
 
+import cs340.getpet.data.*;
+
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Persistence {
     /**
@@ -89,7 +90,7 @@ public class Persistence {
             int i = 1;
             for (DatabaseValue<?> parameter : query.parameters)
                 stmt.setObject(i++, parameter.toDatabaseRepresentation());
-            
+
             return new AnimalSearchResult(stmt.executeQuery());
         } catch (SQLException e) {
             throw new PersistenceException("Failed to create or execute animal search statement", e);
@@ -103,19 +104,9 @@ public class Persistence {
             this.resultSet = resultSet;
         }
 
-		public boolean hasNext() throws PersistenceException {
-            try {
-                return !resultSet.isLast();
-            } catch (SQLException e) {
-                throw new PersistenceException("Error while checking if at end of result set", e);
-            }
-		}
-
 		public Animal next() throws PersistenceException {
-            if (hasNext())
-                try {
-                    resultSet.next();
-
+            try {
+                if (resultSet.next()) {
                     String[] colorStrings = resultSet.getString("color").split(" ");
                     Color[] colors = new Color[colorStrings.length];
                     for (int i = 0; i < colorStrings.length; ++i) {
@@ -123,136 +114,26 @@ public class Persistence {
                     }
 
                     return new Animal.Builder()
-                        .intakeNumber(new IntakeNumber(resultSet.getInt("intakeNumber")))
-                        .species(Species.fromDatabaseRepresentation(resultSet.getString("species")))
-                        .breed(resultSet.getString("breed"))
-                        .size(Size.fromDatabaseRepresentation(resultSet.getString("size")))
-                        .colors(colors)
-                        .gender(Gender.fromDatabaseRepresentation(resultSet.getString("gender")))
-                        .weight(resultSet.getDouble("weight"))
-                        .vaccinated(resultSet.getBoolean("vaccinated"))
-                        .spayNeuter(resultSet.getBoolean("spayNeuter"))
-                        .name(resultSet.getString("name"))
-                        .date(resultSet.getDate("date"))
-                        .missing(resultSet.getBoolean("missing"))
-                        .build();
-                } catch (SQLException e) {
-                    throw new PersistenceException("Error while getting next search result", e);
-                }
-            else
-                try {
-                    if (!resultSet.isClosed())
-                        resultSet.close();
+                            .intakeNumber(new IntakeNumber(resultSet.getInt("intakeNumber")))
+                            .species(Species.fromDatabaseRepresentation(resultSet.getString("species")))
+                            .breed(resultSet.getString("breed"))
+                            .size(Size.fromDatabaseRepresentation(resultSet.getString("size")))
+                            .colors(colors)
+                            .gender(Gender.fromDatabaseRepresentation(resultSet.getString("gender")))
+                            .weight(resultSet.getDouble("weight"))
+                            .vaccinated(resultSet.getBoolean("vaccinated"))
+                            .spayNeuter(resultSet.getBoolean("spayNeuter"))
+                            .name(resultSet.getString("name"))
+                            .date(resultSet.getDate("date"))
+                            .missing(resultSet.getBoolean("missing"))
+                            .build();
+                } else {
                     return null;
-                } catch (SQLException e) {
-                    throw new PersistenceException("Failed to close result set", e);
                 }
-            
-		}
-    }
-
-    /**
-     * An in-memory representation of an entity from the Animals table.
-     */
-    public static class Animal {
-        /**
-         * The intake number of the animal. May be null.
-         */
-        public final IntakeNumber intakeNumber;
-        /**
-         * The species of the animal.
-         */
-        public final Species species;
-        /**
-         * The breed of the animal.
-         */
-        public final String breed;
-        /**
-         * The size of the animal.
-         */
-        public final Size size;
-        /**
-         * The primary colors that the animal's fur has.
-         */
-        public final Color[] colors;
-        /**
-         * The gender of the animal.
-        */
-        public final Gender gender;
-        /**
-         * The weight of the animal.
-         */
-        public final double weight;
-        /**
-         * True if the animal is vaccinated, else false.
-         */
-        public final boolean vaccinated;
-        /**
-         * True if the animal has been spayed or neutered, else false.
-         */
-        public final boolean spayNeuter;
-        /**
-         * The name of the animal.
-         */
-        public final String name;
-        /**
-         * The date the animal was brought into the shelter.
-         */
-        public final Date date;
-        /**
-         * True if the animal is known to be missing, else false.
-         */
-        public boolean missing;
-
-        public static class Builder {
-            IntakeNumber intakeNumber;
-            Species species;
-            String breed;
-            Size size;
-            Color[] colors;
-            Gender gender;
-            Double weight;
-            Boolean vaccinated;
-            Boolean spayNeuter;
-            String name;
-            Date date;
-            Boolean missing;
-            
-            public Builder() {}
-            public Animal build() {
-                if (species == null || breed == null || size == null || colors == null || gender == null || weight == null || vaccinated == null || spayNeuter == null || name == null || date == null || missing == null)
-                    throw new RuntimeException();
-                else
-                    return new Animal(this);
+            } catch (SQLException e) {
+                throw new PersistenceException("Error while getting next search result", e);
             }
-            Builder intakeNumber(IntakeNumber intakeNumber) { this.intakeNumber = intakeNumber; return this; }
-            public Builder species(Species species) { this.species = species; return this; }
-            public Builder breed(String breed) { this.breed = breed; return this; }
-            public Builder size(Size size) { this.size = size; return this; }
-            public Builder colors(Color[] colors) { this.colors = colors; return this; }
-            public Builder gender(Gender gender) { this.gender = gender; return this; }
-            public Builder weight(double weight) { this.weight = weight; return this; }
-            public Builder vaccinated(boolean vaccinated) { this.vaccinated = vaccinated; return this; }
-            public Builder spayNeuter(boolean spayNeuter) { this.spayNeuter = spayNeuter; return this; }
-            public Builder name(String name) { this.name = name; return this; }
-            public Builder date(Date date) { this.date = date; return this; }
-            public Builder missing(boolean missing) { this.missing = missing; return this; }
-        }
-
-        Animal(Builder b) {
-            intakeNumber = b.intakeNumber;
-            species = b.species;
-            vaccinated = b.vaccinated;
-            breed = b.breed;
-            gender = b.gender;
-            name = b.name;
-            colors = b.colors;
-            weight = b.weight;
-            missing = b.missing;
-            date = b.date;
-            spayNeuter = b.spayNeuter;
-            size = b.size;
-        }
+		}
     }
 
     /**
@@ -304,7 +185,8 @@ public class Persistence {
 
                 sq.is("species", species);
                 sq.in("gender", genders);
-                sq.is("breed", breed);
+                if (!breed.value.isEmpty())
+                    sq.has("breed", List.of(breed));
                 sq.has("color", colors);
                 sq.in("size", sizes);
 
@@ -322,6 +204,9 @@ public class Persistence {
              * @return this
              */
             public Builder species(Species species) {
+                if (species == null)
+                    throw new IllegalArgumentException();
+
                 this.species = species;
                 return this;
             }
@@ -334,6 +219,9 @@ public class Persistence {
              * @return this
              */
             public Builder gender(Gender gender) {
+                if (gender == null)
+                    throw new IllegalArgumentException();
+
                 genders.add(gender);
                 return this;
             }
@@ -346,6 +234,9 @@ public class Persistence {
              * @return this
              */
             public Builder breed(DatabaseObject<String> breed) {
+                if (breed == null)
+                    throw new IllegalArgumentException();
+
                 this.breed = breed;
                 return this;
             }
@@ -358,6 +249,9 @@ public class Persistence {
              * @return this
              */
             public Builder color(Color color) {
+                if (color == null)
+                    throw new IllegalArgumentException();
+
                 colors.add(color);
                 return this;
             }
@@ -370,6 +264,9 @@ public class Persistence {
              * @return this
              */
             public Builder size(Size size) {
+                if (size == null)
+                    throw new IllegalArgumentException();
+
                 sizes.add(size);
                 return this;
             }
@@ -399,7 +296,7 @@ public class Persistence {
          * @param attributeName the attribute to check
          * @param values the values to check the attribute against
          */
-        protected void in(String attributeName, LinkedList<? extends DatabaseValue<?>> values) {
+        protected void in(String attributeName, List<? extends DatabaseValue<?>> values) {
             if (!values.isEmpty()) {
                 // add query text
                 StringBuilder sb = new StringBuilder(attributeName).append(" IN (");
@@ -420,7 +317,7 @@ public class Persistence {
          *                      we represent enums in the database.
          * @param values the enum to check that the value contains
          */
-        protected void has(String attributeName, LinkedList<? extends DatabaseEnum> values) {
+        protected void has(String attributeName, List<? extends DatabaseValue<String>> values) {
             if (!values.isEmpty()) {
                 // add query text
                 StringBuilder sb = new StringBuilder("(");
@@ -430,7 +327,7 @@ public class Persistence {
                 ands.add(sb.append(')').toString());
 
                 // add parameters
-                for (DatabaseEnum value : values)
+                for (DatabaseValue<String> value : values)
                     parameters.add(new DatabaseObject<>("%" + value.toDatabaseRepresentation() + "%"));
             }
         }
@@ -463,141 +360,10 @@ public class Persistence {
         }
     }
 
-    public static class IntakeNumber implements DatabaseValue<Integer> {
-        public final int number;
-
-        public IntakeNumber(int number) {
-            this.number = number;
-        }
-
-        @Override
-        public Integer toDatabaseRepresentation() {
-            return number;
-        }
-    }
-
     /**
      * An enumeration that can be stored and retrieved from the database.
      */
     public static interface DatabaseEnum extends DatabaseValue<String> {}
 
-    /**
-     * Either male or female.
-     */
-    public static enum Gender implements DatabaseEnum {
-        Male, Female;
 
-        @Override
-        public String toDatabaseRepresentation() {
-            switch (this) {
-                case Male: return "m";
-                case Female: return "f";
-            }
-
-            // should never happen
-            return null;
-        }
-
-        public static Gender fromDatabaseRepresentation(String s) {
-            switch (s) {
-                case "m": return Male;
-                case "f": return Female;
-            }
-
-            // should never happen
-            return null;
-        }
-    }
-
-    /**
-     * Either dog or cat.
-     */
-    public static enum Species implements DatabaseEnum {
-        Dog, Cat;
-
-        @Override
-        public String toDatabaseRepresentation() {
-            switch (this) {
-                case Dog: return "dog";
-                case Cat: return "cat";
-            }
-
-            // should never happen
-            return null;
-        }
-
-        public static Species fromDatabaseRepresentation(String s) {
-            switch (s) {
-                case "dog": return Dog;
-                case "cat": return Cat;
-            }
-
-            // should never happen
-            return null;
-        }
-    }
-
-    /**
-     * One of black, gray, white, brown, or gold.
-     */
-    public static enum Color implements DatabaseEnum {
-        Black, Gray, White, Brown, Gold;
-
-        @Override
-        public String toDatabaseRepresentation() {
-            switch (this) {
-                case Black: return "black";
-                case Gray: return "gray";
-                case White: return "white";
-                case Brown: return "brown";
-                case Gold: return "gold";
-            }
-
-            // should never happen
-            return null;
-        }
-
-        public static Color fromDatabaseRepresentation(String s) {
-            switch (s) {
-                case "black": return Black;
-                case "gray": return Gray;
-                case "white": return White;
-                case "brown": return Brown;
-                case "gold": return Gold;
-            }
-
-            // should never happen
-            return null;
-        }
-    }
-
-    /**
-     * One of small, medium, or large.
-     */
-    public static enum Size implements DatabaseEnum {
-        Small, Medium, Large;
-
-        @Override
-        public String toDatabaseRepresentation() {
-            switch (this) {
-                case Small: return "small";
-                case Medium: return "medium";
-                case Large: return "large";
-            }
-
-            // should never happen
-            return null;
-        }
-
-        public static Size fromDatabaseRepresentation(String s) {
-            switch (s) {
-                case "small": return Small;
-                case "medium": return Medium;
-                case "large": return Large;
-            }
-
-            // should never happen
-            return null;
-        }
-    }
 }

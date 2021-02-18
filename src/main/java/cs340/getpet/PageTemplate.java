@@ -1,5 +1,6 @@
 package cs340.getpet;
 
+import cs340.getpet.panels.HeaderPanel;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;

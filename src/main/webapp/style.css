@@ -73,6 +73,7 @@ html {
       	flex-direction:row;
         justify-content:flex-start;
         align-content:flex-start;
+        justify-content: center;
       }
 
       #parameters{
@@ -94,22 +95,22 @@ html {
       	margin: 20px;
         padding-left:15px;
       	background-color:#eeeded;
-        width:80%;
         border-style:solid;
         border-radius:10px;
         border-color:#acacac;
         border-width:2px;
+        min-width: 500px;
       }
 
       .option{
       	margin-bottom:10px;
       }
 
-      .catagory{
+      .category{
         font-weight:bold;
       }
 
-      #result{
+      .result{
       	display: flex;
       	flex-wrap:nowrap;
       	flex-direction:row;
@@ -128,10 +129,20 @@ html {
         max-width: 500px;
       }
 
-      #result{
+      .result{
         margin: 15px 10px 15px 10px;
       }
 
       .resultAttribute{
-        margin: 15px;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        text-align: center;
+        margin: 10px;
+        min-width: 100px;
+        max-width: 100px;
+      }
+
+      .resultAttributeName {
+        font-weight: bold;
       }
