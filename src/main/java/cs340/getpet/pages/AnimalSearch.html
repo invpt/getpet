@@ -127,7 +127,7 @@
         border-width:2px;
       }
 
-      input[type = "text"]{
+      input[type="text"]{
       	width:90%;
         margin-right:20px;
         min-width: 20px;
@@ -146,12 +146,12 @@
 </head>
 <body>
 <wicket:extend>
-    <div id = "flexable">
+    <div id="flexable">
         <div id="parameters">
             <form wicket:id="searchForm">
-                <div class = "option">
-                    <div wicket:id="species">
-                        <label class = "category" for="species">Species</label><br>
+                <div class="option">
+                    <label class="category" for="species">Species</label><br>
+                    <div id="species" wicket:id="species">
                         <input type="radio" id="dog" name="animal" value="dog">
                         <label for="dog">Dog</label><br>
 
@@ -160,23 +160,22 @@
                     </div>
                 </div>
 
-
-                <div class = "option">
-                    <label class = "category">Gender</label><br>
-                    <input type="checkbox" id ="male" name="gender" value="male" wicket:id="male" />
+                <div class="option">
+                    <label class="category">Gender</label><br>
+                    <input type="checkbox" id="male" name="gender" value="male" wicket:id="male" />
                     <label for="male">Male</label><br>
-                    <input type="checkbox" id ="female" name="gender" value="female" wicket:id="female" />
+                    <input type="checkbox" id="female" name="gender" value="female" wicket:id="female" />
                     <label for="female">Female</label><br>
                 </div>
 
-                <div class = "option">
-                    <label class = "category" for="breed">Breed</label><br>
-                    <input type="text" id ="breed" name="breed" wicket:id="breed" ><br>
+                <div class="option">
+                    <label class="category" for="breed">Breed</label><br>
+                    <input type="text" id="breed" name="breed" wicket:id="breed" ><br>
                 </div>
 
-                <div class = "option">
-                    <label class = "category" for="color">Color</label><br>
-                    <input type="checkbox" id ="gold" name="gold" value="gold" wicket:id="gold" >
+                <div class="option">
+                    <label class="category">Color</label><br>
+                    <input type="checkbox" id="gold" name="gold" value="gold" wicket:id="gold" >
                     <label>Gold</label><br>
                     <input type="checkbox" id="brown" name="brown" value="brown" wicket:id="brown" >
                     <label>Brown</label><br>
@@ -192,11 +191,11 @@
 
                 <div class="option">
                     <label>Size</label><br>
-                    <input type="checkbox" id ="small" name="small" value="small" wicket:id="small" >
+                    <input type="checkbox" id="small" name="small" value="small" wicket:id="small" >
                     <label for="small">Small</label><br>
-                    <input type="checkbox" id ="medium" name="medium" value="medium" wicket:id="medium" >
+                    <input type="checkbox" id="medium" name="medium" value="medium" wicket:id="medium" >
                     <label for="small">Medium</label><br>
-                    <input type="checkbox" id ="large" name="large" value="large" wicket:id="large" >
+                    <input type="checkbox" id="large" name="large" value="large" wicket:id="large" >
                     <label for="small">Large</label><br />
                 </div>
 
@@ -209,23 +208,23 @@
             <!-- more research required-->
             <h1>Results</h1>
 
-            <div id = "result">
-                <div class = 'resultAttribute'> Name: </div>
-                <div class = 'resultAttribute'> Species: </div>
-                <div class = 'resultAttribute'> Gender: </div>
-                <div class = 'resultAttribute'> Breed: </div>
-                <div class = 'resultAttribute'> Color: </div>
-                <div class = 'resultAttribute'> Size: </div>
+            <div id="result">
+                <div class='resultAttribute'> Name: </div>
+                <div class='resultAttribute'> Species: </div>
+                <div class='resultAttribute'> Gender: </div>
+                <div class='resultAttribute'> Breed: </div>
+                <div class='resultAttribute'> Color: </div>
+                <div class='resultAttribute'> Size: </div>
             </div>
 
             <!-- only here for UI design purposes feel free to delete-->
-            <div id = "result">
-              <div class = 'resultAttribute'> Name: </div>
-              <div class = 'resultAttribute'> Species: </div>
-              <div class = 'resultAttribute'> Gender: </div>
-              <div class = 'resultAttribute'> Breed: </div>
-              <div class = 'resultAttribute'> Color: </div>
-              <div class = 'resultAttribute'> Size: </div>
+            <div id="result">
+              <div class='resultAttribute'> Name: </div>
+              <div class='resultAttribute'> Species: </div>
+              <div class='resultAttribute'> Gender: </div>
+              <div class='resultAttribute'> Breed: </div>
+              <div class='resultAttribute'> Color: </div>
+              <div class='resultAttribute'> Size: </div>
           </div>
             
         </div>
