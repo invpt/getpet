@@ -21,50 +21,51 @@ html {
         margin: 10px;
       }
 
-      button,
-      input[type="submit"],
-      input[type="button"] {
+      .button {
         display: inline-block;
         border-radius: 2px;
         padding: 8px;
         width: 70px;
         margin: 0;
-        background: #0060df;
         cursor: pointer;
         text-align: center;
         transition: background 250ms ease-in-out,
           transform 150ms ease;
 
+        color: white;
+        background: #888;
+
         /* make sure no default styling is applied */
         font-size: 13px, regular 400;
 
         height: 36px;
-        color: white;
         border: none;
         text-decoration: none;
         -webkit-appearance: none;
         -moz-appearance: none;
       }
 
-      button:hover,
-      button:focus,
-      input[type="submit"]:hover,
-      input[type="submit"]:focus,
-      input[type="button"]:hover,
-      input[type="button"]:focus {
-        background: #003eaa;
+      .button:hover,
+      .button:focus {
+        background: #777;
       }
 
-      button:focus,
-      input[type="submit"]:focus,
-      input[type="button"]:focus {
+      .button:focus {
         outline: 1px solid #aaa;
       }
 
-      button:active,
-      input[type="submit"]:active,
-      input[type="button"]:active {
+      .button:active {
         transform: scale(0.95);
+      }
+
+      .submit {
+        color: white;
+        background: #0060df;
+      }
+
+      .submit:hover,
+      .submit:focus {
+        background: #003eaa;
       }
 
       #flexable{
@@ -112,12 +113,20 @@ html {
 
       .result{
       	display: flex;
-      	flex-direction:column;
+      	flex-direction:row;
+      	flex-wrap: nowrap;
+      	align-items: center;
         padding: 3px;
         background-color:#cfcfcf;
         border-style:solid;
         border-color:#acacac;
         border-width:2px;
+      }
+
+      .info {
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: column;
       }
 
       .attributes {
