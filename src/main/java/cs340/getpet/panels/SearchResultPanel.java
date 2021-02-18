@@ -4,6 +4,10 @@ import cs340.getpet.data.Animal;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class SearchResultPanel extends Panel {
     public SearchResultPanel(String id, Animal animal) {
         super(id);
@@ -12,7 +16,7 @@ public class SearchResultPanel extends Panel {
         add(new Label("species", animal.species.toString()));
         add(new Label("gender", animal.gender.toString()));
         add(new Label("breed", animal.breed));
-        add(new Label("color", animal.colors[0].toString()));
+        add(new Label("color", Arrays.stream(animal.colors).map(Enum::toString).collect(Collectors.joining(", "))));
         add(new Label("size", animal.size.toString()));
     }
 }

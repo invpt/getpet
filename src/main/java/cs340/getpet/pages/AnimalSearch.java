@@ -67,9 +67,11 @@ public class AnimalSearch extends PageTemplate {
             searchResults.stream().forEach(component -> searchResults.remove(component));
 
             try {
+
                 Persistence.AnimalSearchQuery query = new Persistence.AnimalSearchQuery.Builder()
+                        // TODO: non-temporary solution
                         .species(Species.fromFormRepresentation(
-                                species.getModel().getObject()))
+                                species.getModel().getObject() == null ? "Dog" : species.getModel().getObject()))
                         .breed(new Persistence.DatabaseObject<>(
                                 breed.getModel().getObject() == null ? "" : breed.getModel().getObject()))
                         .genders(gender
