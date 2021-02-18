@@ -1,10 +1,5 @@
 package cs340.getpet;
 
-import cs340.getpet.Persistence.AnimalSearchResult;
-import cs340.getpet.Persistence.PersistenceException;
-import cs340.getpet.data.Animal;
-import cs340.getpet.data.Color;
-import cs340.getpet.data.Species;
 import cs340.getpet.pages.AnimalSearch;
 import cs340.getpet.pages.Login;
 import org.apache.wicket.csp.CSPDirective;

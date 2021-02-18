@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -79,7 +81,7 @@ public class Persistence {
      * @throws PersistenceException when the database statement
      *                              fails to execute
      */
-    public AnimalSearchResult findAnimal(AnimalSearchQuery query) throws PersistenceException {
+    public AnimalSearchResults findAnimal(AnimalSearchQuery query) throws PersistenceException {
         // build query string
         String queryString = new StringBuilder("SELECT * FROM Animals WHERE ")
                 .append(String.join(" AND ", query.ands))
@@ -91,34 +93,37 @@ public class Persistence {
             for (DatabaseValue<?> parameter : query.parameters)
                 stmt.setObject(i++, parameter.toDatabaseRepresentation());
 
-            return new AnimalSearchResult(stmt.executeQuery());
+            return new AnimalSearchResults(stmt.executeQuery());
         } catch (SQLException e) {
             throw new PersistenceException("Failed to create or execute animal search statement", e);
         }
     }
 
-    public static class AnimalSearchResult {
+    public static class AnimalSearchResults {
         private final ResultSet resultSet;
 
-        AnimalSearchResult(ResultSet resultSet) {
+        AnimalSearchResults(ResultSet resultSet) {
             this.resultSet = resultSet;
         }
 
+        /**
+         * Gets the next animal in the search results.
+         *
+         * @return the next animal, unless the search results have been exhausted,
+         *         in which case null
+         * @throws PersistenceException
+         */
 		public Animal next() throws PersistenceException {
             try {
-                if (resultSet.next()) {
-                    String[] colorStrings = resultSet.getString("color").split(" ");
-                    Color[] colors = new Color[colorStrings.length];
-                    for (int i = 0; i < colorStrings.length; ++i) {
-                        colors[i] = Color.fromDatabaseRepresentation(colorStrings[i]);
-                    }
-
+                if (resultSet.next())
                     return new Animal.Builder()
                             .intakeNumber(new IntakeNumber(resultSet.getInt("intakeNumber")))
                             .species(Species.fromDatabaseRepresentation(resultSet.getString("species")))
                             .breed(resultSet.getString("breed"))
                             .size(Size.fromDatabaseRepresentation(resultSet.getString("size")))
-                            .colors(colors)
+                            .colors(Arrays.stream(resultSet.getString("color").split(" "))
+                                    .map(Color::fromDatabaseRepresentation)
+                                    .toArray(Color[]::new))
                             .gender(Gender.fromDatabaseRepresentation(resultSet.getString("gender")))
                             .weight(resultSet.getDouble("weight"))
                             .vaccinated(resultSet.getBoolean("vaccinated"))
@@ -127,11 +132,10 @@ public class Persistence {
                             .date(resultSet.getDate("date"))
                             .missing(resultSet.getBoolean("missing"))
                             .build();
-                } else {
+                else
                     return null;
-                }
             } catch (SQLException e) {
-                throw new PersistenceException("Error while getting next search result", e);
+                throw new PersistenceException("Failed to get next search result", e);
             }
 		}
     }
@@ -192,7 +196,7 @@ public class Persistence {
 
                 // always:
                 sq.is("vaccinated", new DatabaseObject<>(true));
-                sq.is("spayneuter", new DatabaseObject<>(true));
+                sq.is("spayNeuter", new DatabaseObject<>(true));
 
                 return sq;
             }
@@ -212,17 +216,15 @@ public class Persistence {
             }
 
             /**
-             * Add a gender to search for. If uncalled before building, no restrictions are
+             * Adds genders of animal to search for. If uncalled before building, no restrictions are
              * placed on gender.
              * 
-             * @param gender the gender of animal to allow in the query
+             * @param genders the gender of animal to allow in the query
              * @return this
              */
-            public Builder gender(Gender gender) {
-                if (gender == null)
-                    throw new IllegalArgumentException();
+            public Builder genders(Collection<Gender> genders) {
+                this.genders.addAll(genders);
 
-                genders.add(gender);
                 return this;
             }
 
@@ -242,32 +244,28 @@ public class Persistence {
             }
 
             /**
-             * Adds a color to search for. If uncalled before building, no restrictions are
-             * placed on gender.
+             * Adds colors of animal to search for. If uncalled before building, no restrictions are
+             * placed on color.
              * 
-             * @param color the color of animal to allow in the query
+             * @param colors the colors of animal to allow in the query
              * @return this
              */
-            public Builder color(Color color) {
-                if (color == null)
-                    throw new IllegalArgumentException();
+            public Builder colors(Collection<Color> colors) {
+                this.colors.addAll(colors);
 
-                colors.add(color);
                 return this;
             }
 
             /**
-             * Adds a size to search for. If uncalled before building, no restrictions are
+             * Adds sizes of animal to search for. If uncalled before building, no restrictions are
              * placed on size.
              * 
-             * @param size the size of animal to allow in the query
+             * @param sizes the sizes of animal to allow in the query
              * @return this
              */
-            public Builder size(Size size) {
-                if (size == null)
-                    throw new IllegalArgumentException();
+            public Builder sizes(Collection<Size> sizes) {
+                this.sizes.addAll(sizes);
 
-                sizes.add(size);
                 return this;
             }
         }
@@ -351,6 +349,9 @@ public class Persistence {
         public final T value;
 
         public DatabaseObject(T value) {
+            if (value == null)
+                throw new IllegalArgumentException("Database value must not be null");
+
             this.value = value;
         }
 
@@ -364,6 +365,4 @@ public class Persistence {
      * An enumeration that can be stored and retrieved from the database.
      */
     public static interface DatabaseEnum extends DatabaseValue<String> {}
-
-
 }

@@ -14,7 +14,7 @@ public abstract class PageTemplate extends WebPage {
         super(parameters);
 
         // add header panel
-        HeaderPanel hp = new HeaderPanel("header");
+        HeaderPanel hp = new HeaderPanel("header", getPageTitle());
         hp.setRenderBodyOnly(true);
         add(hp);
 
