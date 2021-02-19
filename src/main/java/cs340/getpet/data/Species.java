@@ -15,18 +15,7 @@ public enum Species implements Persistence.DatabaseEnum {
             case Cat: return "cat";
         }
 
-        // should never happen
-        return null;
-    }
-
-    public static Species fromFormRepresentation(String s) {
-        switch (s) {
-            case "Dog": return Dog;
-            case "Cat": return Cat;
-        }
-
-        // should never happen
-        return null;
+        throw new IllegalStateException();
     }
 
     public static Species fromDatabaseRepresentation(String s) {
@@ -35,7 +24,6 @@ public enum Species implements Persistence.DatabaseEnum {
             case "cat": return Cat;
         }
 
-        // should never happen
         return null;
     }
 }

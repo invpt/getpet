@@ -1,6 +1,6 @@
 package cs340.getpet.data;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * An in-memory representation of an entity from the Animals table.
@@ -72,6 +72,7 @@ public class Animal {
         public Builder() {}
         public Animal build() {
             if (species == null || breed == null || size == null || colors == null || gender == null || weight == null || vaccinated == null || spayNeuter == null || name == null || date == null || missing == null)
+                // TODO: throwing a runtime exception without a message is probably a bad idea
                 throw new RuntimeException();
             else
                 return new Animal(this);

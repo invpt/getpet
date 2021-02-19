@@ -4,18 +4,29 @@
 </head>
 <body>
 <wicket:panel class="result">
-    <div class="resultAttribute" style="margin-left:0"><div class="resultAttributeName">Name</div>
-    <div class="resultAttributeValue" wicket:id="name"></div></div>
-    <div class="resultAttribute"><div class="resultAttributeName">Species</div>
-    <div class="resultAttributeValue" wicket:id="species"></div></div>
-    <div class="resultAttribute"><div class="resultAttributeName">Gender</div>
-    <div class="resultAttributeValue" wicket:id="gender"></div></div>
-    <div class="resultAttribute"><div class="resultAttributeName">Breed</div>
-    <div class="resultAttributeValue" wicket:id="breed"></div></div>
-    <div class="resultAttribute"><div class="resultAttributeName">Color</div>
-    <div class="resultAttributeValue" wicket:id="color"></div></div>
-    <div class="resultAttribute" style="margin-right:0"><div class="resultAttributeName">Size</div>
-    <div class="resultAttributeValue" wicket:id="size"></div></div>
+    <div class="animalInfo">
+        <div class="animalName">
+            <span class="animalAttributeName">Name</span>:
+            <span class="animalAttributeValue" wicket:id="name"></span>
+        </div>
+        <div class="animalSubInfo">
+            <div class="animalAttributePair leftAttributePair">
+                <span class="animalAttributeName">Breed</span>:
+                <span class="animalAttributeValue" wicket:id="breed"></span>
+                <br />
+                <span class="animalAttributeName">Color</span>:
+                <span class="animalAttributeValue" wicket:id="color"></span>
+            </div>
+            <div class="animalAttributePair rightAttributePair">
+                <span class="animalAttributeName">Size</span>:
+                <span class="animalAttributeValue" wicket:id="size"></span>
+                <br />
+                <span class="animalAttributeName">Gender</span>:
+                <span class="animalAttributeValue" wicket:id="gender"></span>
+            </div>
+        </div>
+    </div>
+    <button class="button">Details</button>
 </wicket:panel>
 </body>
 </html>

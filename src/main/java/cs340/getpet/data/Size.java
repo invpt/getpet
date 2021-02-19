@@ -16,19 +16,7 @@ public enum Size implements Persistence.DatabaseEnum {
             case Large: return "large";
         }
 
-        // should never happen
-        return null;
-    }
-
-    public static Size fromFormRepresentation(String s) {
-        switch (s) {
-            case "Small": return Small;
-            case "Medium": return Medium;
-            case "Large": return Large;
-        }
-
-        // should never happen
-        return null;
+        throw new IllegalStateException();
     }
 
     public static Size fromDatabaseRepresentation(String s) {
@@ -38,7 +26,6 @@ public enum Size implements Persistence.DatabaseEnum {
             case "large": return Large;
         }
 
-        // should never happen
         return null;
     }
 }
