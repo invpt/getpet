@@ -19,22 +19,7 @@ public enum Color implements Persistence.DatabaseEnum {
             case LightGray: return "lGray";
         }
 
-        // should never happen
-        return null;
-    }
-
-    public static Color fromFormRepresentation(String s) {
-        switch (s) {
-            case "Black": return Black;
-            case "White": return White;
-            case "Brown": return Brown;
-            case "Gold": return Gold;
-            case "Dark Gray": return DarkGray;
-            case "Light Gray": return LightGray;
-        }
-
-        // should never happen
-        return null;
+        throw new IllegalStateException();
     }
 
     public static Color fromDatabaseRepresentation(String s) {
@@ -47,7 +32,6 @@ public enum Color implements Persistence.DatabaseEnum {
             case "lGray": return LightGray;
         }
 
-        // should never happen
         return null;
     }
 }

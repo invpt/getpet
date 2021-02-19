@@ -1,168 +1,102 @@
+/*********** General ***********/
 html {
-    		font-family: 'Roboto', sans-serif;
-      }
+    font-family: 'Roboto', sans-serif;
+}
 
-      body {
-        padding: 0;
-        margin: 0;
-      }
+body {
+    padding: 0;
+    margin: 0;
+}
 
-      #header {
-        height: 50px;
-        width: 100%;
-        background: #f1f1f1;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-      }
+#header {
+    height: 50px;
+    width: 100%;
+    background: #f1f1f1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 
-      #content {
-        margin: 10px;
-      }
+#content {
+    margin: 10px;
+}
 
-      .button {
-        display: inline-block;
-        border-radius: 2px;
-        padding: 8px;
-        width: 70px;
-        margin: 0;
-        cursor: pointer;
-        text-align: center;
-        transition: background 250ms ease-in-out,
-          transform 150ms ease;
 
-        color: white;
-        background: #888;
+/*********** Buttons ***********/
+.button {
+    display: inline-block;
+    border-radius: 2px;
+    padding: 8px;
+    width: 70px;
+    margin: 0;
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out,
+    transform 150ms ease;
 
-        /* make sure no default styling is applied */
-        font-size: 13px, regular 400;
+    color: white;
+    background: #888;
 
-        height: 36px;
-        border: none;
-        text-decoration: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-      }
+    /* make sure no default styling is applied */
+    font-size: 13px, regular 400;
 
-      .button:hover,
-      .button:focus {
-        background: #777;
-      }
+    height: 36px;
+    border: none;
+    text-decoration: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
 
-      .button:focus {
-        outline: 1px solid #aaa;
-      }
+.button:hover,
+.button:focus {
+    background: #777;
+}
 
-      .button:active {
-        transform: scale(0.95);
-      }
+.button:focus {
+    outline: 1px solid #aaa;
+}
 
-      .submit {
-        color: white;
-        background: #0060df;
-      }
+.button:active {
+    transform: scale(0.95);
+}
 
-      .submit:hover,
-      .submit:focus {
-        background: #003eaa;
-      }
+.submit {
+    color: white;
+    background: #0060df;
+}
 
-      #flexable{
-      	display: flex;
-      	flex-wrap:nowrap;
-      	flex-direction:row;
-        justify-content:flex-start;
-        align-content:flex-start;
-        justify-content: center;
-      }
+.submit:hover,
+.submit:focus {
+    background: #003eaa;
+}
 
-      #parameters{
-      	background-color:#dadada;
-        width:20%;
-        padding-left:15px;
-        padding-bottom:15px;
-        padding-top:10px;
-        margin-top:20px;
-        margin-left:20px;
-        margin-bottom:20px;
-        border-style:solid;
-        border-width:2px;
-        border-color:#acacac;
-        border-radius: 10px;
-      }
 
-      #resultsBox{
-      	margin: 20px;
-        padding-left:15px;
-      	background-color:#eeeded;
-        border-style:solid;
-        border-radius:10px;
-        border-color:#acacac;
-        border-width:2px;
-        min-width: 500px;
-      }
+/*********** Form styling ***********/
+input[type = "text"] {
+    width:90%;
+    margin-right:20px;
+    min-width: 20px;
+    max-width: 500px;
+}
 
-      .option{
-      	margin-bottom:10px;
-      }
+.option {
+    margin-bottom:10px;
+}
 
-      .category{
-        font-weight:bold;
-      }
+.category {
+    font-weight:bold;
+}
 
-      .result{
-      	display: flex;
-      	flex-direction:row;
-      	flex-wrap: nowrap;
-      	align-items: center;
-        padding: 3px;
-        background-color:#cfcfcf;
-        border-style:solid;
-        border-color:#acacac;
-        border-width:2px;
-      }
-
-      .info {
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: column;
-      }
-
-      .attributes {
-      	display: flex;
-      	flex-wrap:nowrap;
-      	flex-direction:row;
-        justify-content:flex-start;
-        align-content:flex-start;
-      }
-
-      input[type = "text"]{
-      	width:90%;
-        margin-right:20px;
-        min-width: 20px;
-        max-width: 500px;
-      }
-
-      .result{
-        margin: 15px 10px 15px 10px;
-      }
-
-      .resultAttribute{
-        border-left: 2px solid #bbb;
-        padding-left: 4px;
-        margin: 2px;
-      }
-
-      .resultAttributeName {
-        font-weight: bold;
-      }
-
-      .leftResultAttribute {
-        margin-left: 0px;
-        width: 200px;
-      }
-
-      .rightResultAttribute {
-        width: 150px;
-      }
+.result {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding: 3px;
+    background-color: #cfcfcf;
+    border-style: solid;
+    border-color: #acacac;
+    border-width: 2px;
+    margin: 15px 10px 15px 10px;
+}

@@ -17,7 +17,7 @@ public class GetPetApplication extends WebApplication
 	static final String DATABASE_NAME = "getpet";
 	private static Persistence persistence;
 
-	final Logger logger = LoggerFactory.getLogger(GetPetApplication.class);
+	final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()

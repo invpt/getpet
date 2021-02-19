@@ -2,12 +2,9 @@ package cs340.getpet.pages;
 
 import cs340.getpet.PageTemplate;
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class Login extends PageTemplate {
-	private static final long serialVersionUID = 1L;
-
 	public Login(final PageParameters parameters) {
 		super(parameters);
 

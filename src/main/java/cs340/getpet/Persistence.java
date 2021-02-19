@@ -83,9 +83,8 @@ public class Persistence {
      */
     public AnimalSearchResults findAnimal(AnimalSearchQuery query) throws PersistenceException {
         // build query string
-        String queryString = new StringBuilder("SELECT * FROM Animals WHERE ")
-                .append(String.join(" AND ", query.ands))
-                .toString();
+        String queryString = "SELECT * FROM Animals WHERE " +
+                String.join(" AND ", query.ands);
 
         try (PreparedStatement stmt = conn.prepareStatement(queryString)) {
             // set parameters
@@ -99,9 +98,20 @@ public class Persistence {
         }
     }
 
+    /**
+     * The results of a search for animals.
+     */
     public static class AnimalSearchResults {
+        /**
+         * The resulting table of a search.
+         */
         private final ResultSet resultSet;
 
+        /**
+         * Creates an instance with the resulting table of a search for animals.
+         *
+         * @param resultSet the resulting table of a search
+         */
         AnimalSearchResults(ResultSet resultSet) {
             this.resultSet = resultSet;
         }
@@ -111,7 +121,8 @@ public class Persistence {
          *
          * @return the next animal, unless the search results have been exhausted,
          *         in which case null
-         * @throws PersistenceException
+         * @throws PersistenceException when an unexpected exception occurs while
+         *                              getting the next search result
          */
 		public Animal next() throws PersistenceException {
             try {
@@ -135,7 +146,7 @@ public class Persistence {
                 else
                     return null;
             } catch (SQLException e) {
-                throw new PersistenceException("Failed to get next search result", e);
+                throw new PersistenceException("Failed while getting next search result", e);
             }
 		}
     }
@@ -189,8 +200,7 @@ public class Persistence {
 
                 sq.is("species", species);
                 sq.in("gender", genders);
-                if (!breed.value.isEmpty())
-                    sq.has("breed", List.of(breed));
+                sq.like("breed", breed);
                 sq.has("color", colors);
                 sq.in("size", sizes);
 
@@ -280,11 +290,21 @@ public class Persistence {
          */
         protected void is(String attributeName, DatabaseValue<?> value) {
             if (value != null) {
-                // add query text
-                ands.add(new StringBuilder(attributeName).append(" = ?").toString());
+                // add condition text
+                ands.add(attributeName + " = ?");
 
                 // add parameters
                 parameters.add(value);
+            }
+        }
+
+        protected void like(String attributeName, DatabaseValue<String> value) {
+            if (value != null) {
+                // add condition text
+                ands.add(attributeName + " LIKE ?");
+
+                // add parameters
+                parameters.add(new DatabaseObject<>("%" + value.toDatabaseRepresentation() + "%"));
             }
         }
 
@@ -296,12 +316,8 @@ public class Persistence {
          */
         protected void in(String attributeName, List<? extends DatabaseValue<?>> values) {
             if (!values.isEmpty()) {
-                // add query text
-                StringBuilder sb = new StringBuilder(attributeName).append(" IN (");
-                for (int i = 0; i < values.size() - 1; ++i)
-                    sb.append("?,");
-                sb.append('?');
-                ands.add(sb.append(')').toString());
+                // add condition text
+                ands.add(attributeName + " IN (" + "?,".repeat(values.size() - 1) + "?)");
 
                 // add parameters
                 parameters.addAll(values);
@@ -310,14 +326,14 @@ public class Persistence {
 
         /**
          * Requires that the given attribute contains one of the given enum values.
-         * 
+         *
          * @param attributeName the given attribute. this is a string, as that is how
          *                      we represent enums in the database.
          * @param values the enum to check that the value contains
          */
         protected void has(String attributeName, List<? extends DatabaseValue<String>> values) {
             if (!values.isEmpty()) {
-                // add query text
+                // add condition text
                 StringBuilder sb = new StringBuilder("(");
                 for (int i = 0; i < values.size() - 1; ++i)
                     sb.append(attributeName).append(" LIKE ? OR ");
@@ -334,12 +350,12 @@ public class Persistence {
     /**
      * A Java value that has a database representation.
      */
-    public static interface DatabaseValue<T> {
+    public interface DatabaseValue<T> {
         /**
          * @return the representation of the value that
          *         should be given to the JDBC to be stored in the database
          */
-        public T toDatabaseRepresentation();
+        T toDatabaseRepresentation();
     }
 
     /**
@@ -364,5 +380,5 @@ public class Persistence {
     /**
      * An enumeration that can be stored and retrieved from the database.
      */
-    public static interface DatabaseEnum extends DatabaseValue<String> {}
+    public interface DatabaseEnum extends DatabaseValue<String> {}
 }

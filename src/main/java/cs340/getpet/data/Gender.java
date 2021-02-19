@@ -15,18 +15,7 @@ public enum Gender implements Persistence.DatabaseEnum {
             case Female: return "f";
         }
 
-        // should never happen
-        return null;
-    }
-
-    public static Gender fromFormRepresentation(String s) {
-        switch (s) {
-            case "Male": return Male;
-            case "Female": return Female;
-        }
-
-        // should never happen
-        return null;
+        throw new IllegalStateException();
     }
 
     public static Gender fromDatabaseRepresentation(String s) {
@@ -35,7 +24,6 @@ public enum Gender implements Persistence.DatabaseEnum {
             case "f": return Female;
         }
 
-        // should never happen
         return null;
     }
 }

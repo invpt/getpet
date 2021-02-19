@@ -3,6 +3,7 @@ package cs340.getpet;
 import cs340.getpet.panels.HeaderPanel;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
@@ -10,16 +11,17 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * extend this class. See AnimalSearch and AnimalSearch.html for an example.
  */
 public abstract class PageTemplate extends WebPage {
+    HeaderPanel headerPanel;
+
     public PageTemplate(final PageParameters parameters) {
         super(parameters);
 
         // add header panel
-        HeaderPanel hp = new HeaderPanel("header", getPageTitle());
-        hp.setRenderBodyOnly(true);
-        add(hp);
+        headerPanel = new HeaderPanel("header", LambdaModel.of(this::getPageTitle));
+        add(headerPanel);
 
         // set page title based on what the extending class's title is
-        add(new Label("title", getPageTitle()));
+        add(new Label("title", LambdaModel.of(this::getPageTitle)));
     }
 
     /**
