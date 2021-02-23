@@ -14,6 +14,11 @@ import java.util.List;
 
 public class Persistence {
     /**
+     * The prepared statement to select an animal with a given intake number.
+     */
+    private final PreparedStatement PREP_STMT_INTAKE_NUMBER;
+
+    /**
      * The connection to the database.
      */
     Connection conn;
@@ -40,6 +45,7 @@ public class Persistence {
     public Persistence(String server, String database, String user, String password) throws PersistenceException {
         try {
             conn = DriverManager.getConnection("jdbc:mariadb://" + server + "/" + database, user, password);
+            PREP_STMT_INTAKE_NUMBER = conn.prepareStatement("SELECT * FROM Animals WHERE intakeNumber = ?");
         } catch (SQLException e) {
             throw new PersistenceException("Failed to create database connection", e);
         }
@@ -65,12 +71,87 @@ public class Persistence {
      *                              fails to execute
      */
     public void updateAnimal(int intakeNumber, Animal animal) throws PersistenceException {
-        // TODO
+        String query = "UPDATE Animal SET" +
+                "species = ?," +
+                "breed = ?," +
+                "size = ?," +
+                "color = ?," +
+                "gender = ?," +
+                "weight = ?," +
+                "vaccinated = ?," +
+                "spayNeuter = ?," +
+                "name = ?," +
+                "date = ?," +
+                "missing = ?" +
+                "WHERE intakeNumber = ?;";
+        Object[] parameters = new Object[] {
+                animal.species,
+                animal.breed,
+                animal.size,
+                animal.colors,
+                animal.gender,
+                animal.weight,
+                animal.vaccinated,
+                animal.spayNeuter,
+                animal.name,
+                animal.date,
+                animal.missing,
+                intakeNumber
+        };
+
+        try (PreparedStatement prepStmt = conn.prepareStatement(query)) {
+            // make sure we're setting the right number of parameters as a sanity check
+            assert prepStmt.getParameterMetaData().getParameterCount() == parameters.length;
+
+            for (int i = 1; i <= parameters.length; ++i)
+                prepStmt.setObject(i, parameters[i]);
+
+            if (prepStmt.executeUpdate() != 1)
+                ; // this is bad
+        } catch (SQLException e) {
+            throw new PersistenceException("Failed to update animal", e);
+        }
     }
 
-    public Animal getAnimal() {
-        // TODO
-        return null;
+    /**
+     * Gets an animal from the database.
+     *
+     * @param intakeNumber the intake number of the animal to get
+     * @return the animal, or null if no animal is found
+     * @throws PersistenceException when the query fails
+     */
+    public Animal getAnimal(int intakeNumber) throws PersistenceException {
+        try {
+            PREP_STMT_INTAKE_NUMBER.clearParameters();
+            PREP_STMT_INTAKE_NUMBER.setInt(1, intakeNumber);
+            ResultSet resultSet = PREP_STMT_INTAKE_NUMBER.executeQuery();
+
+            return animalFromRow(resultSet);
+        } catch (SQLException e) {
+            throw new PersistenceException("Failed to get animal", e);
+        }
+    }
+
+    private static Animal animalFromRow(ResultSet resultSet) throws SQLException {
+        if (resultSet.next())
+            return new Animal.Builder()
+                    .intakeNumber(new IntakeNumber(resultSet.getInt("intakeNumber")))
+                    .species(Species.fromDatabaseRepresentation(resultSet.getString("species")))
+                    .breed(resultSet.getString("breed"))
+                    .size(Size.fromDatabaseRepresentation(resultSet.getString("size")))
+                    .colors(Arrays.stream(resultSet.getString("color").split(" "))
+                            .map(Color::fromDatabaseRepresentation)
+                            .toArray(Color[]::new))
+                    .gender(Gender.fromDatabaseRepresentation(resultSet.getString("gender")))
+                    .weight(resultSet.getDouble("weight"))
+                    .vaccinated(resultSet.getBoolean("vaccinated"))
+                    .spayNeuter(resultSet.getBoolean("spayNeuter"))
+                    .name(resultSet.getString("name"))
+                    .date(resultSet.getDate("date"))
+                    .missing(resultSet.getBoolean("missing"))
+                    .build();
+        else
+            return null;
     }
 
     /**
@@ -126,25 +207,7 @@ public class Persistence {
          */
 		public Animal next() throws PersistenceException {
             try {
-                if (resultSet.next())
-                    return new Animal.Builder()
-                            .intakeNumber(new IntakeNumber(resultSet.getInt("intakeNumber")))
-                            .species(Species.fromDatabaseRepresentation(resultSet.getString("species")))
-                            .breed(resultSet.getString("breed"))
-                            .size(Size.fromDatabaseRepresentation(resultSet.getString("size")))
-                            .colors(Arrays.stream(resultSet.getString("color").split(" "))
-                                    .map(Color::fromDatabaseRepresentation)
-                                    .toArray(Color[]::new))
-                            .gender(Gender.fromDatabaseRepresentation(resultSet.getString("gender")))
-                            .weight(resultSet.getDouble("weight"))
-                            .vaccinated(resultSet.getBoolean("vaccinated"))
-                            .spayNeuter(resultSet.getBoolean("spayNeuter"))
-                            .name(resultSet.getString("name"))
-                            .date(resultSet.getDate("date"))
-                            .missing(resultSet.getBoolean("missing"))
-                            .build();
-                else
-                    return null;
+                return animalFromRow(resultSet);
             } catch (SQLException e) {
                 throw new PersistenceException("Failed while getting next search result", e);
             }
