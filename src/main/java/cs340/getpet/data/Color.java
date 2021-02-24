@@ -9,6 +9,19 @@ public enum Color implements Persistence.DatabaseEnum {
     Black, White, Brown, Gold, DarkGray, LightGray;
 
     @Override
+    public String toString() {
+        switch (this) {
+            case Black: return "Black";
+            case White: return "White";
+            case Brown: return "Brown";
+            case Gold: return "Gold";
+            case DarkGray: return "Dark Gray";
+            case LightGray: return "Light Gray";
+            default: throw new IllegalStateException();
+        }
+    }
+
+    @Override
     public String toDatabaseRepresentation() {
         switch (this) {
             case Black: return "black";

@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -55,15 +56,7 @@ public class AnimalSearch extends PageTemplate {
         );
         CheckBoxMultipleChoice<String> gender;
 
-        Map<String, Color> colorMap = linkedMapOfEntries(
-                entry("Black", Color.Black),
-                entry("White", Color.White),
-                entry("Brown", Color.Brown),
-                entry("Gold", Color.Gold),
-                entry("Dark Gray", Color.DarkGray),
-                entry("Light Gray", Color.LightGray)
-        );
-        CheckBoxMultipleChoice<String> color;
+        CheckBoxMultipleChoice<Color> color;
 
         Map<String, Size> sizeMap = linkedMapOfEntries(
                 entry("Small", Size.Small),
@@ -87,7 +80,7 @@ public class AnimalSearch extends PageTemplate {
             gender.setSuffix(CHOICE_SUFFIX);
             add(gender);
 
-            color = new CheckBoxMultipleChoice<>("colors", Model.of(), new ArrayList<>(colorMap.keySet()));
+            color = new CheckBoxMultipleChoice<>("colors", Model.of(), List.of(Color.Black, Color.White, Color.Brown, Color.Gold, Color.DarkGray, Color.LightGray));
             color.setSuffix(CHOICE_SUFFIX);
             add(color);
 
@@ -109,12 +102,7 @@ public class AnimalSearch extends PageTemplate {
                                 .stream()
                                 .map(s -> genderMap.get(s))
                                 .collect(Collectors.toList()))
-                        .colors(color
-                                .getModel()
-                                .getObject()
-                                .stream()
-                                .map(s -> colorMap.get(s))
-                                .collect(Collectors.toList()))
+                        .colors(color.getModel().getObject())
                         .sizes(size
                                 .getModel()
                                 .getObject()

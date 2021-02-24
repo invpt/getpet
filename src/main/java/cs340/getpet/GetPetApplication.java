@@ -1,6 +1,7 @@
 package cs340.getpet;
 
 import cs340.getpet.pages.AnimalSearch;
+import cs340.getpet.pages.Details;
 import cs340.getpet.pages.Login;
 import org.apache.wicket.csp.CSPDirective;
 import org.apache.wicket.csp.CSPDirectiveSrcValue;
@@ -58,6 +59,7 @@ public class GetPetApplication extends WebApplication
 		// mount each page to its respective URL; this is where we define
 		// the paths of each page in the application.
 		mountPage("/search", AnimalSearch.class);
+		mountPage("/details", Details.class);
 	}
 
 	public static Persistence getPersistence() {
