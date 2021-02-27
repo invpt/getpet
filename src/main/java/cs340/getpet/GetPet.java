@@ -6,9 +6,7 @@ import java.util.Map;
 
 public class GetPet {
     public static void main(String[] args) throws IOException  {
-        Server server = new Server("localhost", 8080, Map.of(
-                "/", new File("/home/slabeb/Projects/Java/shelter/dist/search.html")
-        ));
+        Server server = new Server("localhost", 8080);
         server.run();
     }
 }

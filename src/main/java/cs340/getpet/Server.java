@@ -20,15 +20,13 @@ import java.util.function.Supplier;
 public class Server {
     private final InetSocketAddress address;
     private final HttpServer http;
-    private final Map<String, File> staticFiles;
 
     private HttpContext fileContext;
     private HttpContext apiContext;
 
-    public Server(String hostname, int port, Map<String, File> staticFiles) throws IOException {
+    public Server(String hostname, int port) throws IOException {
         address = new InetSocketAddress(hostname, port);
         http = HttpServer.create();
-        this.staticFiles = staticFiles;
     }
 
     public void run() throws IOException {
