@@ -1,46 +1,57 @@
 package cs340.getpet;
 
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import cs340.getpet.persistence.Persistence;
+import cs340.getpet.persistence.PersistenceHttpHandler;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Serves the pages for the website as well as hosts the RESTful DB interaction API.
  */
 public class Server {
-    private final InetSocketAddress address;
+    private final Configuration configuration;
     private final HttpServer http;
 
-    private HttpContext fileContext;
-    private HttpContext apiContext;
-
-    public Server(String hostname, int port) throws IOException {
-        address = new InetSocketAddress(hostname, port);
+    public Server(Configuration conf) throws IOException {
+        configuration = conf;
         http = HttpServer.create();
     }
 
-    public void run() throws IOException {
-        http.bind(address, -1);
-        fileContext = http.createContext("/", new StaticHttpHandler());
-        apiContext = http.createContext("/api", new ApiHandler());
+    public void run() throws IOException, Persistence.PersistenceException {
+        // connect to database
+        Persistence persistence = new Persistence(configuration.persistenceConf);
+        // bind server to the address
+        http.bind(configuration.address, -1);
+        // create contexts
+        http.createContext("/", new StaticHttpHandler(configuration.homePage));
+        http.createContext("/persistence", new PersistenceHttpHandler(persistence));
+        // start http server
         http.start();
     }
 
-    private static class ApiHandler implements HttpHandler {
+    public static final class Configuration {
+        public final String homePage;
+        public final InetSocketAddress address;
+        public final Persistence.Configuration persistenceConf;
 
-        @Override
-        public void handle(HttpExchange httpExchange) throws IOException {
+        private Configuration(Builder b) {
+            homePage = b.homePage;
+            address = b.address;
+            persistenceConf = b.persistenceConf;
+        }
 
+        public static class Builder {
+            private String homePage;
+            private InetSocketAddress address;
+            private Persistence.Configuration persistenceConf;
+
+            public Builder() {}
+            public Configuration build() { return new Configuration(this); }
+            public Builder homePage(String homePage) { this.homePage = homePage; return this; }
+            public Builder address(String address, int port) { this.address = new InetSocketAddress(address, port); return this; }
+            public Builder persistenceConf(Persistence.Configuration persistenceConf) { this.persistenceConf = persistenceConf; return this; }
         }
     }
 }

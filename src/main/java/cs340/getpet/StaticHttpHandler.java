@@ -6,7 +6,11 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.*;
 
 public class StaticHttpHandler implements HttpHandler {
-    public StaticHttpHandler() {}
+    private final String homePage;
+
+    public StaticHttpHandler(String homePage) {
+        this.homePage = homePage;
+    }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
@@ -14,13 +18,15 @@ public class StaticHttpHandler implements HttpHandler {
             final String path = httpExchange.getRequestURI().getPath();
             final String resourcePath;
 
-            // login.html is the default page
+            System.out.println(path);
+
             if (path.equals("/"))
-                resourcePath = "/content/login.html";
+                resourcePath = "/content/" + homePage;
             else
                 resourcePath = "/content" + path;
 
             if (getClass().getResource(resourcePath) != null) {
+                System.out.println(getClass().getResource(resourcePath));
                 try (InputStream inStream = getClass().getResourceAsStream(resourcePath);
                      OutputStream outStream = httpExchange.getResponseBody()) {
                     // read file data

@@ -1,12 +1,35 @@
 package cs340.getpet;
 
-import java.io.File;
+import cs340.getpet.persistence.Persistence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
-import java.util.Map;
 
 public class GetPet {
-    public static void main(String[] args) throws IOException  {
-        Server server = new Server("localhost", 8080);
-        server.run();
+    private static final Logger logger = LoggerFactory.getLogger(GetPet.class);
+
+    public static void main(String[] args) {
+        Server server;
+        try {
+            server = new Server(new Server.Configuration.Builder()
+                    .homePage("content/login.html")
+                    .address("localhost", 8080)
+                    .persistenceConf(new Persistence.Configuration.Builder()
+                            .server("localhost")
+                            .database("getpet")
+                            .user("root")
+                            .build())
+                    .build());
+        } catch (IOException e) {
+            logger.error("Failed to instantiate server", e);
+            return;
+        }
+
+        try {
+            server.run();
+        } catch (Persistence.PersistenceException | IOException e) {
+            logger.error("Exception while starting or running server", e);
+        }
     }
 }
