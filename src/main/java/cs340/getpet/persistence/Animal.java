@@ -1,6 +1,10 @@
 package cs340.getpet.persistence;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * An in-memory representation of an entity from the Animals table.
@@ -13,7 +17,7 @@ public class Animal {
     /**
      * The species of the animal.
      */
-    public final String species;
+    public final Species species;
     /**
      * The breed of the animal.
      */
@@ -21,15 +25,15 @@ public class Animal {
     /**
      * The size of the animal.
      */
-    public final String size;
+    public final Size size;
     /**
      * The primary colors that the animal's fur has.
      */
-    public final String[] colors;
+    public final Color[] colors;
     /**
      * The gender of the animal.
      */
-    public final String gender;
+    public final Gender gender;
     /**
      * The weight of the animal.
      */
@@ -55,13 +59,51 @@ public class Animal {
      */
     public boolean missing;
 
+    public enum Species {
+        @SerializedName("dog")
+        DOG,
+        @SerializedName("cat")
+        CAT,
+    }
+
+    public enum Size {
+        @SerializedName("small")
+        SMALL,
+        @SerializedName("medium")
+        MEDIUM,
+        @SerializedName("large")
+        LARGE,
+    }
+
+    public enum Color {
+        @SerializedName("black")
+        BLACK,
+        @SerializedName("white")
+        WHITE,
+        @SerializedName("brown")
+        BROWN,
+        @SerializedName("gold")
+        GOLD,
+        @SerializedName("dGray")
+        DARK_GRAY,
+        @SerializedName("lGray")
+        LIGHT_GRAY,
+    }
+
+    public enum Gender {
+        @SerializedName("m")
+        MALE,
+        @SerializedName("f")
+        FEMALE,
+    }
+
     public static class Builder {
         Integer intakeNumber;
-        String species;
+        Species species;
         String breed;
-        String size;
-        String[] colors;
-        String gender;
+        Size size;
+        Color[] colors;
+        Gender gender;
         Double weight;
         Boolean vaccinated;
         Boolean spayNeuter;
@@ -73,16 +115,16 @@ public class Animal {
         public Animal build() {
             if (species == null || breed == null || size == null || colors == null || gender == null || weight == null || vaccinated == null || spayNeuter == null || name == null || date == null || missing == null)
                 // TODO: throwing a runtime exception without a message is probably a bad idea
-                throw new RuntimeException();
+                throw new RuntimeException("Invalid call to build(): One or more required variables is unset!");
             else
                 return new Animal(this);
         }
         public Builder intakeNumber(int intakeNumber) { this.intakeNumber = intakeNumber; return this; }
-        public Builder species(String species) { this.species = species; return this; }
+        public Builder species(Species species) { this.species = species; return this; }
         public Builder breed(String breed) { this.breed = breed; return this; }
-        public Builder size(String size) { this.size = size; return this; }
-        public Builder colors(String[] colors) { this.colors = colors; return this; }
-        public Builder gender(String gender) { this.gender = gender; return this; }
+        public Builder size(Size size) { this.size = size; return this; }
+        public Builder colors(Color[] colors) { this.colors = colors; return this; }
+        public Builder gender(Gender gender) { this.gender = gender; return this; }
         public Builder weight(double weight) { this.weight = weight; return this; }
         public Builder vaccinated(boolean vaccinated) { this.vaccinated = vaccinated; return this; }
         public Builder spayNeuter(boolean spayNeuter) { this.spayNeuter = spayNeuter; return this; }
@@ -104,20 +146,5 @@ public class Animal {
         date = b.date;
         spayNeuter = b.spayNeuter;
         size = b.size;
-    }
-
-    Animal(int intakeNumber, String species, String breed, String size, String[] colors, String gender, double weight, boolean vaccinated, boolean spayNeuter, String name, Date date, boolean missing) {
-        this.intakeNumber = intakeNumber;
-        this.species = species;
-        this.breed = breed;
-        this.size = size;
-        this.colors = colors;
-        this.gender = gender;
-        this.weight = weight;
-        this.vaccinated = vaccinated;
-        this.spayNeuter = spayNeuter;
-        this.name = name;
-        this.date = date;
-        this.missing = missing;
     }
 }

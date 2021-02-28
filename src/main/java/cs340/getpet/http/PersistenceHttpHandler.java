@@ -1,9 +1,12 @@
-package cs340.getpet.persistence;
+package cs340.getpet.http;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+
+import cs340.getpet.persistence.Persistence;
+import cs340.getpet.persistence.SearchRequest;
+import cs340.getpet.persistence.SearchResponse;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -14,7 +17,7 @@ import java.util.Map;
 
 public class PersistenceHttpHandler implements HttpHandler {
     private final Map<String, Endpoint> endpoints = Map.of(
-            "search", new Endpoint("GET") {
+            "search", new Endpoint("POST") {
                 @Override
                 public String handle(Reader body) throws Persistence.PersistenceException {
                     SearchRequest searchRequest = gson.fromJson(body, SearchRequest.class);
@@ -62,7 +65,8 @@ public class PersistenceHttpHandler implements HttpHandler {
             } else
                 exchange.sendResponseHeaders(404, -1);
         } catch (Persistence.PersistenceException e) {
-            e.printStackTrace();
+            // TODO: error page
+            
         }
     }
 }

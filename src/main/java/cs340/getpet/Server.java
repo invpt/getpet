@@ -1,8 +1,10 @@
 package cs340.getpet;
 
 import com.sun.net.httpserver.HttpServer;
+
+import cs340.getpet.http.StaticHttpHandler;
+import cs340.getpet.http.PersistenceHttpHandler;
 import cs340.getpet.persistence.Persistence;
-import cs340.getpet.persistence.PersistenceHttpHandler;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -22,11 +24,14 @@ public class Server {
     public void run() throws IOException, Persistence.PersistenceException {
         // connect to database
         Persistence persistence = new Persistence(configuration.persistenceConf);
+
         // bind server to the address
         http.bind(configuration.address, -1);
+
         // create contexts
         http.createContext("/", new StaticHttpHandler(configuration.homePage));
         http.createContext("/persistence", new PersistenceHttpHandler(persistence));
+        
         // start http server
         http.start();
     }
