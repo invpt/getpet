@@ -1,50 +1,40 @@
 const elementsToFind = ['searchForm', 'result'];
 const elements = {};
 for (const elementToFind of elementsToFind)
-    elements[elementToFind] = document.getElementById(elementTofind);
+    elements[elementToFind] = document.getElementById(elementToFind);
 
 const readForm = form => {
     values = {};
 
-    let currentName;
-    let currentValue;
-    for (const formElement of form.elements) {
-        if (formElement.name) {
-            if (formElement.name !== currentName) {
-                if (formElement.name === 'breed')
-                    console.log(formElement);
+    for (const option of form.querySelectorAll('.option')) {
+        const name = option.getAttribute('name');
+        const type = option.getAttribute('type');
 
-                if (currentName && currentValue)
-                    if (currentValue.length === 0)
-                        values[currentName] = null;
-                    else if (currentValue.length === 1)
-                        values[currentName] = currentValue[0];
-                    else
-                        values[currentName] = currentValue;
-
-                currentName = formElement.name;
-                currentValue = [];
-            }
-
-            if ((formElement.type !== 'radio' && formElement.type !== 'checkbox') || formElement.checked)
-                currentValue.push(formElement.value);
+        switch (type) {
+            case 'radio':
+                values[name] = form.elements[name].value !== '' ? form.elements[name].value : null;
+                break;
+            case 'checkbox':
+                values[name] = [];
+                for (const checkbox of option.querySelectorAll('input'))
+                    if (checkbox.checked)
+                        values[name].push(checkbox.value);
+                break;
+            default:
+                values[name] = option.querySelector('input').value;
         }
     }
-    if (currentName && currentValue)
-        if (currentValue.length === 0)
-            values[currentName] = null;
-        else if (currentValue.length === 1)
-            values[currentName] = currentValue[0];
-        else
-            values[currentName] = currentValue;
 
     return values;
 };
 
 const displaySearchResults = results => {
-    const resultBox = elements.result;
+    while (elements.result.firstChild)
+        elements.result.removeChild(elements.result.firstChild);
 
-    for (const result of results) {
+    console.log('Got response with results', results);
+
+    for (const result of results.results) {
         const resultDiv = document.createElement('div');
         resultDiv.classList.add('result');
 
@@ -60,6 +50,8 @@ const displaySearchResults = results => {
         nameAttributeName.classList.add('animalAttributeName');
         nameAttributeName.innerText = 'Name:';
         animalName.appendChild(nameAttributeName);
+
+        animalName.appendChild(document.createTextNode(' '));
 
         const nameAttributeValue = document.createElement('span');
         nameAttributeValue.classList.add('animalAttributeValue');
@@ -80,10 +72,66 @@ const displaySearchResults = results => {
         breedAttributeName.innerText = 'Breed:';
         leftAttributePair.appendChild(breedAttributeName);
 
+        leftAttributePair.appendChild(document.createTextNode(' '));
+
         const breedAttributeValue = document.createElement('span');
         breedAttributeValue.classList.add('animalAttributeValue');
         breedAttributeValue.innerText = result.breed;
-        leftAttributePair.appendChild(breedAttributeName);
+        leftAttributePair.appendChild(breedAttributeValue);
+
+        const leftBr = document.createElement('br');
+        leftAttributePair.appendChild(leftBr);
+
+        const colorAttributeName = document.createElement('span');
+        colorAttributeName.classList.add('animalAttributeName');
+        colorAttributeName.innerText = 'Color:';
+        leftAttributePair.appendChild(colorAttributeName);
+
+        leftAttributePair.appendChild(document.createTextNode(' '));
+
+        const colorAttributeValue = document.createElement('span');
+        colorAttributeValue.classList.add('animalAttributeValue');
+        colorAttributeValue.innerText = result.colors.map(val => readableValues.color[val]).join(', ');
+        leftAttributePair.appendChild(colorAttributeValue);
+
+        const rightAttributePair = document.createElement('div');
+        rightAttributePair.classList.add('animalAttributePair');
+        rightAttributePair.classList.add('rightAttributePair');
+        animalSubInfo.appendChild(rightAttributePair);
+
+        const sizeAttributeName = document.createElement('span');
+        sizeAttributeName.classList.add('animalAttributeName');
+        sizeAttributeName.innerText = 'Size:';
+        rightAttributePair.appendChild(sizeAttributeName);
+
+        rightAttributePair.appendChild(document.createTextNode(' '));
+
+        const sizeAttributeValue = document.createElement('span');
+        sizeAttributeValue.classList.add('animalAttributeValue');
+        sizeAttributeValue.innerText = readableValues.size[result.size];
+        rightAttributePair.appendChild(sizeAttributeValue);
+
+        const rightBr = document.createElement('br');
+        rightAttributePair.appendChild(rightBr);
+
+        const genderAttributeName = document.createElement('span');
+        genderAttributeName.classList.add('animalAttributeName');
+        genderAttributeName.innerText = 'Gender:';
+        rightAttributePair.appendChild(genderAttributeName);
+
+        rightAttributePair.appendChild(document.createTextNode(' '));
+
+        const genderAttributeValue = document.createElement('span');
+        genderAttributeValue.classList.add('animalAttributeValue');
+        genderAttributeValue.innerText = readableValues.gender[result.gender];
+        rightAttributePair.appendChild(genderAttributeValue);
+
+        const detailsButton = document.createElement('button');
+        detailsButton.classList.add('button');
+        detailsButton.innerText = 'Details';
+        resultDiv.appendChild(detailsButton);
+
+        elements.result.appendChild(resultDiv);
     }
 }
 
@@ -91,6 +139,8 @@ searchForm.addEventListener('submit', ev => {
     ev.preventDefault();
 
     let searchRequest = readForm(searchForm);
+
+    console.log('Sending search request with body', searchRequest);
 
     fetch("/persistence/search", {
         method: 'POST',

@@ -3,22 +3,22 @@
     <head>
         <meta charset="utf-8" />
         <title>Search</title>
-        <link rel="stylesheet" href="/style.css" />
-        <link rel="stylesheet" href="/../search-style.css" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/search-style.css" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" />
     </head>
     <body>
 
         <header>
-            <h3>Search</h3>
+            <h3>Title Goes Here</h3>
         </header>
 
         <div id="flexible">
             <div id="parameters">
                 <form id="searchForm">
                     <div class="category">Species</div>
-                    <div class="option" id="species">
+                    <div class="option" id="species" name="species" type="radio">
                         <input type="radio" name="species" value="dog" id="optionDog" />
                         <label for="optionDog">Dog</label>
                         <br />
@@ -27,21 +27,21 @@
                     </div>
 
                     <div class="category">Gender</div>
-                    <div class="option" id="gender">
-                        <input type="checkbox" name="gender" value="m" id="optionMale" />
+                    <div class="option" id="genders" name="genders" type="checkbox">
+                        <input type="checkbox" name="genders" value="m" id="optionMale" />
                         <label for="optionMale">Male</label>
                         <br />
-                        <input type="checkbox" name="gender" value="f" id="optionFemale" />
+                        <input type="checkbox" name="genders" value="f" id="optionFemale" />
                         <label for="optionFemale">Female</label>
                     </div>
 
                     <div class="category">Breed</div>
-                    <div class="option" id="breed">
+                    <div class="option" id="breed" name="breed" type="text">
                         <input type="text" name="breed" id="optionBreed" />
                     </div>
 
                     <div class="category">Color</div>
-                    <div class="option" id="colors">
+                    <div class="option" id="colors" name="colors" type="checkbox">
                         <input type="checkbox" name="color" value="black" id="optionBlack" />
                         <label for="optionBlack">Black</label>
                         <br />
@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="category">Size</div>
-                    <div class="option" id="size">
+                    <div class="option" id="size" name="size" type="checkbox">
                         <input type="checkbox" name="size" value="small" id="optionSmall" />
                         <label for="optionSmall">Small</label>
                         <br />
@@ -84,6 +84,7 @@
             </div>
         </div>
 
+        <script src="/main.js"></script>
         <script src="/search.js"></script>
     </body>
 </html>
