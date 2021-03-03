@@ -96,34 +96,7 @@ public class Persistence {
         }
     }
 
-    private static final class EnumToString {
-        private static final List<Class<? extends Enum<?>>> CLASSES = List.of(Animal.Species.class, Animal.Gender.class, Animal.Color.class, Animal.Size.class);
-        private static final Map<Object, Map<Object, String>> classToConstantToName = new IdentityHashMap<>();
 
-        static {
-            for (Class<? extends Enum<?>> clazz : CLASSES)
-                try {
-                    Map<Object, String> constantToName = new IdentityHashMap<>();
-                    
-                    for (Enum<?> constant : clazz.getEnumConstants()) {
-                        String name = constant.name();
-                        SerializedName annotation = clazz.getField(name).getAnnotation(SerializedName.class);
-                        if (annotation != null) {
-                            name = annotation.value();
-                        }
-                        constantToName.put(constant, name);
-                    }
-    
-                    classToConstantToName.put(clazz, constantToName);
-                } catch (NoSuchFieldException e) {
-                    throw new AssertionError(e);
-                }
-        }
-
-        public static <T extends Enum<T>> String toString(T t, Class<T> clazz) {
-            return classToConstantToName.get(clazz).get(t);
-        }
-    }
 
     /**
      * Creates a Persistence, connecting to the database using the given information.
@@ -172,23 +145,21 @@ public class Persistence {
     }
 
     private static Animal animalFromRow(ResultSet resultSet) throws SQLException {
-        if (resultSet.next())
-            return new Animal.Builder()
-                    .intakeNumber(resultSet.getInt("intakeNumber"))
-                    .species(resultSet.getString("species"))
-                    .breed(resultSet.getString("breed"))
-                    .size(resultSet.getString("size"))
-                    .colors(Arrays.stream(resultSet.getString("color").split(" "))
-                            .toArray(String[]::new))
-                    .gender(resultSet.getString("gender"))
-                    .weight(resultSet.getDouble("weight"))
-                    .vaccinated(resultSet.getBoolean("vaccinated"))
-                    .spayNeuter(resultSet.getBoolean("spayNeuter"))
-                    .name(resultSet.getString("name"))
-                    .date(resultSet.getDate("date"))
-                    .missing(resultSet.getBoolean("missing"))
-                    .build();
-        else
-            return null;
+        return new Animal.Builder()
+                .intakeNumber(resultSet.getInt("intakeNumber"))
+                .species(Animal.Species.fromString(resultSet.getString("species")))
+                .breed(resultSet.getString("breed"))
+                .size(Animal.Size.fromString(resultSet.getString("size")))
+                .colors(Arrays.stream(resultSet.getString("color").split(" "))
+                        .map(Animal.Color::fromString)
+                        .toArray(Animal.Color[]::new))
+                .gender(Animal.Gender.fromString(resultSet.getString("gender")))
+                .weight(resultSet.getDouble("weight"))
+                .vaccinated(resultSet.getBoolean("vaccinated"))
+                .spayNeuter(resultSet.getBoolean("spayNeuter"))
+                .name(resultSet.getString("name"))
+                .date(resultSet.getDate("date"))
+                .missing(resultSet.getBoolean("missing"))
+                .build();
     }
 }

@@ -4,24 +4,31 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import cs340.getpet.GetPet;
 import cs340.getpet.persistence.Persistence;
 import cs340.getpet.persistence.SearchRequest;
 import cs340.getpet.persistence.SearchResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Map;
 
 public class PersistenceHttpHandler implements HttpHandler {
+    private static final Logger logger = LoggerFactory.getLogger(PersistenceHttpHandler.class);
+
     private final Map<String, Endpoint> endpoints = Map.of(
             "search", new Endpoint("POST") {
                 @Override
                 public String handle(Reader body) throws Persistence.PersistenceException {
                     SearchRequest searchRequest = gson.fromJson(body, SearchRequest.class);
                     SearchResponse searchResponse = persistence.search(searchRequest);
+                    Arrays.stream(searchResponse.results).map(animal -> animal != null ? animal.name : null).forEach(System.out::println);
                     return gson.toJson(searchResponse);
                 }
             }
@@ -66,7 +73,7 @@ public class PersistenceHttpHandler implements HttpHandler {
                 exchange.sendResponseHeaders(404, -1);
         } catch (Persistence.PersistenceException e) {
             // TODO: error page
-            
+            logger.error("Failed to perform search", e);
         }
     }
 }

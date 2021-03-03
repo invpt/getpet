@@ -1,10 +1,9 @@
 package cs340.getpet.persistence;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
+import cs340.getpet.util.EnumSerializer;
 
 /**
  * An in-memory representation of an entity from the Animals table.
@@ -63,7 +62,16 @@ public class Animal {
         @SerializedName("dog")
         DOG,
         @SerializedName("cat")
-        CAT,
+        CAT;
+
+        @Override
+        public String toString() {
+            return EnumSerializer.toString(this, Species.class);
+        }
+
+        public static Species fromString(String s) {
+            return EnumSerializer.fromString(s, Species.class);
+        }
     }
 
     public enum Size {
@@ -72,7 +80,16 @@ public class Animal {
         @SerializedName("medium")
         MEDIUM,
         @SerializedName("large")
-        LARGE,
+        LARGE;
+
+        @Override
+        public String toString() {
+            return EnumSerializer.toString(this, Size.class);
+        }
+
+        public static Size fromString(String s) {
+            return EnumSerializer.fromString(s, Size.class);
+        }
     }
 
     public enum Color {
@@ -87,14 +104,32 @@ public class Animal {
         @SerializedName("dGray")
         DARK_GRAY,
         @SerializedName("lGray")
-        LIGHT_GRAY,
+        LIGHT_GRAY;
+
+        @Override
+        public String toString() {
+            return EnumSerializer.toString(this, Color.class);
+        }
+
+        public static Color fromString(String s) {
+            return EnumSerializer.fromString(s, Color.class);
+        }
     }
 
     public enum Gender {
         @SerializedName("m")
         MALE,
         @SerializedName("f")
-        FEMALE,
+        FEMALE;
+
+        @Override
+        public String toString() {
+            return EnumSerializer.toString(this, Gender.class);
+        }
+
+        public static Gender fromString(String s) {
+            return EnumSerializer.fromString(s, Gender.class);
+        }
     }
 
     public static class Builder {
@@ -114,7 +149,6 @@ public class Animal {
         public Builder() {}
         public Animal build() {
             if (species == null || breed == null || size == null || colors == null || gender == null || weight == null || vaccinated == null || spayNeuter == null || name == null || date == null || missing == null)
-                // TODO: throwing a runtime exception without a message is probably a bad idea
                 throw new RuntimeException("Invalid call to build(): One or more required variables is unset!");
             else
                 return new Animal(this);

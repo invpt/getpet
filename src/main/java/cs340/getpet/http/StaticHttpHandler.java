@@ -19,16 +19,16 @@ public class StaticHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        final String path = httpExchange.getRequestURI().getPath();
+        final String requestPath = httpExchange.getRequestURI().getPath();
         final int responseCode;
 
         if (httpExchange.getRequestMethod().equals("GET")) {
             final String resourcePath;
 
-            if (path.equals("/"))
+            if (requestPath.equals("/"))
                 resourcePath = "/content" + homePage;
             else
-                resourcePath = "/content" + path;
+                resourcePath = "/content" + requestPath;
 
             if (getClass().getResource(resourcePath) != null) {
                 try (InputStream inStream = getClass().getResourceAsStream(resourcePath);
@@ -48,6 +48,6 @@ public class StaticHttpHandler implements HttpHandler {
             httpExchange.sendResponseHeaders(responseCode = 405, -1);
 
 
-        logger.info("HTTP " + responseCode + ": " + path);
+        logger.info("HTTP " + responseCode + ": " + requestPath);
     }
 }
