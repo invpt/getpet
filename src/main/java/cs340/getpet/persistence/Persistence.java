@@ -1,11 +1,20 @@
 package cs340.getpet.persistence;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Map;
+
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 public class Persistence {
+    static SecureRandom secureRandom = new SecureRandom();
     Connection conn;
 
     public static class PersistenceException extends Exception {
@@ -136,6 +145,21 @@ public class Persistence {
         } catch (SQLException e) {
             throw new PersistenceException("Failed to create or execute animal search statement", e);
         }
+    }
+
+    public LoginResponse login(LoginRequest loginRequest) {
+        final Map<String, String> USERS = Map.of(
+            "director", "iAmDirector!!..123",
+            "assistant", "AssistantToTheDirector...45"
+        );
+
+        boolean valid = USERS.containsKey(loginRequest.username)
+                && USERS.get(loginRequest.username).equals(loginRequest.password);
+
+        if (valid)
+            return new LoginResponse(loginRequest.username);
+        else
+            return null;
     }
 
     private static Animal animalFromRow(ResultSet resultSet) throws SQLException {

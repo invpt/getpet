@@ -24,6 +24,9 @@ CREATE TABLE Animals (
 	                     -- Cats: Small 2-10 lbs, Medium 10-15 lbs, Large 15+ lbs   *As an adult*
 );
 
+
+------------ Add sample data ------------
+
 INSERT INTO Animals SET
     intakeNumber = 0001,
     species = 'dog',

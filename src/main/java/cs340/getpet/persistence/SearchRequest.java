@@ -1,7 +1,5 @@
 package cs340.getpet.persistence;
 
-import java.util.Arrays;
-
 import checkers.nullness.quals.NonNull;
 import checkers.nullness.quals.Nullable;
 
