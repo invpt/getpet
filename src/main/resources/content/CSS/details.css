@@ -1,0 +1,35 @@
+#flexible{
+    display:flex;
+    flex-wrap:nowrap;
+    flex-direction:row;
+    justify-content:flex-start;
+    align-content:flex-start;
+}
+#layout{
+    display:flex;
+    flex-wrap:nowrap;
+    flex-direction:column;
+    justify-content:center;
+    align-content:center;
+}
+
+#row1{
+    margin: 10px 20px 0px 20px;
+    align-self:center;
+}
+
+#col1{
+    margin:5px 10px 5px 5px;
+}
+
+#col2{
+    margin:5px 5px 5px 10px;
+}
+
+.row{
+    display:flex;
+    flex-wrap:nowrap;
+    flex-direction:row;
+    justify-content:center;
+    align-content:center;
+}
