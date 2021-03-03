@@ -2,6 +2,9 @@ package cs340.getpet;
 
 import com.sun.net.httpserver.HttpServer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cs340.getpet.http.StaticHttpHandler;
 import cs340.getpet.http.PersistenceHttpHandler;
 import cs340.getpet.persistence.Persistence;
@@ -13,6 +16,8 @@ import java.net.InetSocketAddress;
  * Serves the pages for the website as well as hosts the RESTful DB interaction API.
  */
 public class Server {
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
+
     private final Configuration configuration;
     private final HttpServer http;
 
@@ -34,6 +39,8 @@ public class Server {
         
         // start http server
         http.start();
+
+        logger.info("Successfully started on " + configuration.address);
     }
 
     public static final class Configuration {

@@ -18,11 +18,11 @@ public class StaticHttpHandler implements HttpHandler {
     }
 
     @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        final String requestPath = httpExchange.getRequestURI().getPath();
+    public void handle(HttpExchange exchange) throws IOException {
+        final String requestPath = exchange.getRequestURI().getPath();
         final int responseCode;
 
-        if (httpExchange.getRequestMethod().equals("GET")) {
+        if (exchange.getRequestMethod().equals("GET")) {
             final String resourcePath;
 
             if (requestPath.equals("/"))
@@ -32,22 +32,24 @@ public class StaticHttpHandler implements HttpHandler {
 
             if (getClass().getResource(resourcePath) != null) {
                 try (InputStream inStream = getClass().getResourceAsStream(resourcePath);
-                     OutputStream outStream = httpExchange.getResponseBody()) {
+                     OutputStream outStream = exchange.getResponseBody()) {
                     // read file data
                     byte[] data = inStream.readAllBytes();
 
                     // send headers
-                    httpExchange.sendResponseHeaders(responseCode = 200, data.length);
+                    exchange.sendResponseHeaders(responseCode = 200, data.length);
 
                     // send data
                     outStream.write(data);
                 }
             } else
-                httpExchange.sendResponseHeaders(responseCode = 404, -1);
+                exchange.sendResponseHeaders(responseCode = 404, -1);
         } else
-            httpExchange.sendResponseHeaders(responseCode = 405, -1);
+            exchange.sendResponseHeaders(responseCode = 405, -1);
 
 
         logger.info("HTTP " + responseCode + ": " + requestPath);
+
+        exchange.close();
     }
 }

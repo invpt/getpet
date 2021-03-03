@@ -3,13 +3,7 @@ package cs340.getpet.persistence;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import com.google.gson.annotations.SerializedName;
 
 public class Persistence {
     Connection conn;
