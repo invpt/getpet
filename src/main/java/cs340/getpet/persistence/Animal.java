@@ -1,6 +1,9 @@
-package cs340.getpet.data;
+package cs340.getpet.persistence;
 
 import java.util.Date;
+
+import com.google.gson.annotations.SerializedName;
+import cs340.getpet.util.EnumSerializer;
 
 /**
  * An in-memory representation of an entity from the Animals table.
@@ -9,7 +12,7 @@ public class Animal {
     /**
      * The intake number of the animal. May be null.
      */
-    public final IntakeNumber intakeNumber;
+    public final int intakeNumber;
     /**
      * The species of the animal.
      */
@@ -55,8 +58,82 @@ public class Animal {
      */
     public boolean missing;
 
+    public enum Species {
+        @SerializedName("dog")
+        DOG,
+        @SerializedName("cat")
+        CAT;
+
+        @Override
+        public String toString() {
+            return EnumSerializer.toString(this, Species.class);
+        }
+
+        public static Species fromString(String s) {
+            return EnumSerializer.fromString(s, Species.class);
+        }
+    }
+
+    public enum Size {
+        @SerializedName("small")
+        SMALL,
+        @SerializedName("medium")
+        MEDIUM,
+        @SerializedName("large")
+        LARGE;
+
+        @Override
+        public String toString() {
+            return EnumSerializer.toString(this, Size.class);
+        }
+
+        public static Size fromString(String s) {
+            return EnumSerializer.fromString(s, Size.class);
+        }
+    }
+
+    public enum Color {
+        @SerializedName("black")
+        BLACK,
+        @SerializedName("white")
+        WHITE,
+        @SerializedName("brown")
+        BROWN,
+        @SerializedName("gold")
+        GOLD,
+        @SerializedName("dGray")
+        DARK_GRAY,
+        @SerializedName("lGray")
+        LIGHT_GRAY;
+
+        @Override
+        public String toString() {
+            return EnumSerializer.toString(this, Color.class);
+        }
+
+        public static Color fromString(String s) {
+            return EnumSerializer.fromString(s, Color.class);
+        }
+    }
+
+    public enum Gender {
+        @SerializedName("m")
+        MALE,
+        @SerializedName("f")
+        FEMALE;
+
+        @Override
+        public String toString() {
+            return EnumSerializer.toString(this, Gender.class);
+        }
+
+        public static Gender fromString(String s) {
+            return EnumSerializer.fromString(s, Gender.class);
+        }
+    }
+
     public static class Builder {
-        IntakeNumber intakeNumber;
+        Integer intakeNumber;
         Species species;
         String breed;
         Size size;
@@ -72,12 +149,11 @@ public class Animal {
         public Builder() {}
         public Animal build() {
             if (species == null || breed == null || size == null || colors == null || gender == null || weight == null || vaccinated == null || spayNeuter == null || name == null || date == null || missing == null)
-                // TODO: throwing a runtime exception without a message is probably a bad idea
-                throw new RuntimeException();
+                throw new RuntimeException("Invalid call to build(): One or more required variables is unset!");
             else
                 return new Animal(this);
         }
-        public Builder intakeNumber(IntakeNumber intakeNumber) { this.intakeNumber = intakeNumber; return this; }
+        public Builder intakeNumber(int intakeNumber) { this.intakeNumber = intakeNumber; return this; }
         public Builder species(Species species) { this.species = species; return this; }
         public Builder breed(String breed) { this.breed = breed; return this; }
         public Builder size(Size size) { this.size = size; return this; }

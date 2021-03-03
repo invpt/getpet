@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Search</title>
+        <link rel="stylesheet" href="/style.css" />
+        <link rel="stylesheet" href="/search-style.css" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" />
+    </head>
+    <body>
+
+        <header>
+            <h3>Title Goes Here</h3>
+        </header>
+
+        <div id="flexible">
+            <div id="parameters">
+                <form id="searchForm">
+                    <div class="category">Species</div>
+                    <div class="option" id="species" name="species" type="radio">
+                        <input type="radio" name="species" value="dog" id="optionDog" />
+                        <label for="optionDog">Dog</label>
+                        <br />
+                        <input type="radio" name="species" value="cat" id="optionCat" />
+                        <label for="optionCat">Cat</label>
+                    </div>
+
+                    <div class="category">Gender</div>
+                    <div class="option" id="genders" name="genders" type="checkbox">
+                        <input type="checkbox" name="genders" value="m" id="optionMale" />
+                        <label for="optionMale">Male</label>
+                        <br />
+                        <input type="checkbox" name="genders" value="f" id="optionFemale" />
+                        <label for="optionFemale">Female</label>
+                    </div>
+
+                    <div class="category">Breed</div>
+                    <div class="option" id="breed" name="breed" type="text">
+                        <input type="text" name="breed" id="optionBreed" />
+                    </div>
+
+                    <div class="category">Color</div>
+                    <div class="option" id="colors" name="colors" type="checkbox">
+                        <input type="checkbox" name="color" value="black" id="optionBlack" />
+                        <label for="optionBlack">Black</label>
+                        <br />
+                        <input type="checkbox" name="color" value="white" id="optionWhite" />
+                        <label for="optionWhite">White</label>
+                        <br />
+                        <input type="checkbox" name="color" value="brown" id="optionBrown" />
+                        <label for="optionBrown">Brown</label>
+                        <br />
+                        <input type="checkbox" name="color" value="gold" id="optionGold" />
+                        <label for="optionGold">Gold</label>
+                        <br />
+                        <input type="checkbox" name="color" value="lGray" id="optionLightGray" />
+                        <label for="optionLightGray">Light Gray</label>
+                        <br />
+                        <input type="checkbox" name="color" value="dGray" id="optionDarkGray" />
+                        <label for="optionDarkGray">Dark Gray</label>
+                    </div>
+
+                    <div class="category">Size</div>
+                    <div class="option" id="size" name="size" type="checkbox">
+                        <input type="checkbox" name="size" value="small" id="optionSmall" />
+                        <label for="optionSmall">Small</label>
+                        <br />
+                        <input type="checkbox" name="size" value="medium" id="optionMedium" />
+                        <label for="optionMedium">Medium</label>
+                        <br />
+                        <input type="checkbox" name="size" value="large" id="optionLarge" />
+                        <label for="optionLarge">Large</label>
+                    </div>
+
+                    <input type="submit" value="Search" class="button submit" />
+                </form>
+            </div>
+
+            <div id="resultsBox">
+                <h1>Results</h1>
+
+                <div id="result"></div>
+            </div>
+        </div>
+
+        <script src="/main.js"></script>
+        <script src="/search.js"></script>
+    </body>
+</html>
