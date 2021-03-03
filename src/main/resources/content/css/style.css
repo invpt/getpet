@@ -80,6 +80,7 @@ input[type = "text"] {
 }
 
 .option {
+    margin: 2px;
     margin-bottom:10px;
 }
 
