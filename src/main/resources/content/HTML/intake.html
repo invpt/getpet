@@ -1,97 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>Search</title>
-  <link rel="stylesheet" href="/style.css" />
-  <link rel="stylesheet" href="/search-style.css" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" />
-</head>
-<body>
+    <head>
+        <meta charset="utf-8" />
+        <title>Search</title>
+        <link rel="stylesheet" href="/style.css" />
+        <link rel="stylesheet" href="/../intake-style.css" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" />
+    </head>
+    <body>
 
-  <header>
-      <h3>Details</h3>
-  </header>
+        <header>
+            <h3>Details</h3>
+        </header>
 
-<form>
-  <div id = layout>
-    <div id = "row1">
-      <div class="category">Name</div>
-      <div class="option">
-        <input type="text" wicket:id="name" /><br>
-      </div>
-
-      <div class="category">Breed</div>
-      <div class="option">
-        <input type="text" wicket:id="breed" /><br>
-      </div>
-
-      <div class="category">Weight</div>
-      <div class="option">
-        <input type="number" wicket:id="weight" min="1" max="300" step="0.1" />
-      </div>
-    </div>
-
-    <div class = "row">
-      <div id = "col1">
-        <div class="category">Size</div>
-        <div class="option" wicket:id="size">
-          <input type = "radio" name = "size" id ="small" value = "small"><label for = "small">Small</label><br>
-          <input type = "radio" name = "size" id ="medium" value = "medium"><label for = "medium">Medium</label><br>
-          <input type = "radio" name = "size" id ="large" value = "large"><label for = "large">Large</label><br>
-        </div>
-        
-        <div class="category">Gender</div>
-            <div class="option" wicket:id="gender">
-          <input type = "radio" name = "gender" > Male
-          <input type = "radio" name = "gender"> Female
-        </div>
-        
-        <div class = "category">Species</div>
-          <input type = "radio" id = "dog" name = "species" value = "dog">
-          <label for = "dog"> Dog</label>
-        
-          <input type = "radio" id = "cat" name = "species" value = "cat">
-          <label for = "cat">Cat</label>
-      </div>
-      
-
-      <div id = "col2">   
-        <div class="category">Color</div>
-        <div class="option" wicket:id="color">
-          <div id = "flexible">
-            <div id = "color1">
-              <input type = "checkbox"> Black<br>
-              <input type = "checkbox"> White<br>
-              <input type = "checkbox"> Brown<br>
+        <form>
+        <div id = layout>
+            <div id = "row1">
+            <div class="category">Name</div>
+            <div class="option">
+                <input type="text" id="name" /><br>
             </div>
-            <div id = "color2">
-              <input type = "checkbox"> Golden<br>
-              <input type = "checkbox"> Light Gray<br>
-              <input type = "checkbox"> Dark Gray<br>
+
+            <div class="category">Breed</div>
+            <div class="option">
+                <input type="text" id="breed" /><br>
             </div>
-          </div>
-        </div>
 
-        <div class="category">Vaccinated</div>
-        <div class="option" wicket:id="vaccinated">
-          <input type = "checkbox"> Yes
-        </div>
+            <div class="category">Weight</div>
+            <div class="option">
+                <input type="number" id="weight" min="1" max="300" step="0.1" />
+            </div>
+            </div>
 
-        <div class="category">Spayed/Neutered</div>
-        <div class="option" wicket:id="spayNeuter">
-          <input type = "checkbox"> Yes
-        </div>
-        
-      </div>
-    </div>
-    
-    <div class = "row">
-      <input type="submit" value="Save" class="button submit" />
-    </div>
-  </div>
-</form>
+            <div class = "row">
+            <div id = "col1">
+                <div class="category">Size</div>
+                <div class="option" id="size">
+                <input type = "radio" name = "size" id ="small" value = "small"><label for = "small">Small</label><br>
+                <input type = "radio" name = "size" id ="medium" value = "medium"><label for = "medium">Medium</label><br>
+                <input type = "radio" name = "size" id ="large" value = "large"><label for = "large">Large</label><br>
+                </div>
+                
+                <div class="category">Gender</div>
+                    <div class="option" id="gender">
+                <input type = "radio" name = "gender" > Male
+                <input type = "radio" name = "gender"> Female
+                </div>
+                
+                <div class = "category">Species</div>
+                <input type = "radio" id = "dog" name = "species" value = "dog">
+                <label for = "dog"> Dog</label>
+                
+                <input type = "radio" id = "cat" name = "species" value = "cat">
+                <label for = "cat">Cat</label>
+            </div>
+            
 
-</body>
+            <div id = "col2">   
+                <div class="category">Color</div>
+                <div class="option" id="color">
+                <div id = "flexible">
+                    <div id = "color1">
+                    <input type = "checkbox"> Black<br>
+                    <input type = "checkbox"> White<br>
+                    <input type = "checkbox"> Brown<br>
+                    </div>
+                    <div id = "color2">
+                    <input type = "checkbox"> Golden<br>
+                    <input type = "checkbox"> Light Gray<br>
+                    <input type = "checkbox"> Dark Gray<br>
+                    </div>
+                </div>
+                </div>
+
+                <div class="category">Vaccinated</div>
+                <div class="option" id="vaccinated">
+                <input type = "checkbox"> Yes
+                </div>
+
+                <div class="category">Spayed/Neutered</div>
+                <div class="option" id="spayNeuter">
+                <input type = "checkbox"> Yes
+                </div>
+                
+            </div>
+            </div>
+            
+            <div class = "row">
+            <input type="submit" value="Save" class="button submit" />
+            </div>
+        </div>
+        </form>
+
+    </body>
 </html>

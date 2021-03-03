@@ -1,21 +1,21 @@
 #flexible{
     display:flex;
-  flex-wrap:nowrap;
-      flex-direction:row;
-      justify-content:flex-start;
-       align-content:flex-start;
+    flex-wrap:nowrap;
+    flex-direction:row;
+    justify-content:flex-start;
+    align-content:flex-start;
 }
 #layout{
     display:flex;
-  flex-wrap:nowrap;
-  flex-direction:column;
-  justify-content:center;
-  align-content:center;
+    flex-wrap:nowrap;
+    flex-direction:column;
+    justify-content:center;
+    align-content:center;
 }
 
 #row1{
     margin: 10px 20px 0px 20px;
-  align-self:center;
+    align-self:center;
 }
 
 #col1{
@@ -28,8 +28,8 @@
 
 .row{
     display:flex;
-  flex-wrap:nowrap;
-  flex-direction:row;
-  justify-content:center;
-  align-content:center;
+    flex-wrap:nowrap;
+    flex-direction:row;
+    justify-content:center;
+    align-content:center;
 }
