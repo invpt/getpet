@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import cs340.getpet.persistence.LoginRequest;
+import cs340.getpet.persistence.LoginResponse;
 import cs340.getpet.persistence.Persistence;
 import cs340.getpet.persistence.SearchRequest;
 import cs340.getpet.persistence.SearchResponse;
@@ -28,7 +30,7 @@ public class PersistenceHttpHandler implements HttpHandler {
     }
 
     private final Map<String, Endpoint> endpoints = Map.of(
-        "search", this::handleSearch);
+        "search", this::handleSearch, "login", this::handleLogin);
     private final Gson gson;
     private final Persistence persistence;
 
@@ -52,8 +54,12 @@ public class PersistenceHttpHandler implements HttpHandler {
             Endpoint endpoint = endpoints.get(endpointPath);
             if (endpoint != null) {
                 String responseJson = endpoint.handle(new InputStreamReader(body));
-                exchange.sendResponseHeaders(responseCode = 200, responseJson.length());
-                exchange.getResponseBody().write(responseJson.getBytes(StandardCharsets.UTF_8));
+
+                if (responseJson != null) {
+                    exchange.sendResponseHeaders(responseCode = 200, responseJson.length());
+                    exchange.getResponseBody().write(responseJson.getBytes(StandardCharsets.UTF_8));
+                } else
+                    exchange.sendResponseHeaders(responseCode = 401, -1);
             } else
                 exchange.sendResponseHeaders(responseCode = 404, -1);
         } catch (Persistence.PersistenceException e) {
@@ -71,5 +77,11 @@ public class PersistenceHttpHandler implements HttpHandler {
         SearchRequest searchRequest = gson.fromJson(body, SearchRequest.class);
         SearchResponse searchResponse = persistence.search(searchRequest);
         return gson.toJson(searchResponse);
+    }
+
+    private String handleLogin(Reader body) {
+        LoginRequest loginRequest = gson.fromJson(body, LoginRequest.class);
+        LoginResponse loginResponse = persistence.login(loginRequest);
+        return loginResponse != null ? gson.toJson(loginResponse) : null;
     }
 }

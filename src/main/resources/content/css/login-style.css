@@ -14,10 +14,6 @@
     
   }
   
-  .credentialsItem {
-  	margin: 2px;
-  }
-  
   .credentialsFlex{
   	display:flex;
     flex-direction:column;
