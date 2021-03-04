@@ -1,11 +1,18 @@
-#flexible{
+.flexible{
     display:flex;
     flex-wrap:nowrap;
     flex-direction:row;
     justify-content:flex-start;
     align-content:flex-start;
 }
-#layout{
+
+form {
+    background-color: #dadada;
+    border-style:solid;
+    border-width:2px;
+    border-color:#acacac;
+    border-radius: 10px;
+
     display:flex;
     flex-wrap:nowrap;
     flex-direction:column;
@@ -13,23 +20,14 @@
     align-content:center;
 }
 
-#row1{
-    margin: 10px 20px 0px 20px;
-    align-self:center;
-}
-
-#col1{
-    margin:5px 10px 5px 5px;
-}
-
-#col2{
-    margin:5px 5px 5px 10px;
-}
-
-.row{
+.optionGroupGroup{
     display:flex;
     flex-wrap:nowrap;
     flex-direction:row;
     justify-content:center;
     align-content:center;
+}
+
+.optionGroup {
+    margin:7.5px;
 }
