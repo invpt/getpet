@@ -38,8 +38,6 @@ public class PersistenceHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        logger.info("Got " + exchange.getRequestMethod() + " request to " + exchange.getRequestURI().getPath());
-
         final String path = exchange.getRequestURI().getPath();
         final InputStream body = exchange.getRequestBody();
 
