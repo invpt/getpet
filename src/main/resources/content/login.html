@@ -14,23 +14,25 @@
 		  <h3>Login</h3>
 		</header>
 		
-		<div class ="credentialsFlex">
-			<div class ="credentials">
-			<div class ="credentialsItem">
-			  <label for ="username">Username</label>
-			  <input type ="text" name ="username" id ="username">
-			</div>
-			
-			<div class ="credentialsItem">
-			  <label for ="password">Password</label>
-			  <input type ="password" name ="password" id ="password">
-			  
-			</div>
-			<button type = "submit" class = "button submit" style = "margin-top:3px;"> Login </button>
-			  </div>
+		<div class="credentialsFlex">
+			<p id="errorMessage" style="visibility: hidden; max-width:none; max-height: 0; color: red;">Login failed: Invalid username or password!</p>
+			<form class="credentials" id="credentials">
+				<div class="option" name="username" type="text">
+					<label for="username">Username</label>
+					<input type="text" name="username" id="username" />
+				</div>
+				
+				<div class="option" name="username" type="text">
+					<label for="password">Password</label>
+					<input type="password" name="password" id="password" />
+				</div>
+
+				<button type="submit" class="button submit" style="margin-top:3px;">Login</button>
+			</form>
 		</div>
-			  
-	  </body>
-	  
-	  </html>
+
+        <script src="/js/main.js"></script>
+        <script src="/js/login.js"></script>
+	</body>
+</html>
 	  

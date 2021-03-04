@@ -1,4 +1,4 @@
-.credentials{
+.credentials {
     background-color: #dadada;
     display:flex;
     flex-direction:column;
@@ -7,29 +7,26 @@
     border-width:2px;
     border-color:#acacac;
     border-radius: 10px;
-    
+
     width:350px;
     margin-top:60px;
     padding:5px 0 5px 0;
-    
-  }
-  
-  .credentialsFlex{
-  	display:flex;
+}
+
+.credentialsFlex {
+    display:flex;
     flex-direction:column;
     align-items:center;
-    
-    
-  }
-  
-  #username{
-  	width:200px;
-	}
-  
-  #password{
-  	width:200px;
-  }
-  
-  label{
+}
+
+#username {
+    width:200px;
+}
+
+#password {
+    width:200px;
+}
+
+label {
     display:block;
-  }
+}

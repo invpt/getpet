@@ -147,21 +147,6 @@ public class Persistence {
         }
     }
 
-    public LoginResponse login(LoginRequest loginRequest) {
-        final Map<String, String> USERS = Map.of(
-            "director", "iAmDirector!!..123",
-            "assistant", "AssistantToTheDirector...45"
-        );
-
-        boolean valid = USERS.containsKey(loginRequest.username)
-                && USERS.get(loginRequest.username).equals(loginRequest.password);
-
-        if (valid)
-            return new LoginResponse(loginRequest.username);
-        else
-            return null;
-    }
-
     private static Animal animalFromRow(ResultSet resultSet) throws SQLException {
         return new Animal.Builder()
                 .intakeNumber(resultSet.getInt("intakeNumber"))

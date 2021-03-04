@@ -4,12 +4,9 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import cs340.getpet.persistence.LoginRequest;
-import cs340.getpet.persistence.LoginResponse;
 import cs340.getpet.persistence.Persistence;
 import cs340.getpet.persistence.SearchRequest;
 import cs340.getpet.persistence.SearchResponse;
-import cs340.getpet.persistence.Persistence.PersistenceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +27,7 @@ public class PersistenceHttpHandler implements HttpHandler {
     }
 
     private final Map<String, Endpoint> endpoints = Map.of(
-        "search", this::handleSearch, "login", this::handleLogin);
+        "search", this::handleSearch);
     private final Gson gson;
     private final Persistence persistence;
 
@@ -77,11 +74,5 @@ public class PersistenceHttpHandler implements HttpHandler {
         SearchRequest searchRequest = gson.fromJson(body, SearchRequest.class);
         SearchResponse searchResponse = persistence.search(searchRequest);
         return gson.toJson(searchResponse);
-    }
-
-    private String handleLogin(Reader body) {
-        LoginRequest loginRequest = gson.fromJson(body, LoginRequest.class);
-        LoginResponse loginResponse = persistence.login(loginRequest);
-        return loginResponse != null ? gson.toJson(loginResponse) : null;
     }
 }

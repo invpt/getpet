@@ -1,3 +1,5 @@
+requirePrivilegeLevel('any');
+
 const displaySearchResults = results => {
     while (elements.result.firstChild)
         elements.result.removeChild(elements.result.firstChild);
