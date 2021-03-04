@@ -3,7 +3,7 @@ const users = {
     'assistant': 'AssistantToTheDirector.....',
 };
 
-const doLogin = username => {
+const loginAs = username => {
     window.sessionStorage.setItem('role', username);
     window.location.href = '/search.html';
 };
@@ -19,8 +19,10 @@ elements.credentials.addEventListener('submit', ev => {
 
     const loginDetails = readForm(elements.credentials);
 
+    console.log('login with', loginDetails);
+
     if (users[loginDetails.username] && users[loginDetails.username] === loginDetails.password)
-        window.location.href = '/search.html';
+        loginAs(loginDetails.username);
     else
         displayLoginFailed();
 
