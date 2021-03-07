@@ -140,6 +140,25 @@ public class Persistence {
         }
     }
 
+    public GetAnimalResponse getAnimal(GetAnimalRequest getAnimalRequest) throws PersistenceException {
+        String queryString = "SELECT * FROM Animals WHERE intakeNumber = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(queryString)) {
+            stmt.setInt(1, getAnimalRequest.intakeNumber);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            resultSet.next();
+
+            if (!resultSet.isAfterLast())
+                return new GetAnimalResponse(animalFromRow(resultSet));
+            else
+                return new GetAnimalResponse(null);
+        } catch (SQLException e) {
+            throw new PersistenceException("Failed to create or execute animal search statement", e);
+        }
+    }
+
     private static Animal animalFromRow(ResultSet resultSet) throws SQLException {
         return new Animal.Builder()
                 .intakeNumber(resultSet.getInt("intakeNumber"))

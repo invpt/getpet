@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import cs340.getpet.persistence.GetAnimalRequest;
+import cs340.getpet.persistence.GetAnimalResponse;
 import cs340.getpet.persistence.Persistence;
 import cs340.getpet.persistence.SearchRequest;
 import cs340.getpet.persistence.SearchResponse;
@@ -23,11 +25,11 @@ public class PersistenceHttpHandler implements HttpHandler {
 
     @FunctionalInterface
     private interface Endpoint {
-        public String handle(Reader body) throws Persistence.PersistenceException;
+        public String handle(String method, Reader body) throws Persistence.PersistenceException;
     }
 
     private final Map<String, Endpoint> endpoints = Map.of(
-        "search", this::handleSearch);
+        "search", this::handleSearch, "animal", this::handleAnimal);
     private final Gson gson;
     private final Persistence persistence;
 
@@ -48,7 +50,7 @@ public class PersistenceHttpHandler implements HttpHandler {
 
             Endpoint endpoint = endpoints.get(endpointPath);
             if (endpoint != null) {
-                String responseJson = endpoint.handle(new InputStreamReader(body));
+                String responseJson = endpoint.handle(exchange.getRequestMethod(), new InputStreamReader(body));
 
                 if (responseJson != null) {
                     exchange.sendResponseHeaders(responseCode = 200, responseJson.length());
@@ -68,9 +70,20 @@ public class PersistenceHttpHandler implements HttpHandler {
         exchange.close();
     }
 
-    private String handleSearch(Reader body) throws Persistence.PersistenceException {
+    private String handleSearch(String method, Reader body) throws Persistence.PersistenceException {
         SearchRequest searchRequest = gson.fromJson(body, SearchRequest.class);
         SearchResponse searchResponse = persistence.search(searchRequest);
         return gson.toJson(searchResponse);
+    }
+
+    private String handleAnimal(String method, Reader body) throws Persistence.PersistenceException {
+        switch (method) {
+            // nothing other than POST needed yet.
+            case "POST":
+            default:
+                GetAnimalRequest request = gson.fromJson(body, GetAnimalRequest.class);
+                GetAnimalResponse response = persistence.getAnimal(request);
+                return gson.toJson(response);
+        }
     }
 }
