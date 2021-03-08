@@ -22,7 +22,7 @@ const readableValues = {
     },
 };
 
-const elementsToFind = ['searchForm', 'result', 'credentials', 'errorMessage'];
+const elementsToFind = ['searchForm', 'result', 'credentials', 'errorMessage', 'detailsForm'];
 const elements = {};
 for (const elementToFind of elementsToFind)
     elements[elementToFind] = document.getElementById(elementToFind);
@@ -39,10 +39,16 @@ const readForm = form => {
                 values[name] = form.elements[name].value !== '' ? form.elements[name].value : null;
                 break;
             case 'checkbox':
-                values[name] = [];
-                for (const checkbox of option.querySelectorAll('input'))
-                    if (checkbox.checked)
-                        values[name].push(checkbox.value);
+                const checkboxes = option.querySelectorAll('input');
+                console.log(checkboxes);
+                if (checkboxes.length > 1) {
+                    values[name] = [];
+                    for (const checkbox of option.querySelectorAll('input'))
+                        if (checkbox.checked)
+                            values[name].push(checkbox.value);
+                } else {
+                    values[name] = checkboxes.length != 0;
+                }
                 break;
             default:
                 values[name] = option.querySelector('input').value;

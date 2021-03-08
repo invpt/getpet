@@ -10,9 +10,13 @@ import cs340.getpet.util.EnumSerializer;
  */
 public class Animal {
     /**
-     * The intake number of the animal. May be null.
+     * The intake number of the animal.
      */
     public final int intakeNumber;
+    /**
+     * The cage number of the cage that the animal is residing in.
+     */
+    public final int cageNumber;
     /**
      * The species of the animal.
      */
@@ -134,6 +138,7 @@ public class Animal {
 
     public static class Builder {
         Integer intakeNumber;
+        Integer cageNumber;
         Species species;
         String breed;
         Size size;
@@ -154,6 +159,7 @@ public class Animal {
                 return new Animal(this);
         }
         public Builder intakeNumber(int intakeNumber) { this.intakeNumber = intakeNumber; return this; }
+        public Builder cageNumber(int cageNumber) { this.cageNumber = cageNumber; return this; }
         public Builder species(Species species) { this.species = species; return this; }
         public Builder breed(String breed) { this.breed = breed; return this; }
         public Builder size(Size size) { this.size = size; return this; }
@@ -169,6 +175,7 @@ public class Animal {
 
     Animal(Builder b) {
         intakeNumber = b.intakeNumber;
+        cageNumber = b.cageNumber;
         species = b.species;
         vaccinated = b.vaccinated;
         breed = b.breed;

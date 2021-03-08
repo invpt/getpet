@@ -5,6 +5,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
+
+import cs340.getpet.persistence.Animal.Color;
 
 public class Persistence {
     static SecureRandom secureRandom = new SecureRandom();
@@ -159,9 +162,53 @@ public class Persistence {
         }
     }
 
+    public UpdateAnimalResponse updateAnimal(UpdateAnimalRequest request) throws PersistenceException {
+        String query = "UPDATE Animals SET " +
+                "species = ?," +
+                "breed = ?," +
+                "size = ?," +
+                "color = ?," +
+                "gender = ?," +
+                "weight = ?," +
+                "vaccinated = ?," +
+                "spayNeuter = ?," +
+                "name = ?," +
+                "missing = ? " +
+                "WHERE intakeNumber = ?";
+        Object[] parameters = new Object[] {
+                request.species.toString(),
+                request.breed,
+                request.size.toString(),
+                String.join(" ", Arrays.stream(request.colors).map(Color::toString).collect(Collectors.toList())),
+                request.gender.toString(),
+                request.weight,
+                request.vaccinated,
+                request.spayNeuter,
+                request.name,
+                request.missing,
+                request.intakeNumber,
+        };
+
+        try (PreparedStatement prepStmt = conn.prepareStatement(query)) {
+            // make sure we're setting the right number of parameters as a sanity check
+            assert prepStmt.getParameterMetaData().getParameterCount() == parameters.length;
+
+            for (int i = 0; i < parameters.length; ++i)
+                prepStmt.setObject(i + 1, parameters[i]);
+
+            if (prepStmt.executeUpdate() != 1)
+                ; // this is bad
+            
+            return new UpdateAnimalResponse();
+        } catch (SQLException e) {
+            throw new PersistenceException("Failed to update animal", e);
+        }
+    }
+
     private static Animal animalFromRow(ResultSet resultSet) throws SQLException {
         return new Animal.Builder()
                 .intakeNumber(resultSet.getInt("intakeNumber"))
+                .cageNumber(resultSet.getInt("cageNumber"))
                 .species(Animal.Species.fromString(resultSet.getString("species")))
                 .breed(resultSet.getString("breed"))
                 .size(Animal.Size.fromString(resultSet.getString("size")))
