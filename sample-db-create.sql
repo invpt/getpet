@@ -7,7 +7,7 @@ CREATE DATABASE getpet;
 USE getpet;
 
 CREATE TABLE Animals (
-    intakeNumber INT,
+    intakeNumber INT NOT NULL PRIMARY KEY,
     species VARCHAR(50) NOT NULL,
     vaccinated BOOLEAN,
     breed VARCHAR(50),
