@@ -5,7 +5,7 @@ const users = {
 
 const loginAs = username => {
     window.sessionStorage.setItem('role', username);
-    window.location.href = '/search.html';
+    window.location = window.location.origin + '/';
 };
 
 const displayLoginFailed = () => {
