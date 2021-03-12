@@ -55,3 +55,13 @@
   #optionCageNumber{
       width:169px;
   }
+
+  .euthanize {
+    background-color: #e43500;
+    width: 150px;
+  }
+
+  .euthanize:hover,
+  .euthanize:focus {
+    background-color: #b82c02;
+  }

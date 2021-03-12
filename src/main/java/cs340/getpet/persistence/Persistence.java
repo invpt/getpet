@@ -122,7 +122,8 @@ public class Persistence {
         query.in("size", searchRequest.sizes);
 
         String queryString = "SELECT * FROM Animals WHERE "
-                + String.join(" AND ", query.ands);
+                + String.join(" AND ", query.ands)
+                + " ORDER BY name";
 
         try (PreparedStatement stmt = conn.prepareStatement(queryString)) {
             // set parameters
@@ -141,6 +142,19 @@ public class Persistence {
             return new SearchResponse(results.toArray(new Animal[0]));
         } catch (SQLException e) {
             throw new PersistenceException("Failed to create or execute animal search statement", e);
+        }
+    }
+
+    public void euthanize(EuthanizationRequest request) throws PersistenceException {
+        String query = "DELETE FROM Animals WHERE intakeNumber = ?";
+
+        try (PreparedStatement prepStmt = conn.prepareStatement(query)) {
+            prepStmt.setInt(1, request.intakeNumber);
+
+            if (prepStmt.executeUpdate() != 1)
+                ; // this is bad D:
+        } catch (SQLException e) {
+            throw new PersistenceException("Failed to euthanize animal", e);
         }
     }
 

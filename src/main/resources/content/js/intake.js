@@ -5,6 +5,8 @@ elements.intakeForm.addEventListener('submit', ev => {
 
     let updateRequest = readForm(elements.intakeForm);
 
+    updateRequest.intakeNumber = -1;
+
     console.log('Sending intake request with body', updateRequest);
 
     fetch('/persistence/addAnimal', {

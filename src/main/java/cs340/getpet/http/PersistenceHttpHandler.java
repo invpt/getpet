@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import cs340.getpet.persistence.AddAnimalRequest;
+import cs340.getpet.persistence.EuthanizationRequest;
 import cs340.getpet.persistence.GetAnimalRequest;
 import cs340.getpet.persistence.GetAnimalResponse;
 import cs340.getpet.persistence.Persistence;
@@ -32,7 +33,7 @@ public class PersistenceHttpHandler implements HttpHandler {
     }
 
     private final Map<String, Endpoint> endpoints = Map.of(
-        "search", this::handleSearch, "animal", this::handleAnimal, "updateAnimal", this::updateAnimal, "addAnimal", this::addAnimal);
+        "search", this::handleSearch, "animal", this::handleAnimal, "updateAnimal", this::updateAnimal, "addAnimal", this::addAnimal, "euthanize", this::euthanize);
     private final Gson gson;
     private final Persistence persistence;
 
@@ -98,6 +99,12 @@ public class PersistenceHttpHandler implements HttpHandler {
     private String addAnimal(String method, Reader body) throws Persistence.PersistenceException {
         AddAnimalRequest request = gson.fromJson(body, AddAnimalRequest.class);
         persistence.addAnimal(request);
+        return "{}";
+    }
+
+    private String euthanize(String method, Reader body) throws Persistence.PersistenceException {
+        EuthanizationRequest request = gson.fromJson(body, EuthanizationRequest.class);
+        persistence.euthanize(request);
         return "{}";
     }
 }

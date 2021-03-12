@@ -1,5 +1,27 @@
 requirePrivilegeLevel('any');
 
+let animal;
+
+const euthanize = intakeNumber => {
+    const request = { intakeNumber };
+
+    console.log('Sending euthanization request with body', request);
+
+    fetch("/persistence/euthanize", {
+        method: 'POST',
+        body: JSON.stringify(request),
+    })
+        .catch(e => console.log("ERROR: " + e));
+}
+
+if (hasPrivilegeLevel('director'))
+    elements.buttonEuthanize.onclick = () => {
+        if (confirm(`Are you sure you want to mark ${animal.name} as euthanized?`))
+            euthanize(animal.intakeNumber);
+    };
+else
+    elements.buttonEuthanize.style.display = 'none';
+
 
 ///////////////////////////////// Fill in details ?///////////////////////////////////////////
 const fillDetails = response => {
@@ -16,7 +38,7 @@ const fillDetails = response => {
         }
     };
 
-    const animal = response.animal;
+    animal = response.animal;
 
     if (animal) {
         document.getElementById('optionName').value = animal.name;

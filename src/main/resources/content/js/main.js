@@ -22,7 +22,7 @@ const readableValues = {
     },
 };
 
-const elementsToFind = ['searchForm', 'result', 'credentials', 'errorMessage', 'detailsForm', 'intakeForm'];
+const elementsToFind = ['searchForm', 'result', 'credentials', 'errorMessage', 'detailsForm', 'intakeForm', 'buttonEuthanize'];
 const elements = {};
 for (const elementToFind of elementsToFind)
     elements[elementToFind] = document.getElementById(elementToFind);
@@ -60,7 +60,7 @@ const readForm = form => {
 
 const hasPrivilegeLevel = level => {
     const role = window.sessionStorage.getItem('role');
-    
+
     switch (level) {
         case 'any':
             return role !== null;
