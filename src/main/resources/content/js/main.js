@@ -22,7 +22,7 @@ const readableValues = {
     },
 };
 
-const elementsToFind = ['searchForm', 'result', 'credentials', 'errorMessage', 'detailsForm'];
+const elementsToFind = ['searchForm', 'result', 'credentials', 'errorMessage', 'detailsForm', 'intakeForm'];
 const elements = {};
 for (const elementToFind of elementsToFind)
     elements[elementToFind] = document.getElementById(elementToFind);
@@ -59,15 +59,19 @@ const readForm = form => {
 };
 
 const hasPrivilegeLevel = level => {
+    const role = window.sessionStorage.getItem('role');
+    
     switch (level) {
         case 'any':
-            return window.sessionStorage.getItem('role') !== null;
+            return role !== null;
         case 'assistant':
-            return window.sessionStorage.getItem('role') === 'assistant'
-                || window.sessionStorage.getItem('role') === 'director';
+            return role === 'assistant'
+                || role === 'director';
         case 'director':
-            return window.sessionStorage.getItem('role') === 'director';
+            return role === 'director';
     }
+
+    return false;
 }
 
 const requirePrivilegeLevel = level => {

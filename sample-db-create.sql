@@ -7,21 +7,21 @@ CREATE DATABASE getpet;
 USE getpet;
 
 CREATE TABLE Animals (
-    intakeNumber INT NOT NULL PRIMARY KEY,
-    species VARCHAR(50) NOT NULL,
+    intakeNumber INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    species ENUM('dog', 'cat') NOT NULL,
     vaccinated BOOLEAN,
     breed VARCHAR(50),
-    gender CHAR(1) NOT NULL,
+    gender ENUM('m', 'f') NOT NULL,
     name VARCHAR(50),
-    color VARCHAR(50),
+    color VARCHAR(50) NOT NULL,
     weight DOUBLE NOT NULL, -- Pounds
     cageNumber INT NOT NULL,
     ownerCustomerId INT,
     missing BOOLEAN,
     date DATE NOT NULL,
     spayNeuter BOOLEAN,
-    size VARCHAR(50)     -- Dogs: Small 2-22 lbs, Medium 23-57lb, Large 58+ lbs     *As an adult*
-	                     -- Cats: Small 2-10 lbs, Medium 10-15 lbs, Large 15+ lbs   *As an adult*
+    size ENUM('small', 'medium', 'large')     -- Dogs: Small 2-22 lbs, Medium 23-57lb, Large 58+ lbs     *As an adult*
+	                                          -- Cats: Small 2-10 lbs, Medium 10-15 lbs, Large 15+ lbs   *As an adult*
 );
 
 

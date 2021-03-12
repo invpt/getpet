@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -162,7 +163,50 @@ public class Persistence {
         }
     }
 
-    public UpdateAnimalResponse updateAnimal(UpdateAnimalRequest request) throws PersistenceException {
+    public void addAnimal(AddAnimalRequest request) throws PersistenceException {
+        String query = "INSERT INTO Animals SET " +
+                "species = ?," +
+                "breed = ?," +
+                "size = ?," +
+                "color = ?," +
+                "gender = ?," +
+                "weight = ?," +
+                "vaccinated = ?," +
+                "spayNeuter = ?," +
+                "name = ?," +
+                "missing = ?," +
+                "cageNumber = ?," +
+                "date = ?";
+        Object[] parameters = new Object[] {
+                request.species.toString(),
+                request.breed,
+                request.size.toString(),
+                String.join(" ", Arrays.stream(request.colors).map(Color::toString).collect(Collectors.toList())),
+                request.gender.toString(),
+                request.weight,
+                request.vaccinated,
+                request.spayNeuter,
+                request.name,
+                request.missing,
+                request.cageNumber,
+                new Date(),
+        };
+
+        try (PreparedStatement prepStmt = conn.prepareStatement(query)) {
+            // make sure we're setting the right number of parameters as a sanity check
+            assert prepStmt.getParameterMetaData().getParameterCount() == parameters.length;
+
+            for (int i = 0; i < parameters.length; ++i)
+                prepStmt.setObject(i + 1, parameters[i]);
+
+            if (prepStmt.executeUpdate() != 1)
+                ; // this is bad D:
+        } catch (SQLException e) {
+            throw new PersistenceException("Failed to update animal", e);
+        }
+    }
+
+    public void updateAnimal(UpdateAnimalRequest request) throws PersistenceException {
         String query = "UPDATE Animals SET " +
                 "species = ?," +
                 "breed = ?," +
@@ -173,7 +217,8 @@ public class Persistence {
                 "vaccinated = ?," +
                 "spayNeuter = ?," +
                 "name = ?," +
-                "missing = ? " +
+                "missing = ?," +
+                "cageNumber = ? " +
                 "WHERE intakeNumber = ?";
         Object[] parameters = new Object[] {
                 request.species.toString(),
@@ -186,6 +231,7 @@ public class Persistence {
                 request.spayNeuter,
                 request.name,
                 request.missing,
+                request.cageNumber,
                 request.intakeNumber,
         };
 
@@ -197,9 +243,7 @@ public class Persistence {
                 prepStmt.setObject(i + 1, parameters[i]);
 
             if (prepStmt.executeUpdate() != 1)
-                ; // this is bad
-            
-            return new UpdateAnimalResponse();
+                ; // this is bad D:
         } catch (SQLException e) {
             throw new PersistenceException("Failed to update animal", e);
         }

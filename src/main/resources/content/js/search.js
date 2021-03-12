@@ -101,6 +101,11 @@ const displaySearchResults = results => {
         const detailsButton = document.createElement('button');
         detailsButton.classList.add('button');
         detailsButton.innerText = 'Details';
+        detailsButton.onclick = () => {
+            window.location = window.location.origin
+                + '/details.html'
+                + `?intakeNumber=${result.intakeNumber}`;            
+        };
         resultDiv.appendChild(detailsButton);
 
         elements.result.appendChild(resultDiv);

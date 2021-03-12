@@ -13,7 +13,7 @@ public class GetPet {
         Server server;
         try {
             server = new Server(new Server.Configuration.Builder()
-                    .homePage("/login.html")
+                    .homePage("/home.html")
                     .address("localhost", 8080)
                     .persistenceConf(new Persistence.Configuration.Builder()
                             .server("localhost")
