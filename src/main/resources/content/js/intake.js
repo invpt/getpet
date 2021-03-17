@@ -15,5 +15,6 @@ elements.intakeForm.addEventListener('submit', ev => {
     })
         .then(resp => resp.json())
         .then(resp => console.log('Got response from server after intake', resp))
+        .then(_ => window.location = window.location.origin + "/")
         .catch(e => console.log("ERROR: " + e));
 });

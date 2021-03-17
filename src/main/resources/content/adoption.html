@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-        <head>
+    <head>
         <meta charset="utf-8" />
         <title>Adoption</title>
         <link rel="stylesheet" href="/css/style.css" />
@@ -8,28 +8,64 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" />
     </head>
-
     <body>
-
         <header>
             <h3>Adoption</h3>
         </header>
 
-        <div class="form">
-            <div class="petinfo">
+        <div id="hack">
+            <form>
+                <p>
+                    Animal Name: <span id="animalName"></span>
+                    <br />
+                    Animal Intake Number: <span id="animalIntakeNumber"></span>
+                </p>
 
-            </div>
-            <div class="ownerinfo">
-                <div class="ownerleft">
+                <div class="ownerInfo">
+                    <!-- Ownerleft -->
+                    <div class="ownerLeft">
+                        <!-- Name -->
+                        <div class="category">Name</div>
+                        <div class="option" type="text" name="name">
+                            <input type="text" name="name" id="optionName" />
+                        </div><!-- End of Name tag -->
+                        <!-- Address -->
+                        <div class="category">Address</div>
+                        <div class="option" type="text" name="address">
+                            <input type="text" name="address" id="optionAddress" />
+                        </div><!-- End of Address tag -->
+                        <!-- State -->
+                        <div class="category">State</div>
+                        <div class="option" type="text" name="state">
+                            <input type="text" name="state" id="optionState" />
+                        </div><!-- End of OwnwerLeft tag -->
+                    </div>
 
+                    <!-- Ownerright -->
+                    <div class="ownerRight">
+                        <!-- Phone -->
+                        <div class="category">Phone</div>
+                        <div class="option" type="text" name="phone">
+                            <input type="text" name="phone" id="optionPhone" />
+                        </div><!-- End of phone tag -->
+                        <!-- City -->
+                        <div class="category">City</div>
+                        <div class="option" type="text" name="city">
+                            <input type="text" name="city" id="optionCity" />
+                        </div><!-- End of City tag -->
+                        <!-- Zip Code -->
+                        <div class="category">Zip</div>
+                        <div class="option" type="text" name="zip">
+                            <input type="text" name="zip" id="optionZip" />
+                        </div><!-- End of Zip tag -->
+                    </div>
                 </div>
-                <div class="ownerright">
 
-                </div>
-            </div>
-            <div class="subbutton">
-
-            </div>
+                <button class="button submit" value="Submit" id="fakeSubmitButton">Submit</button>
+            </form>
         </div>
 
+        <script src="/js/main.js"></script>
+        <script src="/js/adoption.js"></script>
     </body>
+</html>
