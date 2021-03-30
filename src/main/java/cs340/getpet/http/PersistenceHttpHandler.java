@@ -1,110 +1,133 @@
 package cs340.getpet.http;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-
-import cs340.getpet.persistence.AddAnimalRequest;
-import cs340.getpet.persistence.EuthanizationRequest;
-import cs340.getpet.persistence.GetAnimalRequest;
-import cs340.getpet.persistence.GetAnimalResponse;
+import cs340.getpet.http.rest.Endpoint;
+import cs340.getpet.http.rest.RequestBody;
+import cs340.getpet.http.rest.Response;
+import cs340.getpet.http.rest.ResponseBody;
+import cs340.getpet.http.rest.RestException;
+import cs340.getpet.http.rest.RestHttpHandler;
+import cs340.getpet.http.rest.ValidationException;
+import cs340.getpet.http.rest.ResponseBody.EmptyResponse;
+import cs340.getpet.persistence.Animal;
 import cs340.getpet.persistence.Persistence;
-import cs340.getpet.persistence.SearchRequest;
-import cs340.getpet.persistence.SearchResponse;
-import cs340.getpet.persistence.UpdateAnimalRequest;
+import cs340.getpet.persistence.SearchQuery;
+import cs340.getpet.persistence.Animal.Color;
+import cs340.getpet.persistence.Animal.Gender;
+import cs340.getpet.persistence.Animal.Size;
+import cs340.getpet.persistence.Animal.Species;
+import cs340.getpet.persistence.Persistence.PersistenceException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-
-public class PersistenceHttpHandler implements HttpHandler {
-    private static final Logger logger = LoggerFactory.getLogger(PersistenceHttpHandler.class);
-
-    @FunctionalInterface
-    private interface Endpoint {
-        public String handle(String method, Reader body) throws Persistence.PersistenceException;
-    }
-
-    private final Map<String, Endpoint> endpoints = Map.of(
-        "search", this::handleSearch, "animal", this::handleAnimal, "updateAnimal", this::updateAnimal, "addAnimal", this::addAnimal, "euthanize", this::euthanize);
-    private final Gson gson;
+public class PersistenceHttpHandler extends RestHttpHandler {
     private final Persistence persistence;
 
     public PersistenceHttpHandler(Persistence persistence) {
-        gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+        super(
+            "/persistence",
+            new Endpoint.Builder()
+                .path("/search")
+                .post(AnimalSearchRequest.class, AnimalSearchResponse.class, (req) -> {
+                    try {
+                        return Response.withBody(200, new AnimalSearchResponse(persistence.search(req.body)));
+                    } catch (PersistenceException e) {
+                        throw new RestException(e);
+                    }
+                })
+                .build(),
+            new Endpoint.Builder()
+                .path("/animal/new")
+                .post(AnimalNewRequest.class, EmptyResponse.class, (req) -> {
+                    try {
+                        persistence.newAnimal(req.body.animal);
+                        return Response.empty(200);
+                    } catch (PersistenceException e) {
+                        throw new RestException(e);
+                    }
+                })
+                .build(),
+            new Endpoint.Builder()
+                .path("/animal/{intakeNumber}")
+                .get(AnimalGetResponse.class, (req) -> {
+                    int intakeNumber = req.pathVariables.getInt("intakeNumber");
+                    try {
+                        return Response.withBody(200, new AnimalGetResponse(persistence.getAnimal(intakeNumber)));
+                    } catch (PersistenceException e) {
+                        throw new RestException(e);
+                    }
+                })
+                .put(AnimalPutRequest.class, ResponseBody.EmptyResponse.class, (req) -> {
+                    int intakeNumber = req.pathVariables.getInt("intakeNumber");
+                    try {
+                        persistence.updateAnimal(intakeNumber, req.body.animal);
+                        return Response.empty(200);
+                    } catch (PersistenceException e) {
+                        throw new RestException(e);
+                    }
+                })
+                .delete(RequestBody.EmptyRequest.class, ResponseBody.EmptyResponse.class, (req) -> {
+                    int intakeNumber = req.pathVariables.getInt("intakeNumber");
+                    try {
+                        persistence.deleteAnimal(intakeNumber);
+                        return Response.empty(200);
+                    } catch (PersistenceException e) {
+                        throw new RestException(e);
+                    }
+                })
+                .build()
+        );
+        
         this.persistence = persistence;
+    }
+}
+
+final class AnimalSearchRequest extends SearchQuery implements RequestBody {
+    AnimalSearchRequest(Species species, Gender[] genders, String breed, Color[] colors, Size[] sizes) {
+        super(species, genders, breed, colors, sizes);
     }
 
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        final String path = exchange.getRequestURI().getPath();
-        final InputStream body = exchange.getRequestBody();
+    public void validate() throws ValidationException {
+        // Validate that breed is <= 50 characters and is only alphabetic
+    }
+}
 
-        int responseCode = -1;
-        try {
-            assert path.startsWith("/persistence/");
-            final String endpointPath = path.substring("/persistence/".length());
+final class AnimalNewRequest implements RequestBody {
+    public final Animal animal;
 
-            Endpoint endpoint = endpoints.get(endpointPath);
-            if (endpoint != null) {
-                String responseJson = endpoint.handle(exchange.getRequestMethod(), new InputStreamReader(body));
-
-                if (responseJson != null) {
-                    exchange.sendResponseHeaders(responseCode = 200, responseJson.length());
-                    exchange.getResponseBody().write(responseJson.getBytes(StandardCharsets.UTF_8));
-                } else
-                    exchange.sendResponseHeaders(responseCode = 401, -1);
-            } else
-                exchange.sendResponseHeaders(responseCode = 404, -1);
-        } catch (Persistence.PersistenceException e) {
-            logger.info("Database error while servicing request to " + path, e);
-
-            exchange.sendResponseHeaders(responseCode = 500, -1);
-        } catch (Exception e) {
-            logger.info("Error parsing request JSON while servicing request to " + path, e);
-
-            exchange.sendResponseHeaders(responseCode = 400, -1);
-        }
-
-        logger.info("HTTP " + responseCode + ": " + path);
-
-        exchange.close();
+    AnimalNewRequest(Animal animal) {
+        this.animal = animal;
     }
 
-    private String handleSearch(String method, Reader body) throws Persistence.PersistenceException {
-        SearchRequest searchRequest = gson.fromJson(body, SearchRequest.class);
-        SearchResponse searchResponse = persistence.search(searchRequest);
-        return gson.toJson(searchResponse);
+    @Override
+    public void validate() throws ValidationException {
+        // Validate string fields of the Animal, like name
+    }
+}
+
+final class AnimalPutRequest implements RequestBody {
+    public final Animal animal;
+
+    AnimalPutRequest(Animal animal) {
+        this.animal = animal;
     }
 
-    private String handleAnimal(String method, Reader body) throws Persistence.PersistenceException {
-        GetAnimalRequest request = gson.fromJson(body, GetAnimalRequest.class);
-        GetAnimalResponse response = persistence.getAnimal(request);
-        return gson.toJson(response);
+    @Override
+    public void validate() throws ValidationException {
+        // Validate string fields of the Animal, like name
     }
+}
 
-    private String updateAnimal(String method, Reader body) throws Persistence.PersistenceException {
-        UpdateAnimalRequest request = gson.fromJson(body, UpdateAnimalRequest.class);
-        persistence.updateAnimal(request);
-        return "{}";
+final class AnimalSearchResponse implements ResponseBody {
+    public final Animal[] results;
+
+    AnimalSearchResponse(Animal[] results) {
+        this.results = results;
     }
+}
 
-    private String addAnimal(String method, Reader body) throws Persistence.PersistenceException {
-        AddAnimalRequest request = gson.fromJson(body, AddAnimalRequest.class);
-        persistence.addAnimal(request);
-        return "{}";
-    }
+final class AnimalGetResponse implements ResponseBody {
+    public final Animal animal;
 
-    private String euthanize(String method, Reader body) throws Persistence.PersistenceException {
-        EuthanizationRequest request = gson.fromJson(body, EuthanizationRequest.class);
-        persistence.euthanize(request);
-        return "{}";
+    AnimalGetResponse(Animal animal) {
+        this.animal = animal;
     }
 }
