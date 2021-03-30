@@ -1,7 +1,6 @@
--- To initialize your local MariaDB instance with data, just go into the
--- MariaDB command-line interface as the root MariaDB user, and paste this in.
--- However, WATCH OUT: This script will delete the "getpet" database if it exists.
--- Just be careful to avoid losing data.
+-- NOTE: YOU DO NOT NEED TO APPLY THIS MANUALLY! The code now
+--       does this for you, so it is no longer necessary.
+-- This is code to initialize the database with sample data.
 CREATE OR REPLACE TABLE Animals (
     intakeNumber INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     species ENUM('dog', 'cat') NOT NULL,
