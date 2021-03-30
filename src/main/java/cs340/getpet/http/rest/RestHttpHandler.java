@@ -35,6 +35,8 @@ public abstract class RestHttpHandler implements HttpHandler {
         assert absolutePath.startsWith(basePath);
         final String endpointPath = absolutePath.substring(basePath.length());
 
+        // TODO: catch GSON exceptions
+
         try {
             for (Endpoint endpoint : endpoints) {
                 PathVariables pathVariables = endpoint.path.match(endpointPath);
@@ -49,7 +51,7 @@ public abstract class RestHttpHandler implements HttpHandler {
                 }
             }
         } catch(RestException e) {
-
+            exchange.sendResponseHeaders(500, -1);
         } finally {
             exchange.close();
         }
