@@ -16,6 +16,7 @@ import cs340.getpet.persistence.Animal.Gender;
 import cs340.getpet.persistence.Animal.Size;
 import cs340.getpet.persistence.Animal.Species;
 import cs340.getpet.persistence.Persistence.PersistenceException;
+import java.util.regex.Pattern;
 
 public class PersistenceHttpHandler extends RestHttpHandler {
     private final Persistence persistence;
@@ -87,6 +88,8 @@ final class AnimalSearchRequest extends SearchQuery implements RequestBody {
     @Override
     public void validate() throws ValidationException {
         // Validate that breed is <= 50 characters and is only alphabetic
+		if(!breed.matches("^[a-zA-Z]{1,50}$"))
+			throw new ValidationException("Breed must be alphabetic and 50 characters or less.")
     }
 }
 
