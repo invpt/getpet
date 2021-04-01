@@ -16,7 +16,6 @@ import cs340.getpet.persistence.Animal.Gender;
 import cs340.getpet.persistence.Animal.Size;
 import cs340.getpet.persistence.Animal.Species;
 import cs340.getpet.persistence.Persistence.PersistenceException;
-import java.util.regex.Pattern;
 
 public class PersistenceHttpHandler extends RestHttpHandler {
     private final Persistence persistence;
@@ -88,7 +87,7 @@ final class AnimalSearchRequest extends SearchQuery implements RequestBody {
     @Override
     public void validate() throws ValidationException {
         // Validate that breed is <= 50 characters and is only alphabetic
-		if(!breed.matches("^[a-zA-Z ]{1,50}$"))
+		if (!breed.matches("^[a-zA-Z ]{0,50}$"))
 			throw new ValidationException("Breed must be alphabetic and 50 characters or less.");
     }
 }
@@ -103,13 +102,12 @@ final class AnimalNewRequest implements RequestBody {
     @Override
     public void validate() throws ValidationException {
         // Validate string fields of the Animal, like name
-		if(!animal.name.matches("^[a-zA-Z ]{1,50}$"))
-			throw new ValidationException("Name must be alphabetic and 50 characters or less.");
-		if(!animal.breed.matches("^[a-zA-Z ]{1,50}$"))
-			throw new ValidationException("Breed must be alphabetic and 50 characters or less.");
-		if(animal.weight > 250.0 || animal.weight < 1.0)
-			throw new ValidationException("Weight must lie withing the range of 1 and 250 lbs");
-		
+        if (!animal.name.matches("^[a-zA-Z ]{1,50}$"))
+            throw new ValidationException("Name must be alphabetic and 50 characters or less.");
+        if (!animal.breed.matches("^[a-zA-Z ]{1,50}$"))
+            throw new ValidationException("Breed must be alphabetic and 50 characters or less.");
+        if (animal.weight > 250.0 || animal.weight < 1.0)
+            throw new ValidationException("Weight must lie within the range of 1 and 250 lbs");
     }
 }
 
@@ -123,12 +121,12 @@ final class AnimalPutRequest implements RequestBody {
     @Override
     public void validate() throws ValidationException {
         // Validate string fields of the Animal, like name
-		if(!animal.name.matches("^[a-zA-Z ]{1,50}$"))
-			throw new ValidationException("Name must be alphabetic and 50 characters or less.");
-		if(!animal.breed.matches("^[a-zA-Z ]{1,50}$"))
-			throw new ValidationException("Breed must be alphabetic and 50 characters or less.");
-		if(animal.weight > 250.0 || animal.weight < 1.0)
-			throw new ValidationException("Weight must lie withing the range of 1 and 250 lbs");
+        if (!animal.name.matches("^[a-zA-Z ]{1,50}$"))
+            throw new ValidationException("Name must be alphabetic and 50 characters or less.");
+        if (!animal.breed.matches("^[a-zA-Z ]{1,50}$"))
+            throw new ValidationException("Breed must be alphabetic and 50 characters or less.");
+        if (animal.weight > 250.0 || animal.weight < 1.0)
+            throw new ValidationException("Weight must lie within the range of 1 and 250 lbs");
     }
 }
 
