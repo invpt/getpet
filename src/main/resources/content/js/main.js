@@ -22,13 +22,8 @@ const readableValues = {
     },
 };
 
-const elementsToFind = ['searchForm', 'result', 'credentials', 'errorMessage', 'detailsForm', 'intakeForm', 'buttonEuthanize'];
-const elements = {};
-for (const elementToFind of elementsToFind)
-    elements[elementToFind] = document.getElementById(elementToFind);
-
 const readForm = form => {
-    values = {};
+    const values = {};
 
     for (const option of form.querySelectorAll('.option')) {
         const name = option.getAttribute('name');
@@ -63,15 +58,16 @@ const hasPrivilegeLevel = level => {
 
     switch (level) {
         case 'any':
-            return role !== null;
+            return role !== null && role !== undefined;
         case 'assistant':
             return role === 'assistant'
                 || role === 'director';
         case 'director':
             return role === 'director';
+        default:
+            console.error("unknown privilege level", role);
+            return false;
     }
-
-    return false;
 }
 
 const requirePrivilegeLevel = level => {
