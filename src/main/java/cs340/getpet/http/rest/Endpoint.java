@@ -93,7 +93,7 @@ public final class Endpoint {
         public Builder() {}
 
         public Endpoint build() {
-            return null;
+            return new Endpoint(this);
         }
 
         public Builder path(String path) {
