@@ -1,44 +1,26 @@
-requirePrivilegeLevel('any');
-
 let animal;
 
 const euthanize = intakeNumber => {
-    const request = { intakeNumber };
+    console.info('Sending euthanization request for animal with intake number', intakeNumber);
 
-    console.log('Sending euthanization request with body', request);
-
-    fetch("/persistence/euthanize", {
-        method: 'POST',
-        body: JSON.stringify(request),
-    })
-        .catch(e => console.log("ERROR: " + e));
+    fetch(`/persistence/animal/${intakeNumber}`, { method: 'DELETE' })
+        .catch(e => console.error("error euthanizing animal:", e));
 }
 
-if (hasPrivilegeLevel('director'))
-    elements.buttonEuthanize.onclick = () => {
-        if (confirm(`Are you sure you want to mark ${animal.name} as euthanized?`))
-            euthanize(animal.intakeNumber);
-    };
-else
-    elements.buttonEuthanize.style.display = 'none';
-
-
-///////////////////////////////// Fill in details ?///////////////////////////////////////////
+// Fills in the form fields with the animal's preexisting details
 const fillDetails = response => {
-    console.log("resp", response);
+    animal = response.animal;
 
     const setRadio = (elementId, name) => {
         const element = document.getElementById(elementId);
-        element.querySelector('input[value="' + name + '"]').checked = true;
+        element.querySelector(`input[value="${name}"]`).checked = true;
     };
     const setCheckboxes = (elementId, names) => {
         const element = document.getElementById(elementId);
-        for (const name of names) {
-            element.querySelector('input[value="' + name + '"]').checked = true;
-        }
-    };
 
-    animal = response.animal;
+        for (const name of names)
+            element.querySelector(`input[value="${name}"]`).checked = true;
+    };
 
     if (animal) {
         document.getElementById('optionName').value = animal.name;
@@ -55,37 +37,38 @@ const fillDetails = response => {
     }
 }
 
-const searchParams = new URLSearchParams(window.location.search);
+const onSubmit = ev => {
+    ev.preventDefault();
 
-if (!searchParams.has('intakeNumber')) {
-    // TODO: This shows exactly no information to the user that something has gone wrong
-    console.error("Internal error");
-} else {
-    const intakeNumber = parseInt(searchParams.get('intakeNumber'));
+    let updateRequest = readForm(document.getElementById('detailsForm'));
 
-    fetch("/persistence/animal", {
+    apiCall({
+        endpoint: `/animal/${updateRequest.intakeNumber}`,
         method: 'POST',
-        body: JSON.stringify({ intakeNumber }),
+        body: updateRequest,
     })
+    .then(resp => console.info('Got response from server after update', resp))
+    .catch(e => displayErrorPage(-1, 'Internal error - failed to update animal', e));
+}
+
+// Enable onSubmit
+document.getElementById('detailsForm').addEventListener('submit', onSubmit);
+
+requirePrivilegeLevel('any');
+
+if (hasPrivilegeLevel('director'))
+    document.getElementById('buttonEuthanize').onclick = () => {
+        if (confirm(`Are you sure you want to mark ${animal.name} as euthanized?`))
+            euthanize(animal.intakeNumber);
+    };
+else
+    document.getElementById('buttonEuthanize').style.display = 'none';
+
+const intakeNumber = parseInt(new URLSearchParams(window.location.search).get('intakeNumber'));
+if (!searchParams.has('intakeNumber'))
+    displayErrorPage(-1, 'Internal error - invalid or nonexistent intake number');
+else
+    fetch(`/persistence/animal/${intakeNumber}`)
         .then(resp => resp.json())
         .then(fillDetails)
         .catch(e => console.log("ERROR: " + e));
-}
-
-
-////////////////////////////////////// Update functionality ////////////////////////////////
-elements.detailsForm.addEventListener('submit', ev => {
-    ev.preventDefault();
-
-    let updateRequest = readForm(elements.detailsForm);
-
-    console.log('Sending update request with body', updateRequest);
-
-    fetch('/persistence/updateAnimal', {
-        method: 'POST',
-        body: JSON.stringify(updateRequest),
-    })
-        .then(resp => resp.json())
-        .then(resp => console.log('Got response from server after update', resp))
-        .catch(e => console.log("ERROR: " + e));
-});

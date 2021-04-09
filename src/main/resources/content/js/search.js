@@ -1,8 +1,9 @@
 requirePrivilegeLevel('any');
 
 const displaySearchResults = results => {
-    while (elements.result.firstChild)
-        elements.result.removeChild(elements.result.firstChild);
+    const resultElement = document.getElementById('result');
+    while (resultElement.firstChild)
+        resultElement.removeChild(resultElement.firstChild);
 
     console.log('Got response with results', results);
 
@@ -108,24 +109,27 @@ const displaySearchResults = results => {
         };
         resultDiv.appendChild(detailsButton);
 
-        elements.result.appendChild(resultDiv);
+        resultElement.appendChild(resultDiv);
     }
 }
 
-elements.searchForm.addEventListener('submit', ev => {
+const onSubmit = ev => {
     ev.preventDefault();
 
-    let searchRequest = readForm(elements.searchForm);
+    let searchRequest = readForm(document.getElementById('searchForm'));
 
     console.log('Sending search request with body', searchRequest);
 
-    fetch("/persistence/search", {
+    apiCall({
+        endpoint: '/search',
         method: 'POST',
-        body: JSON.stringify(searchRequest),
+        body: searchRequest,
     })
         .then(resp => resp.json())
         .then(displaySearchResults)
-        .catch(e => console.log("ERROR: " + e));
+        .catch(e => displayErrorPopup(-1, 'Internal error - failed to perform search', e));
 
     return false;
-});
+}
+
+document.getElementById('searchForm').addEventListener('submit', onSubmit);

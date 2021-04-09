@@ -1,20 +1,29 @@
 requirePrivilegeLevel('any');
 
-elements.intakeForm.addEventListener('submit', ev => {
+const onSubmit = ev => {
     ev.preventDefault();
 
-    let updateRequest = readForm(elements.intakeForm);
+    let intakeRequest = readForm(document.getElementById('intakeForm'));
 
-    updateRequest.intakeNumber = -1;
+    intakeRequest.intakeNumber = -1;
 
-    console.log('Sending intake request with body', updateRequest);
-
-    fetch('/persistence/addAnimal', {
+    apiCall({
+        endpoint: `/animal/new`,
         method: 'POST',
-        body: JSON.stringify(updateRequest),
+        body: intakeRequest,
     })
+    .then(resp => console.info('Got response from server after intake', resp))
+    .catch(e => displayErrorPage(-1, 'Internal error - failed to intake animal', e));
+}
+
+// Enable onSubmit
+document.getElementById('intakeForm').addEventListener('submit', onSubmit);
+
+const intakeNumber = parseInt(new URLSearchParams(window.location.search).get('intakeNumber'));
+if (!searchParams.has('intakeNumber'))
+    displayErrorPage(-1, 'Internal error - invalid or nonexistent intake number');
+else
+    fetch(`/persistence/animal/${intakeNumber}`)
         .then(resp => resp.json())
-        .then(resp => console.log('Got response from server after intake', resp))
-        .then(_ => window.location = window.location.origin + "/")
-        .catch(e => console.log("ERROR: " + e));
-});
+        .then(fillDetails)
+        .catch(e => displayErrorPage(-1, null, e));
