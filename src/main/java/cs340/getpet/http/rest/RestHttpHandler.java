@@ -7,6 +7,8 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -35,24 +37,35 @@ public abstract class RestHttpHandler implements HttpHandler {
         assert absolutePath.startsWith(basePath);
         final String endpointPath = absolutePath.substring(basePath.length());
 
-        // TODO: catch GSON exceptions
-
+        int responseCode = -1;
         try {
+            boolean endpointFound = false;
+            
             for (Endpoint endpoint : endpoints) {
                 PathVariables pathVariables = endpoint.path.match(endpointPath);
 
-                if (pathVariables != null) {
+                if (endpointFound = pathVariables != null) {
                     Response<?> resp = handleFor(exchange.getRequestMethod(), pathVariables, exchange.getRequestBody(), endpoint);
                     String json = gson.toJson(resp.body);
 
-                    exchange.sendResponseHeaders(resp.code, json.length() == 0 ? -1 : json.length());
+                    exchange.sendResponseHeaders(responseCode = resp.code, json.length() == 0 ? -1 : json.length());
                     exchange.getResponseBody().write(json.getBytes(StandardCharsets.UTF_8));
                     break;
                 }
             }
-        } catch(RestException e) {
-            exchange.sendResponseHeaders(500, -1);
+
+            if (!endpointFound)
+                throw new RestException(RestException.Code.UNKNOWN_ENDPOINT);
+        } catch (RestException e) {
+            JsonObject resp = new JsonObject();
+            resp.addProperty("message", e.getMessage());
+            String json = gson.toJson(resp);
+            exchange.sendResponseHeaders(responseCode = 500, json.length() == 0 ? -1 : json.length());
+            exchange.getResponseBody().write(json.getBytes(StandardCharsets.UTF_8));
+        } catch (JsonSyntaxException e) {
+            exchange.sendResponseHeaders(responseCode = 400, -1);
         } finally {
+            logger.info("HTTP " + responseCode + ": " + absolutePath);
             exchange.close();
         }
     }

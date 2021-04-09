@@ -34,7 +34,7 @@ public class RestException extends Exception {
     }
 
     public enum Code {
-        INVALID_METHOD("Invalid method"), UNKNOWN_METHOD("Unknown method"), INVALID_PATH_PARAMETER("Invalid path parameter");
+        INVALID_METHOD("Invalid method"), UNKNOWN_METHOD("Unknown method"), INVALID_PATH_PARAMETER("Invalid path parameter"), UNKNOWN_ENDPOINT("Unknown endpoint");
 
         public final String message;
 
