@@ -118,8 +118,6 @@ const onSubmit = ev => {
 
     let searchRequest = readForm(document.getElementById('searchForm'));
 
-    console.log('Sending search request with body', searchRequest);
-
     apiCall({
         endpoint: '/search',
         method: 'POST',

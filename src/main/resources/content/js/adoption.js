@@ -14,8 +14,6 @@ const fillDetails = response => {
 const submit = ev => {
     ev.preventDefault();
 
-    console.log('Sending animal delete request for animal', intakeNumber);
-
     apiCall({
         endpoint: `/animal/${intakeNumber}`,
         method: 'DELETE'

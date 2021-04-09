@@ -70,4 +70,4 @@ if (!searchParams.has('intakeNumber'))
 else
     fetch(`/persistence/animal/${intakeNumber}`)
         .then(fillDetails)
-        .catch(e => console.log("ERROR: " + e));
+        .catch(e => displayErrorPage(-1, null, e));
