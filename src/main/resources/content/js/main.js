@@ -81,7 +81,7 @@ const apiCall = async (details) => {
         throw Error("apiCall requires endpoint");
     }
 
-    const options = {method: details.method, body: details.body};
+    const options = {method: details.method, body: JSON.stringify(details.body)};
     if (!options.method) options.method = 'GET';
 
     console.info('Performing API call to endpoint', details.endpoint, 'with body', options.body);

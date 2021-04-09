@@ -69,6 +69,5 @@ if (!searchParams.has('intakeNumber'))
     displayErrorPage(-1, 'Internal error - invalid or nonexistent intake number');
 else
     fetch(`/persistence/animal/${intakeNumber}`)
-        .then(resp => resp.json())
         .then(fillDetails)
         .catch(e => console.log("ERROR: " + e));

@@ -33,6 +33,5 @@ if (!searchParams.has('intakeNumber'))
     displayErrorPage(-1, 'Internal error - invalid or nonexistent intake number');
 else
     apiCall({ endpoint: `/animal/${intakeNumber}` })
-        .then(resp => resp.json())
         .then(fillDetails)
         .catch(e => displayErrorPage(-1, null, e));
