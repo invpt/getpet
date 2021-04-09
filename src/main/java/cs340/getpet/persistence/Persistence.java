@@ -144,11 +144,16 @@ public class Persistence {
             }
         };
 
-        is.accept("species", searchRequest.species.toString());
-        in.accept("gender", Arrays.stream(searchRequest.genders).map(gender -> gender.toString()).collect(Collectors.toList()).toArray(new String[0]));
-        like.accept("breed", searchRequest.breed);
-        has.accept("color", Arrays.stream(searchRequest.colors).map(color -> color.toString()).collect(Collectors.toList()).toArray(new String[0]));
-        in.accept("size", Arrays.stream(searchRequest.sizes).map(size -> size.toString()).collect(Collectors.toList()).toArray(new String[0]));
+        if (searchRequest.species != null)
+            is.accept("species", searchRequest.species.toString());
+        if (searchRequest.genders != null)
+            in.accept("gender", Arrays.stream(searchRequest.genders).map(gender -> gender.toString()).collect(Collectors.toList()).toArray(new String[0]));
+        if (searchRequest.breed != null)
+            like.accept("breed", searchRequest.breed);
+        if (searchRequest.colors != null)
+            has.accept("color", Arrays.stream(searchRequest.colors).map(color -> color.toString()).collect(Collectors.toList()).toArray(new String[0]));
+        if (searchRequest.sizes != null)
+            in.accept("size", Arrays.stream(searchRequest.sizes).map(size -> size.toString()).collect(Collectors.toList()).toArray(new String[0]));
 
         String queryString = "SELECT * FROM Animals WHERE "
                 + String.join(" AND ", ands)
