@@ -7,6 +7,9 @@ import cs340.getpet.persistence.Animal.Gender;
 import cs340.getpet.persistence.Animal.Size;
 import cs340.getpet.persistence.Animal.Species;
 
+/**
+ * A search query for finding an animal.
+ */
 public class SearchQuery {
     public final @NonNull Species species;
     public final @Nullable Gender[] genders;
