@@ -18,8 +18,8 @@ const submit = ev => {
         endpoint: `/animal/${intakeNumber}`,
         method: 'DELETE'
     })
+        .then(_ => window.history.back())
         .catch(e => displayErrorPage(-1, 'Internal error - failed to adopt animal', e));
-
 
     return false;
 }

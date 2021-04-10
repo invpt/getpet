@@ -99,6 +99,16 @@ const displaySearchResults = results => {
         genderAttributeValue.innerText = readableValues.gender[result.gender];
         rightAttributePair.appendChild(genderAttributeValue);
 
+        const adoptButton = document.createElement('button');
+        adoptButton.classList.add('button');
+        adoptButton.innerText = 'Adopt';
+        adoptButton.onclick = () => {
+            window.location = window.location.origin
+                + '/adoption.html'
+                + `?intakeNumber=${result.intakeNumber}`;            
+        };
+        resultDiv.appendChild(adoptButton);
+
         const detailsButton = document.createElement('button');
         detailsButton.classList.add('button');
         detailsButton.innerText = 'Details';
