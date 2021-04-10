@@ -64,6 +64,9 @@ public abstract class RestHttpHandler implements HttpHandler {
             exchange.getResponseBody().write(json.getBytes(StandardCharsets.UTF_8));
         } catch (JsonSyntaxException e) {
             exchange.sendResponseHeaders(responseCode = 400, -1);
+        } catch (Exception e) {
+            logger.info("caught", e);
+            throw e;  
         } finally {
             logger.info("HTTP " + responseCode + ": " + absolutePath);
             exchange.close();

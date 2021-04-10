@@ -3,9 +3,9 @@ requirePrivilegeLevel('any');
 const onSubmit = ev => {
     ev.preventDefault();
 
-    let intakeRequest = readForm(document.getElementById('intakeForm'));
+    let intakeRequest = { animal: readForm(document.getElementById('intakeForm')) };
 
-    intakeRequest.intakeNumber = -1;
+    intakeRequest.animal.intakeNumber = -1;
 
     apiCall({
         endpoint: `/animal/new`,
