@@ -18,11 +18,3 @@ const onSubmit = ev => {
 
 // Enable onSubmit
 document.getElementById('intakeForm').addEventListener('submit', onSubmit);
-
-const intakeNumber = parseInt(new URLSearchParams(window.location.search).get('intakeNumber'));
-if (!intakeNumber)
-    displayErrorPage(-1, 'Internal error - invalid or nonexistent intake number');
-else
-    apiCall({ endpoint: `/animal/${intakeNumber}` })
-        .then(fillDetails)
-        .catch(e => displayErrorPage(-1, null, e));
