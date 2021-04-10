@@ -35,7 +35,6 @@ const readForm = form => {
                 break;
             case 'checkbox':
                 const checkboxes = option.querySelectorAll('input');
-                console.log(checkboxes);
                 if (checkboxes.length > 1) {
                     values[name] = [];
                     for (const checkbox of option.querySelectorAll('input'))
