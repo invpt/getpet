@@ -89,7 +89,8 @@ public abstract class RestHttpHandler implements HttpHandler {
 
     private <Req extends RequestBody, Resp extends ResponseBody> Response<Resp> fuck(PathVariables pathVariables, Reader body, MethodHandler<Req, Resp> requestHandler) throws RestException {
         Req req = gson.fromJson(body, requestHandler.requestClass);
-        req.validate();
+        if (req != null)
+            req.validate();
         return requestHandler.handler.handle(new Request<>(pathVariables, req));
     }
 }
