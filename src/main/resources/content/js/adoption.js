@@ -27,7 +27,7 @@ const submit = ev => {
 document.getElementById('submitButton').addEventListener('click', submit);
 
 const intakeNumber = parseInt(new URLSearchParams(window.location.search).get('intakeNumber'));
-if (!searchParams.has('intakeNumber'))
+if (!intakeNumber)
     displayErrorPage(-1, 'Internal error - invalid or nonexistent intake number');
 else
     apiCall({ endpoint: `/animal/${intakeNumber}` })

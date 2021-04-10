@@ -1,12 +1,5 @@
 let animal;
 
-const euthanize = intakeNumber => {
-    console.info('Sending euthanization request for animal with intake number', intakeNumber);
-
-    fetch(`/persistence/animal/${intakeNumber}`, { method: 'DELETE' })
-        .catch(e => console.error("error euthanizing animal:", e));
-}
-
 // Fills in the form fields with the animal's preexisting details
 const fillDetails = response => {
     animal = response.animal;
@@ -65,9 +58,9 @@ else
     document.getElementById('buttonEuthanize').style.display = 'none';
 
 const intakeNumber = parseInt(new URLSearchParams(window.location.search).get('intakeNumber'));
-if (!searchParams.has('intakeNumber'))
+if (!intakeNumber)
     displayErrorPage(-1, 'Internal error - invalid or nonexistent intake number');
 else
-    fetch(`/persistence/animal/${intakeNumber}`)
+    apiCall({ endpoint: `/animal/${intakeNumber}` })
         .then(fillDetails)
         .catch(e => displayErrorPage(-1, null, e));
