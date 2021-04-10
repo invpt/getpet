@@ -2,7 +2,6 @@ package cs340.getpet.persistence;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
 import cs340.getpet.persistence.Animal.Color;
 
 public class Persistence {
-    static SecureRandom secureRandom = new SecureRandom();
     Connection conn;
 
     public static class PersistenceException extends Exception {
@@ -27,6 +25,9 @@ public class Persistence {
         }
     }
 
+    /**
+     * Information for connecting to the database.
+     */
     public static class Configuration {
         public final String server;
         public final String database;
@@ -71,6 +72,12 @@ public class Persistence {
         }
     }
 
+    /**
+     * Applies sample data to the database.
+     * 
+     * @throws SQLException when the application fails
+     * @throws IOException when the sample data cannot be read
+     */
     private void applySampleData() throws SQLException, IOException {
         Statement batch = conn.createStatement();
         String sql = new String(getClass().getResourceAsStream("/sample-db-create.sql").readAllBytes(), StandardCharsets.UTF_8);
@@ -80,6 +87,13 @@ public class Persistence {
         batch.executeBatch();
     }
 
+    /**
+     * Retrieves an animal fron the database using its intake number as a key.
+     * 
+     * @param intakeNumber the intake number of the animal
+     * @return the found animal, or null if none is found
+     * @throws PersistenceException when the database query fails
+     */
     public Animal getAnimal(int intakeNumber) throws PersistenceException {
         String queryString = "SELECT * FROM Animals WHERE intakeNumber = ?";
 
@@ -99,6 +113,13 @@ public class Persistence {
         }
     }
 
+    /**
+     * Searches for animals in the database using a SearchQuery.
+     * 
+     * @param searchRequest the search query
+     * @return the list of found animals
+     * @throws PersistenceException when the database query fails
+     */
     public Animal[] search(SearchQuery searchRequest) throws PersistenceException {
         // LinkedLists used to build the where clause of the query
         final LinkedList<String> ands = new LinkedList<>();
@@ -179,6 +200,12 @@ public class Persistence {
         }
     }
 
+    /**
+     * Adds an animal to the database, automatically assigning it an intake number.
+     * 
+     * @param animal the animal to add to the database
+     * @throws PersistenceException when the database update fails
+     */
     public void newAnimal(Animal animal) throws PersistenceException {
         String query = "INSERT INTO Animals SET " +
                 "species = ?," +
@@ -222,6 +249,13 @@ public class Persistence {
         }
     }
 
+    /**
+     * Updates an animal in the database using an intake number as the key.
+     * 
+     * @param intakeNumber the intake number of the animal to update
+     * @param animal the new animal data to be stored in the corresponding row of the database table
+     * @throws PersistenceException
+     */
     public void updateAnimal(int intakeNumber, Animal animal) throws PersistenceException {
         String query = "UPDATE Animals SET " +
                 "species = ?," +
@@ -265,6 +299,12 @@ public class Persistence {
         }
     }
 
+    /**
+     * Removes an animal from the database, using its intake number as a key.
+     * 
+     * @param intakeNumber the intake number of the animal to remove
+     * @throws PersistenceException when the database operation fails
+     */
     public void deleteAnimal(int intakeNumber) throws PersistenceException {
         String query = "DELETE FROM Animals WHERE intakeNumber = ?";
 
@@ -278,6 +318,13 @@ public class Persistence {
         }
     }
 
+    /**
+     * Constructs an animal from a row of the Animals table.
+     * 
+     * @param resultSet the result set, positioned at the row that data should be retrieved from
+     * @return the constructed animal
+     * @throws SQLException when a field could not be found
+     */
     private static Animal animalFromRow(ResultSet resultSet) throws SQLException {
         return new Animal.Builder()
                 .intakeNumber(resultSet.getInt("intakeNumber"))
