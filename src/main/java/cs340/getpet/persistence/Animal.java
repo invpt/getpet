@@ -54,10 +54,6 @@ public class Animal {
      */
     public final String name;
     /**
-     * The date the animal was brought into the shelter.
-     */
-    public final Date date;
-    /**
      * True if the animal is known to be missing, else false.
      */
     public boolean missing;
@@ -148,12 +144,11 @@ public class Animal {
         Boolean vaccinated;
         Boolean spayNeuter;
         String name;
-        Date date;
         Boolean missing;
 
         public Builder() {}
         public Animal build() {
-            if (species == null || breed == null || size == null || colors == null || gender == null || weight == null || vaccinated == null || spayNeuter == null || name == null || date == null || missing == null)
+            if (species == null || breed == null || size == null || colors == null || gender == null || weight == null || vaccinated == null || spayNeuter == null || name == null || missing == null)
                 throw new RuntimeException("Invalid call to build(): One or more required variables is unset!");
             else
                 return new Animal(this);
@@ -169,7 +164,6 @@ public class Animal {
         public Builder vaccinated(boolean vaccinated) { this.vaccinated = vaccinated; return this; }
         public Builder spayNeuter(boolean spayNeuter) { this.spayNeuter = spayNeuter; return this; }
         public Builder name(String name) { this.name = name; return this; }
-        public Builder date(Date date) { this.date = date; return this; }
         public Builder missing(boolean missing) { this.missing = missing; return this; }
     }
 
@@ -184,7 +178,6 @@ public class Animal {
         colors = b.colors;
         weight = b.weight;
         missing = b.missing;
-        date = b.date;
         spayNeuter = b.spayNeuter;
         size = b.size;
     }

@@ -28,7 +28,7 @@ public class Server {
 
     public void run() throws IOException, Persistence.PersistenceException {
         // connect to database
-        Persistence persistence = new Persistence(configuration.persistenceConf);
+        Persistence persistence = new Persistence(configuration.databaseName);
 
         // bind server to the address
         http.bind(configuration.address, -1);
@@ -46,24 +46,24 @@ public class Server {
     public static final class Configuration {
         public final String homePage;
         public final InetSocketAddress address;
-        public final Persistence.Configuration persistenceConf;
+        public final String databaseName;
 
         private Configuration(Builder b) {
             homePage = b.homePage;
             address = b.address;
-            persistenceConf = b.persistenceConf;
+            databaseName = b.databaseName;
         }
 
         public static class Builder {
             private String homePage;
             private InetSocketAddress address;
-            private Persistence.Configuration persistenceConf;
+            private String databaseName;
 
             public Builder() {}
             public Configuration build() { return new Configuration(this); }
             public Builder homePage(String homePage) { this.homePage = homePage; return this; }
             public Builder address(String address, int port) { this.address = new InetSocketAddress(address, port); return this; }
-            public Builder persistenceConf(Persistence.Configuration persistenceConf) { this.persistenceConf = persistenceConf; return this; }
+            public Builder databaseName(String databaseName) { this.databaseName = databaseName; return this; }
         }
     }
 }

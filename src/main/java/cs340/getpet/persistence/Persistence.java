@@ -26,41 +26,14 @@ public class Persistence {
     }
 
     /**
-     * Information for connecting to the database.
-     */
-    public static class Configuration {
-        public final String server;
-        public final String database;
-        public final String user;
-        public final String password;
-
-        private Configuration(Builder b) {
-            server = b.server;
-            database = b.database;
-            user = b.user;
-            password = b.password;
-        }
-
-        public static class Builder {
-            private String server, database, user, password;
-            public Builder() {}
-            public Configuration build() { return new Configuration(this); }
-            public Builder server(String server) { this.server = server; return this; }
-            public Builder database(String database) { this.database = database; return this; }
-            public Builder user(String user) { this.user = user; return this; }
-            public Builder password(String password) { this.password = password; return this; }
-        }
-    }
-
-    /**
      * Creates a Persistence, connecting to the database using the given information.
      *
-     * @param conf the configuration
+     * @param database the database filename to give to SQLite, or ":memory:" for an in-memory DB
      * @throws PersistenceException when the database connection could not be created
      */
-    public Persistence(Configuration conf) throws PersistenceException {
+    public Persistence(String database) throws PersistenceException {
         try {
-            conn = DriverManager.getConnection("jdbc:mariadb://" + conf.server + "/" + conf.database, conf.user, conf.password);
+            conn = DriverManager.getConnection("jdbc:sqlite:" + database);
         } catch (SQLException e) {
             throw new PersistenceException("Failed to create database connection", e);
         }
@@ -207,32 +180,20 @@ public class Persistence {
      * @throws PersistenceException when the database update fails
      */
     public void newAnimal(Animal animal) throws PersistenceException {
-        String query = "INSERT INTO Animals SET " +
-                "species = ?," +
-                "breed = ?," +
-                "size = ?," +
-                "color = ?," +
-                "gender = ?," +
-                "weight = ?," +
-                "vaccinated = ?," +
-                "spayNeuter = ?," +
-                "name = ?," +
-                "missing = ?," +
-                "cageNumber = ?," +
-                "date = ?";
+        String query = "INSERT INTO Animals (species,vaccinated,breed,gender,name,color,weight,cageNumber,ownerCustomerId,missing,spayNeuter,size) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         Object[] parameters = new Object[] {
                 animal.species.toString(),
-                animal.breed,
-                animal.size.toString(),
-                String.join(",", Arrays.stream(animal.colors).map(Color::toString).collect(Collectors.toList())),
-                animal.gender.toString(),
-                animal.weight,
                 animal.vaccinated,
-                animal.spayNeuter,
+                animal.breed,
+                animal.gender.toString(),
                 animal.name,
-                animal.missing,
+                String.join(",", Arrays.stream(animal.colors).map(Color::toString).collect(Collectors.toList())),
+                animal.weight,
                 animal.cageNumber,
-                new Date(),
+                null,
+                animal.missing,
+                animal.spayNeuter,
+                animal.size.toString(),
         };
 
         try (PreparedStatement prepStmt = conn.prepareStatement(query)) {
@@ -340,7 +301,6 @@ public class Persistence {
                 .vaccinated(resultSet.getBoolean("vaccinated"))
                 .spayNeuter(resultSet.getBoolean("spayNeuter"))
                 .name(resultSet.getString("name"))
-                .date(resultSet.getDate("date"))
                 .missing(resultSet.getBoolean("missing"))
                 .build();
     }

@@ -15,11 +15,7 @@ public class GetPet {
             server = new Server(new Server.Configuration.Builder()
                     .homePage("/home.html")
                     .address("localhost", 8080)
-                    .persistenceConf(new Persistence.Configuration.Builder()
-                            .server("localhost")
-                            .database("getpet")
-                            .user("root")
-                            .build())
+                    .databaseName(":memory:")
                     .build());
         } catch (IOException e) {
             logger.error("Failed to instantiate server", e);
