@@ -33,11 +33,11 @@ const fillDetails = response => {
 const onSubmit = ev => {
     ev.preventDefault();
 
-    let updateRequest = readForm(document.getElementById('detailsForm'));
+    let updateRequest = { animal: readForm(document.getElementById('detailsForm')) };
 
     apiCall({
-        endpoint: `/animal/${updateRequest.intakeNumber}`,
-        method: 'POST',
+        endpoint: `/animal/${updateRequest.animal.intakeNumber}`,
+        method: 'PUT',
         body: updateRequest,
     })
     .then(resp => console.info('Got response from server after update', resp))
