@@ -52,7 +52,7 @@ requirePrivilegeLevel('any');
 if (hasPrivilegeLevel('director'))
     document.getElementById('buttonEuthanize').onclick = () => {
         if (confirm(`Are you sure you want to mark ${animal.name} as euthanized?`))
-            euthanize(animal.intakeNumber);
+        apiCall({ endpoint: `/animal/${intakeNumber}`, method: 'DELETE' });
     };
 else
     document.getElementById('buttonEuthanize').style.display = 'none';
