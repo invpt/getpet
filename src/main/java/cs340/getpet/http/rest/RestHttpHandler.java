@@ -57,15 +57,26 @@ public abstract class RestHttpHandler implements HttpHandler {
             if (!endpointFound)
                 throw new RestException(RestException.Code.UNKNOWN_ENDPOINT);
         } catch (RestException e) {
+            if (e.code == RestException.Code.INTERNAL) {
+                // Something went wrong but the code is handling it properly
+                logger.info("Internal exception while handling request", e);
+                responseCode = 500;
+            } else {
+                // The client gave a bad request
+                responseCode = 400;
+            }
+                
+            // Build JSON response with error message
             JsonObject resp = new JsonObject();
             resp.addProperty("message", e.getMessage());
             String json = gson.toJson(resp);
-            exchange.sendResponseHeaders(responseCode = 500, json.length() == 0 ? -1 : json.length());
+
+            // Send response
+            exchange.sendResponseHeaders(responseCode, json.length() == 0 ? -1 : json.length());
             exchange.getResponseBody().write(json.getBytes(StandardCharsets.UTF_8));
-        } catch (JsonSyntaxException e) {
-            exchange.sendResponseHeaders(responseCode = 400, -1);
-        } catch (Exception e) {
-            logger.info("caught", e);
+        } catch (RuntimeException e) {
+            // Something went wrong with the code, and an exception went unhandled
+            logger.info("Unhandled runtime exception - this is a bug!", e);
             throw e;  
         } finally {
             logger.info("HTTP " + responseCode + ": " + absolutePath);
@@ -91,9 +102,19 @@ public abstract class RestHttpHandler implements HttpHandler {
     }
 
     private <Req extends RequestBody, Resp extends ResponseBody> Response<Resp> fuck(PathVariables pathVariables, Reader body, MethodHandler<Req, Resp> requestHandler) throws RestException {
-        Req req = gson.fromJson(body, requestHandler.requestClass);
+        Req req;
+        try {
+            req = gson.fromJson(body, requestHandler.requestClass);
+        } catch (JsonSyntaxException e) {
+            throw new RestException(RestException.Code.INVALID_STRUCTURE, e);
+        }
+
         if (req != null)
-            req.validate();
+            try {
+                req.validate();
+            } catch (ValidationException e) {
+                throw new RestException(RestException.Code.INVALID_DATA, e);
+            }
         return requestHandler.handler.handle(new Request<>(pathVariables, req));
     }
 }

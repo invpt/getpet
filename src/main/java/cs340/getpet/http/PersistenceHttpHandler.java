@@ -29,7 +29,7 @@ public class PersistenceHttpHandler extends RestHttpHandler {
                     try {
                         return Response.withBody(200, new AnimalSearchResponse(persistence.search(req.body)));
                     } catch (PersistenceException e) {
-                        throw new RestException(e);
+                        throw new RestException(RestException.Code.INTERNAL, e);
                     }
                 })
                 .build(),
@@ -40,7 +40,7 @@ public class PersistenceHttpHandler extends RestHttpHandler {
                         persistence.newAnimal(req.body.animal);
                         return Response.empty(200);
                     } catch (PersistenceException e) {
-                        throw new RestException(e);
+                        throw new RestException(RestException.Code.INTERNAL, e);
                     }
                 })
                 .build(),
@@ -51,7 +51,7 @@ public class PersistenceHttpHandler extends RestHttpHandler {
                     try {
                         return Response.withBody(200, new AnimalGetResponse(persistence.getAnimal(intakeNumber)));
                     } catch (PersistenceException e) {
-                        throw new RestException(e);
+                        throw new RestException(RestException.Code.INTERNAL, e);
                     }
                 })
                 .put(AnimalPutRequest.class, ResponseBody.EmptyResponse.class, (req) -> {
@@ -60,7 +60,7 @@ public class PersistenceHttpHandler extends RestHttpHandler {
                         persistence.updateAnimal(intakeNumber, req.body.animal);
                         return Response.empty(200);
                     } catch (PersistenceException e) {
-                        throw new RestException(e);
+                        throw new RestException(RestException.Code.INTERNAL, e);
                     }
                 })
                 .delete(RequestBody.EmptyRequest.class, ResponseBody.EmptyResponse.class, (req) -> {
@@ -69,7 +69,7 @@ public class PersistenceHttpHandler extends RestHttpHandler {
                         persistence.deleteAnimal(intakeNumber);
                         return Response.empty(200);
                     } catch (PersistenceException e) {
-                        throw new RestException(e);
+                        throw new RestException(RestException.Code.INTERNAL, e);
                     }
                 })
                 .build()
