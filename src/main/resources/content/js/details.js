@@ -41,7 +41,7 @@ const onSubmit = ev => {
         body: updateRequest,
     })
     .then(resp => console.info('Got response from server after update', resp))
-    .catch(e => displayErrorPage(-1, 'Internal error - failed to update animal', e));
+    .catch(e => displayErrorPage('Internal error - failed to update animal', e));
 }
 
 // Enable onSubmit
@@ -59,8 +59,8 @@ else
 
 const intakeNumber = parseInt(new URLSearchParams(window.location.search).get('intakeNumber'));
 if (!intakeNumber)
-    displayErrorPage(-1, 'Internal error - invalid or nonexistent intake number');
+    displayErrorPage('Internal error - invalid or nonexistent intake number');
 else
     apiCall({ endpoint: `/animal/${intakeNumber}` })
         .then(fillDetails)
-        .catch(e => displayErrorPage(-1, null, e));
+        .catch(e => displayErrorPage(null, e));

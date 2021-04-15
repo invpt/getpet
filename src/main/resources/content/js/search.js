@@ -134,7 +134,7 @@ const onSubmit = ev => {
         body: searchRequest,
     })
         .then(displaySearchResults)
-        .catch(e => displayErrorPopup(-1, 'Internal error - failed to perform search', e));
+        .catch(e => displayErrorPopup('Internal error - failed to perform search', e));
 
     return false;
 }

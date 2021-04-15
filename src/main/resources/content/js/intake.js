@@ -13,7 +13,7 @@ const onSubmit = ev => {
         body: intakeRequest,
     })
     .then(resp => console.info('Got response from server after intake', resp))
-    .catch(e => displayErrorPage(-1, 'Internal error - failed to intake animal', e));
+    .catch(e => displayErrorPage('Internal error - failed to intake animal', e));
 }
 
 // Enable onSubmit

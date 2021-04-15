@@ -90,24 +90,22 @@ const apiCall = async (details) => {
 
 /**
  * Reports an error by bringing the user to an error page
- * @param {number} code the HTTP response code, or -1 if client error
  * @param {string?} message the error message
- * @param {Error?} error error to log to console
+ * @param {Error?} cause error to log to console
  */
-const displayErrorPage = (code, message, error) => {
+const displayErrorPage = (message, cause) => {
     // TODO: implement this
     console.warn("Displayed error popup instead of error page");
-    displayErrorPopup(code, message, error);
+    displayErrorPopup(message, cause);
 }
 
 /**
  * Reports an error by showing an alert to the user
- * @param {number} code the HTTP response code, or -1 if client error
  * @param {string?} message the error message
- * @param {Error?} error error to log to console
+ * @param {Error?} cause error to log to console
  */
-const displayErrorPopup = (code, message, error) => {
-    console.error(error);
-    let alertMessage = "ERROR" + (code !== -1 ? " (code " + code + ")" : "") + ": " + (message ? message : "Internal error");
+const displayErrorPopup = (message, cause) => {
+    cause && console.error(cause);
+    let alertMessage = "ERROR: " + (message ? message : "Internal error");
     alert(alertMessage);
 }
