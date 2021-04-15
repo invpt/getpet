@@ -9,17 +9,18 @@ const loginAs = username => {
 };
 
 const displayLoginFailed = () => {
-    elements.errorMessage.style.visibility = 'visible';
-    elements.errorMessage.style.maxWidth = 'none';
-    elements.errorMessage.style.minWidth = 'none';
+    const errorMessageElement = document.getElementById('errorMessage');
+    errorMessageElement.style.visibility = 'visible';
+    errorMessageElement.style.maxWidth = 'none';
+    errorMessageElement.style.minWidth = 'none';
 };
 
-elements.credentials.addEventListener('submit', ev => {
+const onSubmit = ev => {
     ev.preventDefault();
 
-    const loginDetails = readForm(elements.credentials);
+    const loginDetails = readForm(document.getElementById('credentials'));
 
-    console.log('login with', loginDetails);
+    console.info('login occurred with details', loginDetails);
 
     if (users[loginDetails.username] && users[loginDetails.username] === loginDetails.password)
         loginAs(loginDetails.username);
@@ -27,4 +28,6 @@ elements.credentials.addEventListener('submit', ev => {
         displayLoginFailed();
 
     return false;
-});
+}
+
+document.getElementById('credentials').addEventListener('submit', onSubmit);

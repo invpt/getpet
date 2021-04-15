@@ -1,44 +1,19 @@
-requirePrivilegeLevel('any');
-
 let animal;
 
-const euthanize = intakeNumber => {
-    const request = { intakeNumber };
-
-    console.log('Sending euthanization request with body', request);
-
-    fetch("/persistence/euthanize", {
-        method: 'POST',
-        body: JSON.stringify(request),
-    })
-        .catch(e => console.log("ERROR: " + e));
-}
-
-if (hasPrivilegeLevel('director'))
-    elements.buttonEuthanize.onclick = () => {
-        if (confirm(`Are you sure you want to mark ${animal.name} as euthanized?`))
-            euthanize(animal.intakeNumber);
-    };
-else
-    elements.buttonEuthanize.style.display = 'none';
-
-
-///////////////////////////////// Fill in details ?///////////////////////////////////////////
+// Fills in the form fields with the animal's preexisting details
 const fillDetails = response => {
-    console.log("resp", response);
+    animal = response.animal;
 
     const setRadio = (elementId, name) => {
         const element = document.getElementById(elementId);
-        element.querySelector('input[value="' + name + '"]').checked = true;
+        element.querySelector(`input[value="${name}"]`).checked = true;
     };
     const setCheckboxes = (elementId, names) => {
         const element = document.getElementById(elementId);
-        for (const name of names) {
-            element.querySelector('input[value="' + name + '"]').checked = true;
-        }
-    };
 
-    animal = response.animal;
+        for (const name of names)
+            element.querySelector(`input[value="${name}"]`).checked = true;
+    };
 
     if (animal) {
         document.getElementById('optionName').value = animal.name;
@@ -55,37 +30,37 @@ const fillDetails = response => {
     }
 }
 
-const searchParams = new URLSearchParams(window.location.search);
-
-if (!searchParams.has('intakeNumber')) {
-    // TODO: This shows exactly no information to the user that something has gone wrong
-    console.error("Internal error");
-} else {
-    const intakeNumber = parseInt(searchParams.get('intakeNumber'));
-
-    fetch("/persistence/animal", {
-        method: 'POST',
-        body: JSON.stringify({ intakeNumber }),
-    })
-        .then(resp => resp.json())
-        .then(fillDetails)
-        .catch(e => console.log("ERROR: " + e));
-}
-
-
-////////////////////////////////////// Update functionality ////////////////////////////////
-elements.detailsForm.addEventListener('submit', ev => {
+const onSubmit = ev => {
     ev.preventDefault();
 
-    let updateRequest = readForm(elements.detailsForm);
+    let updateRequest = readForm(document.getElementById('detailsForm'));
 
-    console.log('Sending update request with body', updateRequest);
-
-    fetch('/persistence/updateAnimal', {
+    apiCall({
+        endpoint: `/animal/${updateRequest.intakeNumber}`,
         method: 'POST',
-        body: JSON.stringify(updateRequest),
+        body: updateRequest,
     })
-        .then(resp => resp.json())
-        .then(resp => console.log('Got response from server after update', resp))
-        .catch(e => console.log("ERROR: " + e));
-});
+    .then(resp => console.info('Got response from server after update', resp))
+    .catch(e => displayErrorPage(-1, 'Internal error - failed to update animal', e));
+}
+
+// Enable onSubmit
+document.getElementById('detailsForm').addEventListener('submit', onSubmit);
+
+requirePrivilegeLevel('any');
+
+if (hasPrivilegeLevel('director'))
+    document.getElementById('buttonEuthanize').onclick = () => {
+        if (confirm(`Are you sure you want to mark ${animal.name} as euthanized?`))
+            euthanize(animal.intakeNumber);
+    };
+else
+    document.getElementById('buttonEuthanize').style.display = 'none';
+
+const intakeNumber = parseInt(new URLSearchParams(window.location.search).get('intakeNumber'));
+if (!intakeNumber)
+    displayErrorPage(-1, 'Internal error - invalid or nonexistent intake number');
+else
+    apiCall({ endpoint: `/animal/${intakeNumber}` })
+        .then(fillDetails)
+        .catch(e => displayErrorPage(-1, null, e));

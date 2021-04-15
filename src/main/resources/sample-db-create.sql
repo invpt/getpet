@@ -1,19 +1,14 @@
--- To initialize your local MariaDB instance with data, just go into the
--- MariaDB command-line interface as the root MariaDB user, and paste this in.
--- However, WATCH OUT: This script will delete the "getpet" database if it exists.
--- Just be careful to avoid losing data.
-DROP DATABASE getpet;
-CREATE DATABASE getpet;
-USE getpet;
-
-CREATE TABLE Animals (
+-- NOTE: YOU DO NOT NEED TO APPLY THIS MANUALLY! The code now
+--       does this for you, so it is no longer necessary.
+-- This is code to initialize the database with sample data.
+CREATE OR REPLACE TABLE Animals (
     intakeNumber INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     species ENUM('dog', 'cat') NOT NULL,
     vaccinated BOOLEAN,
     breed VARCHAR(50),
     gender ENUM('m', 'f') NOT NULL,
     name VARCHAR(50),
-    color VARCHAR(50) NOT NULL,
+    color SET('black', 'white', 'brown', 'gold', 'dGray', 'lGray') NOT NULL,
     weight DOUBLE NOT NULL, -- Pounds
     cageNumber INT NOT NULL,
     ownerCustomerId INT,
@@ -23,9 +18,6 @@ CREATE TABLE Animals (
     size ENUM('small', 'medium', 'large')     -- Dogs: Small 2-22 lbs, Medium 23-57lb, Large 58+ lbs     *As an adult*
 	                                          -- Cats: Small 2-10 lbs, Medium 10-15 lbs, Large 15+ lbs   *As an adult*
 );
-
-
------------- Add sample data ------------
 
 INSERT INTO Animals SET
     intakeNumber = 0001,
@@ -146,7 +138,7 @@ INSERT INTO Animals SET
     breed = 'German Shepherd',
     gender = 'm',
     name = 'Bacon',
-    color = 'black brown',
+    color = 'black,brown',
     weight = 72,
     cageNumber = 9,
     ownerCustomerId = 9,
@@ -162,7 +154,7 @@ INSERT INTO Animals SET
     breed = 'Corgi',
     gender = 'f',
     name = 'Peter Dinklage',
-    color = 'gold white',
+    color = 'gold,white',
     weight = 5,
     cageNumber = 13,
     ownerCustomerId = 13,

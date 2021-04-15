@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
+/**
+ * HTTP handler that handles the serving of static files located in the JAR's resources.
+ */
 public class StaticHttpHandler implements HttpHandler {
     private static final Logger logger = LoggerFactory.getLogger(StaticHttpHandler.class);
 
@@ -21,35 +24,37 @@ public class StaticHttpHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         final String requestPath = exchange.getRequestURI().getPath();
         final int responseCode;
+        
+        try {
+            if (exchange.getRequestMethod().equals("GET")) {
+                final String resourcePath;
 
-        if (exchange.getRequestMethod().equals("GET")) {
-            final String resourcePath;
+                if (requestPath.equals("/"))
+                    resourcePath = "/content" + homePage;
+                else
+                    resourcePath = "/content" + requestPath;
 
-            if (requestPath.equals("/"))
-                resourcePath = "/content" + homePage;
-            else
-                resourcePath = "/content" + requestPath;
+                if (getClass().getResource(resourcePath) != null) {
+                    try (InputStream inStream = getClass().getResourceAsStream(resourcePath);
+                        OutputStream outStream = exchange.getResponseBody()) {
+                        // read file data
+                        byte[] data = inStream.readAllBytes();
 
-            if (getClass().getResource(resourcePath) != null) {
-                try (InputStream inStream = getClass().getResourceAsStream(resourcePath);
-                     OutputStream outStream = exchange.getResponseBody()) {
-                    // read file data
-                    byte[] data = inStream.readAllBytes();
+                        // send headers
+                        exchange.sendResponseHeaders(responseCode = 200, data.length);
 
-                    // send headers
-                    exchange.sendResponseHeaders(responseCode = 200, data.length);
-
-                    // send data
-                    outStream.write(data);
-                }
+                        // send data
+                        outStream.write(data);
+                    }
+                } else
+                    exchange.sendResponseHeaders(responseCode = 404, -1);
             } else
-                exchange.sendResponseHeaders(responseCode = 404, -1);
-        } else
-            exchange.sendResponseHeaders(responseCode = 405, -1);
+                exchange.sendResponseHeaders(responseCode = 405, -1);
 
 
-        logger.info("HTTP " + responseCode + ": " + requestPath);
-
-        exchange.close();
+            logger.info("HTTP " + responseCode + ": " + requestPath);
+        } finally {
+            exchange.close();
+        }
     }
 }

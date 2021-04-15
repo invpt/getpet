@@ -1,20 +1,20 @@
 requirePrivilegeLevel('any');
 
-elements.intakeForm.addEventListener('submit', ev => {
+const onSubmit = ev => {
     ev.preventDefault();
 
-    let updateRequest = readForm(elements.intakeForm);
+    let intakeRequest = { animal: readForm(document.getElementById('intakeForm')) };
 
-    updateRequest.intakeNumber = -1;
+    intakeRequest.animal.intakeNumber = -1;
 
-    console.log('Sending intake request with body', updateRequest);
-
-    fetch('/persistence/addAnimal', {
+    apiCall({
+        endpoint: `/animal/new`,
         method: 'POST',
-        body: JSON.stringify(updateRequest),
+        body: intakeRequest,
     })
-        .then(resp => resp.json())
-        .then(resp => console.log('Got response from server after intake', resp))
-        .then(_ => window.location = window.location.origin + "/")
-        .catch(e => console.log("ERROR: " + e));
-});
+    .then(resp => console.info('Got response from server after intake', resp))
+    .catch(e => displayErrorPage(-1, 'Internal error - failed to intake animal', e));
+}
+
+// Enable onSubmit
+document.getElementById('intakeForm').addEventListener('submit', onSubmit);
