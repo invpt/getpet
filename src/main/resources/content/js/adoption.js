@@ -19,7 +19,7 @@ const submit = ev => {
         method: 'DELETE'
     })
         .then(_ => window.history.back())
-        .catch(e => displayErrorPage(-1, 'Internal error - failed to adopt animal', e));
+        .catch(e => displayErrorPage('Internal error - failed to adopt animal', e));
 
     return false;
 }
@@ -28,8 +28,8 @@ document.getElementById('submitButton').addEventListener('click', submit);
 
 const intakeNumber = parseInt(new URLSearchParams(window.location.search).get('intakeNumber'));
 if (!intakeNumber)
-    displayErrorPage(-1, 'Internal error - invalid or nonexistent intake number');
+    displayErrorPage('Internal error - invalid or nonexistent intake number');
 else
     apiCall({ endpoint: `/animal/${intakeNumber}` })
         .then(fillDetails)
-        .catch(e => displayErrorPage(-1, null, e));
+        .catch(e => displayErrorPage(null, e));

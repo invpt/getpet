@@ -52,15 +52,20 @@ requirePrivilegeLevel('any');
 if (hasPrivilegeLevel('director'))
     document.getElementById('buttonEuthanize').onclick = () => {
         if (confirm(`Are you sure you want to mark ${animal.name} as euthanized?`))
-        apiCall({ endpoint: `/animal/${intakeNumber}`, method: 'DELETE' });
+        apiCall({
+            endpoint: `/animal/${intakeNumber}`,
+            method: 'DELETE'
+        })
+            .then(_ => window.history.back())
+            .catch(e => displayErrorPage('Internal error - failed to mark animal as euthanized', e));
     };
 else
     document.getElementById('buttonEuthanize').style.display = 'none';
 
 const intakeNumber = parseInt(new URLSearchParams(window.location.search).get('intakeNumber'));
 if (!intakeNumber)
-    displayErrorPage('Internal error - invalid or nonexistent intake number');
+    displayErrorPage('Internal error - invalid intake number');
 else
     apiCall({ endpoint: `/animal/${intakeNumber}` })
         .then(fillDetails)
-        .catch(e => displayErrorPage(null, e));
+        .catch(e => displayErrorPage('That animal does not exist', e));
