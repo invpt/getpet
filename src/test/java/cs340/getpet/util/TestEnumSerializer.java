@@ -6,10 +6,10 @@ import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import cs340.getpet.persistence.Animal.Color;
-import cs340.getpet.persistence.Animal.Gender;
-import cs340.getpet.persistence.Animal.Size;
-import cs340.getpet.persistence.Animal.Species;
+import cs340.getpet.persistence.Color;
+import cs340.getpet.persistence.Gender;
+import cs340.getpet.persistence.Size;
+import cs340.getpet.persistence.Species;
 
 // There's not much to test here, so I just added tests for every single possibility.
 public class TestEnumSerializer {

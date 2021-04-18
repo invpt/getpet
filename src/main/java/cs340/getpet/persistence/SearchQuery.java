@@ -2,10 +2,6 @@ package cs340.getpet.persistence;
 
 import checkers.nullness.quals.NonNull;
 import checkers.nullness.quals.Nullable;
-import cs340.getpet.persistence.Animal.Color;
-import cs340.getpet.persistence.Animal.Gender;
-import cs340.getpet.persistence.Animal.Size;
-import cs340.getpet.persistence.Animal.Species;
 
 /**
  * A search query for finding an animal.

@@ -4,10 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import cs340.getpet.persistence.Animal.Color;
-import cs340.getpet.persistence.Animal.Gender;
-import cs340.getpet.persistence.Animal.Size;
-import cs340.getpet.persistence.Animal.Species;
 import cs340.getpet.persistence.Persistence.PersistenceException;
 
 public class TestPersistence {

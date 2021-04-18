@@ -1,7 +1,10 @@
 package cs340.getpet.util;
 
 import com.google.gson.annotations.SerializedName;
-import cs340.getpet.persistence.Animal;
+import cs340.getpet.persistence.Species;
+import cs340.getpet.persistence.Gender;
+import cs340.getpet.persistence.Color;
+import cs340.getpet.persistence.Size;
 
 import java.util.HashMap;
 import java.util.IdentityHashMap;
@@ -10,7 +13,7 @@ import java.util.Map;
 
 // partially copied code from GSON to get value of @SerializedName annotation
 public final class EnumSerializer {
-    private static final List<Class<? extends Enum<?>>> CLASSES = List.of(Animal.Species.class, Animal.Gender.class, Animal.Color.class, Animal.Size.class);
+    private static final List<Class<? extends Enum<?>>> CLASSES = List.of(Species.class, Gender.class, Color.class, Size.class);
     private static final Map<Object, Map<Object, String>> CLASS_TO_CONSTANT_TO_NAME = new IdentityHashMap<>();
     private static final Map<Object, Map<String, Object>> CLASS_TO_NAME_TO_CONSTANT = new IdentityHashMap<>();
 

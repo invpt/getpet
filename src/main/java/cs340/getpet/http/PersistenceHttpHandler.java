@@ -11,10 +11,10 @@ import cs340.getpet.http.rest.ResponseBody.EmptyResponse;
 import cs340.getpet.persistence.Animal;
 import cs340.getpet.persistence.Persistence;
 import cs340.getpet.persistence.SearchQuery;
-import cs340.getpet.persistence.Animal.Color;
-import cs340.getpet.persistence.Animal.Gender;
-import cs340.getpet.persistence.Animal.Size;
-import cs340.getpet.persistence.Animal.Species;
+import cs340.getpet.persistence.Color;
+import cs340.getpet.persistence.Gender;
+import cs340.getpet.persistence.Size;
+import cs340.getpet.persistence.Species;
 import cs340.getpet.persistence.Persistence.PersistenceException;
 
 public class PersistenceHttpHandler extends RestHttpHandler {

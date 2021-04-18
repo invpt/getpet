@@ -9,8 +9,6 @@ import java.util.LinkedList;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import cs340.getpet.persistence.Animal.Color;
-
 // NOTE: this class cannot be multithreaded using a single connection, as it would have race conditions.
 public class Persistence {
     Connection conn;
@@ -299,13 +297,13 @@ public class Persistence {
         return new Animal.Builder()
                 .intakeNumber(resultSet.getInt("intakeNumber"))
                 .cageNumber(resultSet.getInt("cageNumber"))
-                .species(Animal.Species.fromString(resultSet.getString("species")))
+                .species(Species.fromString(resultSet.getString("species")))
                 .breed(resultSet.getString("breed"))
-                .size(Animal.Size.fromString(resultSet.getString("size")))
+                .size(Size.fromString(resultSet.getString("size")))
                 .colors(Arrays.stream(resultSet.getString("color").split(","))
-                        .map(Animal.Color::fromString)
-                        .toArray(Animal.Color[]::new))
-                .gender(Animal.Gender.fromString(resultSet.getString("gender")))
+                        .map(Color::fromString)
+                        .toArray(Color[]::new))
+                .gender(Gender.fromString(resultSet.getString("gender")))
                 .weight(resultSet.getDouble("weight"))
                 .vaccinated(resultSet.getBoolean("vaccinated"))
                 .spayNeuter(resultSet.getBoolean("spayNeuter"))
