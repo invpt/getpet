@@ -5,13 +5,13 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import cs340.getpet.persistence.Animal.Color;
 
+// NOTE: this class cannot be multithreaded using a single connection, as it would have race conditions.
 public class Persistence {
     Connection conn;
 
@@ -178,8 +178,9 @@ public class Persistence {
      * 
      * @param animal the animal to add to the database
      * @throws PersistenceException when the database update fails
+     * @return the automatically assigned intake number of the animal
      */
-    public void newAnimal(Animal animal) throws PersistenceException {
+    public int newAnimal(Animal animal) throws PersistenceException {
         String query = "INSERT INTO Animals (species,vaccinated,breed,gender,name,color,weight,cageNumber,ownerCustomerId,missing,spayNeuter,size) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         Object[] parameters = new Object[] {
                 animal.species.toString(),
@@ -205,6 +206,14 @@ public class Persistence {
 
             if (prepStmt.executeUpdate() != 1)
                 ; // this is bad D:
+            
+            // get the automatically-assigned intake number of the animal
+            Statement stmt = conn.createStatement();
+            ResultSet resultSet = stmt.executeQuery("SELECT last_insert_rowid() AS intakeNumber");
+            resultSet.next();
+            int intakeNumber = resultSet.getInt("intakeNumber");
+
+            return intakeNumber;
         } catch (SQLException e) {
             throw new PersistenceException("Failed to update animal", e);
         }

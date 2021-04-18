@@ -1,6 +1,6 @@
 package cs340.getpet.persistence;
 
-import java.util.Date;
+import java.util.Arrays;
 
 import com.google.gson.annotations.SerializedName;
 import cs340.getpet.util.EnumSerializer;
@@ -12,7 +12,7 @@ public class Animal {
     /**
      * The intake number of the animal.
      */
-    public final int intakeNumber;
+    public final Integer intakeNumber;
     /**
      * The cage number of the cage that the animal is residing in.
      */
@@ -180,5 +180,25 @@ public class Animal {
         missing = b.missing;
         spayNeuter = b.spayNeuter;
         size = b.size;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Animal) {
+            Animal a = (Animal) o;
+
+            return (intakeNumber == null || intakeNumber.equals(a.intakeNumber))
+                    && cageNumber == a.cageNumber
+                    && species == a.species
+                    && vaccinated == a.vaccinated
+                    && breed.equals(a.breed)
+                    && gender == a.gender
+                    && name.equals(a.name)
+                    && Arrays.equals(colors, a.colors)
+                    && weight == a.weight
+                    && missing == a.missing
+                    && spayNeuter == a.spayNeuter
+                    && size == a.size;
+        } else return false;
     }
 }

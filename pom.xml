@@ -31,13 +31,14 @@
 		<checker-framework.version>1.7.5</checker-framework.version>
 		<sqlite.version>3.34.0</sqlite.version>
 		<slf4j.version>1.7.25</slf4j.version>
+		<httpclient.version>5.0.3</httpclient.version>
 		<junit.version>5.7.0</junit.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
 	<dependencies>
-		<!-- GSON: Convert Java -> JSON and vice versa -->
+		<!-- GSON: Convert Java object -> JSON and JSON -> Java object -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -63,6 +64,14 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- Apache HttpClient for unit testing -->
+		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>${httpclient.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- JUnit -->
