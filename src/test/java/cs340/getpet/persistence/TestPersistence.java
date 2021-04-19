@@ -23,17 +23,10 @@ public class TestPersistence {
                 .build(),
     };
 
-    // This is reassigned before every test; no need to paste the line of code into each test anymore
-    private Persistence persistence;
-
-    // Gives each test its own new Persistence instance
-    @BeforeEach
-    public void initializePersistence() throws PersistenceException {
-        persistence = new Persistence(":memory:");
-    }
-
     @Test
     public void testAddAnimal() throws PersistenceException {
+        Persistence persistence = new Persistence(":memory:");
+
         int intakeNumber = persistence.newAnimal(testingAnimals[0]);
         Assertions.assertEquals(testingAnimals[0], persistence.getAnimal(intakeNumber));
     }
@@ -52,6 +45,8 @@ public class TestPersistence {
 
     @Test
     public void testDeleteTwice() throws PersistenceException {
+        Persistence persistence = new Persistence(":memory:");
+
         final int PREEXISTING_INTAKE_NUMBER = 1;
 
         // Assert that the animal already exists
@@ -72,6 +67,8 @@ public class TestPersistence {
 
     @Test
     public void testDeleteNonexistent() throws PersistenceException {
+        Persistence persistence = new Persistence(":memory:");
+
         final int NONEXISTENT_INTAKE_NUMBER = 20;
 
         // Assert that the animal does not already exist
@@ -86,6 +83,8 @@ public class TestPersistence {
 
     @Test
     public void testDeletePreexisting() throws PersistenceException {
+        Persistence persistence = new Persistence(":memory:");
+
         final int PREEXISTING_INTAKE_NUMBER = 1;
 
         // Assert that the animal already exists
