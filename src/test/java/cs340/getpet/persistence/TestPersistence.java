@@ -40,6 +40,7 @@ public class TestPersistence {
     // Persistence.newAnimal:
     //      - Make a test that adds the same animal twice, assert that the two intake numbers returned back are different
     //      - Make a test that adds an animal and deletes it immediately, making sure that it is deleted properly
+    //      - Make a test that gets an animal and adds it to the database a second time
     // Persistence.deleteAnimal:
     //      - Make a test that adds an animal, updates it, then deletes it
 
