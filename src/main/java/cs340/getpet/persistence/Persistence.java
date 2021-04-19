@@ -272,15 +272,15 @@ public class Persistence {
      * 
      * @param intakeNumber the intake number of the animal to remove
      * @throws PersistenceException when the database operation fails
+     * @return whether or not an animal was deleted
      */
-    public void deleteAnimal(int intakeNumber) throws PersistenceException {
+    public boolean deleteAnimal(int intakeNumber) throws PersistenceException {
         String query = "DELETE FROM Animals WHERE intakeNumber = ?";
 
         try (PreparedStatement prepStmt = conn.prepareStatement(query)) {
             prepStmt.setInt(1, intakeNumber);
 
-            if (prepStmt.executeUpdate() != 1)
-                ; // this is bad D:
+            return prepStmt.executeUpdate() != 0;
         } catch (SQLException e) {
             throw new PersistenceException("Failed to euthanize animal", e);
         }
