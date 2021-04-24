@@ -99,6 +99,16 @@ const displaySearchResults = results => {
         genderAttributeValue.innerText = readableValues.gender[result.gender];
         rightAttributePair.appendChild(genderAttributeValue);
 
+        const reclaimButton = document.createElement('button');
+        reclaimButton.classList.add('button');
+        reclaimButton.innerText = 'Reclaim';
+        reclaimButton.onclick = () => {
+            window.location = window.location.origin
+                + '/reclamation.html'
+                + `?intakeNumber=${result.intakeNumber}`;            
+        };
+        resultDiv.appendChild(reclaimButton);
+
         const adoptButton = document.createElement('button');
         adoptButton.classList.add('button');
         adoptButton.innerText = 'Adopt';
@@ -134,7 +144,7 @@ const onSubmit = ev => {
         body: searchRequest,
     })
         .then(displaySearchResults)
-        .catch(e => displayErrorPopup('Internal error - failed to perform search', e));
+        .catch(e => displayError('failed to perform search', e));
 
     return false;
 }

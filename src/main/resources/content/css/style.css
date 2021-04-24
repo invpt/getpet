@@ -73,15 +73,21 @@ header {
 
 
 /*********** Form styling ***********/
-input[type = "text"] {
-    width:90%;
-    min-width: 20px;
-    max-width: 500px;
-}
-
 .option {
     margin: 2px;
     margin-bottom:10px;
+}
+
+.optionSuperGroup{
+  display:flex;
+  flex-wrap:nowrap;
+  flex-direction:row;
+  justify-content:center;
+  align-content:center
+}
+
+.optionGroup {
+  margin:7.5px;
 }
 
 .category {

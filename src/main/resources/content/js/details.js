@@ -41,7 +41,7 @@ const onSubmit = ev => {
         body: updateRequest,
     })
     .then(resp => console.info('Got response from server after update', resp))
-    .catch(e => displayErrorPage('Internal error - failed to update animal', e));
+    .catch(e => displayError('failed to update animal', e));
 }
 
 // Enable onSubmit
@@ -57,15 +57,15 @@ if (hasPrivilegeLevel('director'))
             method: 'DELETE'
         })
             .then(_ => window.history.back())
-            .catch(e => displayErrorPage('Internal error - failed to mark animal as euthanized', e));
+            .catch(e => displayError('failed to mark animal as euthanized', e));
     };
 else
     document.getElementById('buttonEuthanize').style.display = 'none';
 
 const intakeNumber = parseInt(new URLSearchParams(window.location.search).get('intakeNumber'));
 if (!intakeNumber)
-    displayErrorPage('Internal error - invalid intake number');
+    displayError('invalid intake number');
 else
     apiCall({ endpoint: `/animal/${intakeNumber}` })
         .then(fillDetails)
-        .catch(e => displayErrorPage('That animal does not exist', e));
+        .catch(e => displayError('That animal does not exist', e));
