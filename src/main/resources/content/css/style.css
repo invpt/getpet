@@ -93,16 +93,3 @@ header {
 .category {
     font-weight:bold;
 }
-
-.result {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    padding: 3px;
-    background-color: #cfcfcf;
-    border-style: solid;
-    border-color: #acacac;
-    border-width: 2px;
-    margin: 15px 10px 15px 10px;
-}
