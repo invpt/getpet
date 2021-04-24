@@ -1,0 +1,2 @@
+requirePrivilegeLevel('any');
+

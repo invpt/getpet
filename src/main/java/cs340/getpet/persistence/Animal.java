@@ -53,7 +53,7 @@ public class Animal {
     /**
      * True if the animal is known to be missing, else false.
      */
-    public boolean missing;
+    public final boolean missing;
 
     /**
      * Builds an animal using the Builder pattern.

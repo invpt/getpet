@@ -59,6 +59,17 @@ public class Persistence {
     }
 
     /**
+     * Retrieves information about the cages contained in the database.
+     * 
+     * @return The cages in the database
+     * @throws PersistenceException when one of the database queries fails
+     */
+    public Cage[] getCages() throws PersistenceException {
+
+        return null;
+    }
+
+    /**
      * Retrieves an animal fron the database using its intake number as a key.
      * 
      * @param intakeNumber the intake number of the animal

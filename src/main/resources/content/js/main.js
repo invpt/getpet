@@ -85,18 +85,16 @@ const apiCall = async (details) => {
 
     console.info('Performing API call to endpoint', details.endpoint, 'with body', options.body);
 
-    return await (await fetch(`/persistence${details.endpoint}`, options)).json()
-}
+    let response = await fetch(`/persistence${details.endpoint}`, options);
+    let json = await response.json();
 
-/**
- * Reports an error by bringing the user to an error page
- * @param {string?} message the error message
- * @param {Error?} cause error to log to console
- */
-const displayErrorPage = (message, cause) => {
-    // TODO: implement this
-    console.warn("Displayed error popup instead of error page");
-    displayErrorPopup(message, cause);
+    if (response.status >= 200 && response.status < 300)
+        return json
+    else {
+        let error = new Error(`Error ${response.status}: ${response.statusText}`);
+        error.responseJson = json;
+        throw error;
+    }
 }
 
 /**
@@ -104,8 +102,12 @@ const displayErrorPage = (message, cause) => {
  * @param {string?} message the error message
  * @param {Error?} cause error to log to console
  */
-const displayErrorPopup = (message, cause) => {
+const displayError = (message, cause) => {
     cause && console.error(cause);
-    let alertMessage = "ERROR: " + (message ? message : "Internal error");
-    alert(alertMessage);
+
+    if (cause.responseJson) {
+        alert(`Error: ${message} - ${cause.responseJson.message} (${cause.message})`);
+    } else {
+        alert(`Error: ${message}`);
+    }
 }

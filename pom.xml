@@ -45,13 +45,6 @@
 			<version>2.8.6</version>
 		</dependency>
 
-		<!-- NotNull and Nullable annotations -->
-		<dependency>
-			<groupId>edu.washington.cs.types.checker</groupId>
-			<artifactId>checker-framework</artifactId>
-			<version>${checker-framework.version}</version>
-		</dependency>
-
 		<!-- SQLite -->
 		<dependency>
 			<groupId>org.xerial</groupId>

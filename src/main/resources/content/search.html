@@ -17,68 +17,111 @@
         <div id="flexible">
             <div id="parameters">
                 <form id="searchForm">
-                    <div class="category">Species</div>
-                    <div class="option" id="species" name="species" type="radio">
-                        <input type="radio" name="species" value="dog" id="optionDog" />
-                        <label for="optionDog">Dog</label>
-                        <br />
-                        <input type="radio" name="species" value="cat" id="optionCat" />
-                        <label for="optionCat">Cat</label>
+                  <div class="optionSuperGroup">
+                    <div class="optionGroup">
+                      <div class="category">Breed</div>
+                      <div class="option" type="text" name="breed">
+                        <input type="text" name="breed" id="optionBreed" style="width:200px; " />
+                      </div>
                     </div>
-
-                    <div class="category">Gender</div>
-                    <div class="option" id="genders" name="genders" type="checkbox">
-                        <input type="checkbox" name="genders" value="m" id="optionMale" />
-                        <label for="optionMale">Male</label>
-                        <br />
-                        <input type="checkbox" name="genders" value="f" id="optionFemale" />
-                        <label for="optionFemale">Female</label>
+                  </div>
+            
+                    <div class="optionSuperGroup">
+                      <div class="optionGroup">
+                        <div class="category">Intake Number</div>
+                        <div class="option" type="text" name="intakeNumber">
+                          <input type="text" name="intakeNumber" id="optionIntakeNumber" />
+                        </div>
+                        <div class="category">Sizes</div>
+                        <div class="option" type="checkbox" name="sizes" id="optionSize">
+                          <input type="checkbox" id="optionSmall" value="small" />
+                          <label for="optionSmall">Small</label>
+                          <br />
+            
+                          <input type="checkbox" id="optionMedium" value="medium" />
+                          <label for="optionMedium">Medium</label>
+                          <br />
+            
+                          <input type="checkbox" id="optionLarge" value="large" />
+                          <label for="optionLarge">Large</label>
+                        </div>
+            
+                        <div class="category">Genders</div>
+                        <div class="option" type="checkbox" name="genders" id="optionGender">
+                          <input type="checkbox" id="optionMale" value="m" />
+                          <label for="optionMale">Male</label>
+            
+                          <input type="checkbox" id="optionFemale" value="f" />
+                          <label for="optionFemale">Female</label>
+                        </div>
+            
+                        <div class="category">Species</div>
+                        <div class="option" type="radio" name="species" id="optionSpecies">
+                          <input type="radio" id="optionDog" name="species" value="dog" />
+                          <label for="optionDog">Dog</label>
+            
+                          <input type="radio" id="optionCat" name="species" value="cat" />
+                          <label for="optionCat">Cat</label>
+                        </div>
+                      </div>
+            
+                      <div class="optionGroup">
+                        <div class="category">Cage Number</div>
+                        <div class="option" type="text" name="cageNumber">
+                          <input type="text" name="cageNumber" id="optionCageNumber" value="" />
+                        </div>
+            
+                        <div class="category">Color</div>
+                        <div class="option" type="checkbox" name="colors" id="optionColor">
+                          <div class="flexible">
+                            <div>
+                              <input type="checkbox" id="optionBlack" value="black" />
+                              <label for="optionBlack">Black</label>
+                              <br />
+            
+                              <input type="checkbox" id="optionWhite" value="white" />
+                              <label for="optionWhite">White</label>
+                              <br />
+            
+                              <input type="checkbox" id="optionBrown" value="brown" />
+                              <label for="optionBrown">Brown</label>
+                            </div>
+                            <div>
+                              <input type="checkbox" id="optionGold" value="gold" />
+                              <label for="optionGold">Gold</label>
+                              <br />
+            
+                              <input type="checkbox" id="optionLGray" value="lGray" />
+                              <label for="optionLGray">Light Gray</label>
+                              <br />
+            
+                              <input type="checkbox" id="optionDGray" value="dGray" />
+                              <label for="optionDGray">Dark Gray</label>
+                            </div>
+                          </div>
+                        </div>
+            
+                        <div class="category">Vaccinated</div>
+                        <div class="option" type="checkbox" name="vaccinated">
+                          <input type="checkbox" id="optionVaccinated" value="vaccinated" checked />
+                          <label for="optionVaccinated">Yes</label>
+                        </div>
+            
+                        <div class="category">Spayed/Neutered</div>
+                        <div class="option" type="checkbox" name="spayNeuter">
+                          <input type="checkbox" id="optionSpayNeuter" value="spayNeuter" checked />
+                          <label for="optionSpayNeuter">Yes</label>
+                        </div>
+            
+                      </div>
                     </div>
-
-                    <div class="category">Breed</div>
-                    <div class="option" id="breed" name="breed" type="text">
-                        <input type="text" name="breed" id="optionBreed" />
-                    </div>
-
-                    <div class="category">Color</div>
-                    <div class="option" id="colors" name="colors" type="checkbox">
-                        <input type="checkbox" name="color" value="black" id="optionBlack" />
-                        <label for="optionBlack">Black</label>
-                        <br />
-                        <input type="checkbox" name="color" value="white" id="optionWhite" />
-                        <label for="optionWhite">White</label>
-                        <br />
-                        <input type="checkbox" name="color" value="brown" id="optionBrown" />
-                        <label for="optionBrown">Brown</label>
-                        <br />
-                        <input type="checkbox" name="color" value="gold" id="optionGold" />
-                        <label for="optionGold">Gold</label>
-                        <br />
-                        <input type="checkbox" name="color" value="lGray" id="optionLightGray" />
-                        <label for="optionLightGray">Light Gray</label>
-                        <br />
-                        <input type="checkbox" name="color" value="dGray" id="optionDarkGray" />
-                        <label for="optionDarkGray">Dark Gray</label>
-                    </div>
-
-                    <div class="category">Size</div>
-                    <div class="option" id="size" name="size" type="checkbox">
-                        <input type="checkbox" name="size" value="small" id="optionSmall" />
-                        <label for="optionSmall">Small</label>
-                        <br />
-                        <input type="checkbox" name="size" value="medium" id="optionMedium" />
-                        <label for="optionMedium">Medium</label>
-                        <br />
-                        <input type="checkbox" name="size" value="large" id="optionLarge" />
-                        <label for="optionLarge">Large</label>
-                    </div>
-
+            
                     <input type="submit" value="Search" class="button submit" />
-                </form>
+                  </form>
             </div>
 
             <div id="resultsBox">
-                <h1>Results</h1>
+                <h1 id="resultsTitle">Results</h1>
 
                 <div id="result"></div>
             </div>

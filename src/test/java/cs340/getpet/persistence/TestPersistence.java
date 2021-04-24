@@ -45,6 +45,21 @@ public class TestPersistence {
     //      - Make a test that adds an animal, updates it, then deletes it
 
     @Test
+    public void testDeleteAnimal() throws PersistenceException {
+        Persistence persistence = new Persistence(":memory:");
+
+        final int INTAKE_NUMBER = 1;
+
+        Animal preexistingDoge = persistence.getAnimal(INTAKE_NUMBER);
+        Assertions.assertNotNull(preexistingDoge);
+        
+        persistence.deleteAnimal(INTAKE_NUMBER);
+
+        Animal doge = persistence.getAnimal(INTAKE_NUMBER);
+        Assertions.assertNull(doge);
+    }
+
+    @Test
     public void testDeleteTwice() throws PersistenceException {
         Persistence persistence = new Persistence(":memory:");
 

@@ -105,7 +105,7 @@ public abstract class RestHttpHandler implements HttpHandler {
         Req req;
         try {
             req = gson.fromJson(body, requestHandler.requestClass);
-        } catch (JsonSyntaxException e) {
+        } catch (JsonSyntaxException | NumberFormatException e) {
             throw new RestException(RestException.Code.INVALID_STRUCTURE, e);
         }
 
