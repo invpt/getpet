@@ -45,7 +45,7 @@ public class TestPersistence {
 
     @Test
     public void testDeleteAnimal() throws PersistenceException {
-        Persistence persistence = new Persistence(":memory");
+        Persistence persistence = new Persistence(":memory:");
 
         final int INTAKE_NUMBER = 1;
 
