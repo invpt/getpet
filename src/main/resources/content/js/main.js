@@ -75,6 +75,12 @@ const requirePrivilegeLevel = level => {
         window.location.href = '/login.html';
 };
 
+/**
+ * Performs an API call to the GetPet database REST API.
+ * 
+ * @param {{endpoint: string, method: string?, body: string?}} details the API call details
+ * @returns the API's response
+ */
 const apiCall = async (details) => {
     if (!details.endpoint) {
         throw Error("apiCall requires endpoint");
