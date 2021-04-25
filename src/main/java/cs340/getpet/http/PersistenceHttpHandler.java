@@ -91,8 +91,8 @@ public class PersistenceHttpHandler extends RestHttpHandler {
 }
 
 final class AnimalSearchRequest extends SearchQuery implements RequestBody {
-    AnimalSearchRequest(Species species, Gender[] genders, String breed, Color[] colors, Size[] sizes) {
-        super(species, genders, breed, colors, sizes);
+    AnimalSearchRequest(Species species, Gender[] genders, String breed, Color[] colors, Size[] sizes, Integer cageNumber, boolean vaccinated, boolean spayNeuter) {
+        super(species, genders, breed, colors, sizes, cageNumber, vaccinated, spayNeuter);
     }
 
     @Override

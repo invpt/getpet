@@ -141,7 +141,7 @@ public class Persistence {
 
         // Functions used in conjunction with the previously defined variables
         // to build the where clause in an easy-to-understand way.
-        final BiConsumer<String, String> is = (attrName, value) -> {
+        final BiConsumer<String, Object> is = (attrName, value) -> {
             if (value != null) {
                 // add condition text
                 ands.add(attrName + " = ?");
@@ -157,7 +157,7 @@ public class Persistence {
                 parameters.add("%" + value + "%");
             }
         };
-        final BiConsumer<String, String[]> in = (attrName, values) -> {
+        final BiConsumer<String, Object[]> in = (attrName, values) -> {
             if (values != null && values.length != 0) {
                 // add condition text
                 ands.add(attrName + " IN (" + "?,".repeat(values.length - 1) + "?)");
@@ -189,6 +189,12 @@ public class Persistence {
             has.accept("color", Arrays.stream(searchRequest.colors).map(color -> color.toString()).collect(Collectors.toList()).toArray(new String[0]));
         if (searchRequest.sizes != null)
             in.accept("size", Arrays.stream(searchRequest.sizes).map(size -> size.toString()).collect(Collectors.toList()).toArray(new String[0]));
+        if (searchRequest.cageNumber != null)
+            is.accept("cageNumber", searchRequest.cageNumber);
+        if (searchRequest.vaccinated)
+            is.accept("vaccinated", true);
+        if (searchRequest.spayNeuter)
+            is.accept("spayNeuter", true);
 
         String queryString = "SELECT * FROM Animals WHERE "
                 + String.join(" AND ", ands)
