@@ -265,9 +265,10 @@ public class Persistence {
      * 
      * @param intakeNumber the intake number of the animal to update
      * @param animal the new animal data to be stored in the corresponding row of the database table
+     * @return whether or not an animal was updated
      * @throws PersistenceException
      */
-    public void updateAnimal(int intakeNumber, Animal animal) throws PersistenceException {
+    public boolean updateAnimal(int intakeNumber, Animal animal) throws PersistenceException {
         String query = "UPDATE Animals SET " +
                 "species = ?," +
                 "breed = ?," +
@@ -303,8 +304,7 @@ public class Persistence {
             for (int i = 0; i < parameters.length; ++i)
                 prepStmt.setObject(i + 1, parameters[i]);
 
-            if (prepStmt.executeUpdate() != 1)
-                ; // this is bad D:
+            return prepStmt.executeUpdate() != 0;
         } catch (SQLException e) {
             throw new PersistenceException("Failed to update animal", e);
         }
