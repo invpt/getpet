@@ -9,6 +9,7 @@ import cs340.getpet.http.rest.RestHttpHandler;
 import cs340.getpet.http.rest.ValidationException;
 import cs340.getpet.http.rest.ResponseBody.EmptyResponse;
 import cs340.getpet.persistence.Animal;
+import cs340.getpet.persistence.Cage;
 import cs340.getpet.persistence.Persistence;
 import cs340.getpet.persistence.SearchQuery;
 import cs340.getpet.persistence.Color;
@@ -23,6 +24,16 @@ public class PersistenceHttpHandler extends RestHttpHandler {
     public PersistenceHttpHandler(Persistence persistence) {
         super(
             "/persistence",
+            new Endpoint.Builder()
+                .path("/cages")
+                .get(CagesGetResponse.class, (req) -> {
+                    try {
+                        return Response.withBody(200, new CagesGetResponse(persistence.getCages()));
+                    } catch (PersistenceException e) {
+                        throw new RestException(RestException.Code.INTERNAL, e);
+                    }
+                })
+                .build(),
             new Endpoint.Builder()
                 .path("/search")
                 .post(AnimalSearchRequest.class, AnimalSearchResponse.class, (req) -> {
@@ -127,6 +138,14 @@ final class AnimalPutRequest implements RequestBody {
             throw new ValidationException("Breed must be alphabetic and 50 characters or less.");
         if (animal.weight > 250.0 || animal.weight < 1.0)
             throw new ValidationException("Weight must lie within the range of 1 and 250 lbs");
+    }
+}
+
+final class CagesGetResponse implements ResponseBody {
+    public final Cage[] cages;
+
+    CagesGetResponse(Cage[] cages) {
+        this.cages = cages;
     }
 }
 

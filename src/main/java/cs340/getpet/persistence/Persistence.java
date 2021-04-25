@@ -6,8 +6,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Stack;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+
+import cs340.getpet.util.EnumSerializer;
 
 // NOTE: this class cannot be multithreaded using a single connection, as it would have race conditions.
 public class Persistence {
@@ -62,11 +65,40 @@ public class Persistence {
      * Retrieves information about the cages contained in the database.
      * 
      * @return The cages in the database
-     * @throws PersistenceException when one of the database queries fails
+     * @throws PersistenceException when the database query fails
      */
     public Cage[] getCages() throws PersistenceException {
+        try (Statement stmt = conn.createStatement()) {
+            ResultSet resultSet = stmt.executeQuery("SELECT cageNumber, species, COUNT(*) as count FROM Animals GROUP BY cageNumber, species");
 
-        return null;
+            Stack<Cage> cages = new Stack<>();
+            while (resultSet.next()) {
+                int cageNumber = resultSet.getInt("cageNumber");
+                Species species = EnumSerializer.fromString(resultSet.getString("species"), Species.class);
+                
+                int dogCount;
+                int catCount;
+                if (species == Species.DOG) {
+                    dogCount = resultSet.getInt("count");
+                    if (!cages.isEmpty() && cageNumber == cages.peek().cageNumber)
+                        catCount = cages.pop().catCount;
+                    else
+                        catCount = 0;
+                } else {
+                    catCount = resultSet.getInt("count");
+                    if (!cages.isEmpty() && cageNumber == cages.peek().cageNumber)
+                        dogCount = cages.pop().dogCount;
+                    else
+                        dogCount = 0;
+                }
+
+                cages.push(new Cage(cageNumber, dogCount, catCount));
+            }
+
+            return cages.toArray(new Cage[0]);
+        } catch (SQLException e) {
+            throw new PersistenceException("Failed to create or execute query to search for cages", e);
+        }
     }
 
     /**

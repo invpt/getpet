@@ -150,3 +150,10 @@ const onSubmit = ev => {
 }
 
 document.getElementById('searchForm').addEventListener('submit', onSubmit);
+
+// special functionality... allow other pages to link to this one and search by cage number
+const cageNumber = new URLSearchParams(window.location.search).get('cageNumber');
+if (cageNumber) {
+    document.getElementById('optionCageNumber').value = cageNumber;
+    document.querySelector('.button.submit').click();
+}
