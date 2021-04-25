@@ -45,7 +45,8 @@ const readForm = form => {
                 }
                 break;
             default:
-                values[name] = option.querySelector('input').value;
+                const value = option.querySelector('input').value;
+                values[name] = value !== '' ? value : null;
         }
     }
 
