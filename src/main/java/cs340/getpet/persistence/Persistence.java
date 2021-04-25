@@ -137,6 +137,7 @@ public class Persistence {
     public Animal[] search(SearchQuery searchRequest) throws PersistenceException {
         // LinkedLists used to build the where clause of the query
         final LinkedList<String> ands = new LinkedList<>();
+        ands.push("TRUE");
         final LinkedList<Object> parameters = new LinkedList<>();
 
         // Functions used in conjunction with the previously defined variables
@@ -192,9 +193,9 @@ public class Persistence {
         if (searchRequest.cageNumber != null)
             is.accept("cageNumber", searchRequest.cageNumber);
         if (searchRequest.vaccinated)
-            is.accept("vaccinated", true);
+            is.accept("vaccinated", 1);
         if (searchRequest.spayNeuter)
-            is.accept("spayNeuter", true);
+            is.accept("spayNeuter", 1);
 
         String queryString = "SELECT * FROM Animals WHERE "
                 + String.join(" AND ", ands)
@@ -231,7 +232,7 @@ public class Persistence {
         String query = "INSERT INTO Animals (species,vaccinated,breed,gender,name,color,weight,cageNumber,ownerCustomerId,missing,spayNeuter,size) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         Object[] parameters = new Object[] {
                 animal.species.toString(),
-                animal.vaccinated,
+                animal.vaccinated ? 1 : 0,
                 animal.breed,
                 animal.gender.toString(),
                 animal.name,
@@ -239,8 +240,8 @@ public class Persistence {
                 animal.weight,
                 animal.cageNumber,
                 null,
-                animal.missing,
-                animal.spayNeuter,
+                animal.missing ? 1 : 0,
+                animal.spayNeuter ? 1 : 0,
                 animal.size.toString(),
         };
 
@@ -295,10 +296,10 @@ public class Persistence {
                 String.join(",", Arrays.stream(animal.colors).map(Color::toString).collect(Collectors.toList())),
                 animal.gender.toString(),
                 animal.weight,
-                animal.vaccinated,
-                animal.spayNeuter,
+                animal.vaccinated ? 1 : 0,
+                animal.spayNeuter ? 1 : 0,
                 animal.name,
-                animal.missing,
+                animal.missing ? 1 : 0,
                 animal.cageNumber,
                 intakeNumber,
         };
@@ -354,10 +355,10 @@ public class Persistence {
                         .toArray(Color[]::new))
                 .gender(Gender.fromString(resultSet.getString("gender")))
                 .weight(resultSet.getDouble("weight"))
-                .vaccinated(resultSet.getBoolean("vaccinated"))
-                .spayNeuter(resultSet.getBoolean("spayNeuter"))
+                .vaccinated(resultSet.getInt("vaccinated") != 0)
+                .spayNeuter(resultSet.getInt("spayNeuter") != 0)
                 .name(resultSet.getString("name"))
-                .missing(resultSet.getBoolean("missing"))
+                .missing(resultSet.getInt("missing") != 0)
                 .build();
     }
 }

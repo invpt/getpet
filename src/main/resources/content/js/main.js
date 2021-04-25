@@ -40,8 +40,8 @@ const readForm = form => {
                     for (const checkbox of option.querySelectorAll('input'))
                         if (checkbox.checked)
                             values[name].push(checkbox.value);
-                } else {
-                    values[name] = checkboxes.length != 0;
+                } else if (checkboxes.length == 1) {
+                    values[name] = checkboxes[0].checked;
                 }
                 break;
             default:

@@ -25,8 +25,8 @@ const fillDetails = response => {
         setRadio('optionGender', animal.gender);
         setRadio('optionSpecies', animal.species);
         setCheckboxes('optionColor', animal.colors);
-        document.getElementById('optionVaccinated').checked = true;
-        document.getElementById('optionSpayNeuter').checked = true;
+        document.getElementById('optionVaccinated').checked = animal.vaccinated;
+        document.getElementById('optionSpayNeuter').checked = animal.spayNeuter;
     }
 }
 
