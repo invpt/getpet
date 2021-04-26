@@ -136,7 +136,7 @@ const displaySearchResults = results => {
 const onSubmit = ev => {
     ev.preventDefault();
 
-    let searchRequest = readForm(document.getElementById('searchForm'));
+    let searchRequest = { query: readForm(document.getElementById('searchForm')) };
 
     apiCall({
         endpoint: '/search',
