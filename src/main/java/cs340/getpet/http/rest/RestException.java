@@ -19,7 +19,7 @@ public class RestException extends Exception {
         INVALID_METHOD("Invalid method"),
         UNKNOWN_METHOD("Unknown method"),
         INVALID_PATH_PARAMETER("Invalid path parameter"),
-        UNKNOWN_ENDPOINT("Unknown endpoint"),
+        NOT_FOUND("Not found"),
         INVALID_DATA("Invalid input data"),
         INVALID_STRUCTURE("Invalid input structure"),
         INTERNAL("Internal error");
@@ -28,6 +28,22 @@ public class RestException extends Exception {
 
         Code(String message) {
             this.message = message;
+        }
+
+        public int httpResponseCode() {
+            switch (this) {
+                case INVALID_METHOD:
+                case UNKNOWN_METHOD:
+                case INVALID_PATH_PARAMETER:
+                case INVALID_DATA:
+                case INVALID_STRUCTURE:
+                    return 400;
+                case NOT_FOUND:
+                    return 404;
+                case INTERNAL:
+                default:
+                    return 500;
+            }
         }
     }
 }

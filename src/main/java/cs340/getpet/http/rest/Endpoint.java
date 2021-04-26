@@ -129,4 +129,19 @@ public final class Endpoint {
         this.putHandler = b.putHandler;
         this.deleteHandler = b.deleteHandler;
     }
+
+    public MethodHandler<?, ?> getHandlerForMethod(String method) {
+        switch (method) {
+            case "GET":
+                return getHandler;
+            case "POST":
+                return postHandler;
+            case "PUT":
+                return putHandler;
+            case "DELETE":
+                return deleteHandler;
+            default:
+                return null;
+        }
+    }
 }

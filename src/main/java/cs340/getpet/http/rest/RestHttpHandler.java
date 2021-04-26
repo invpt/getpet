@@ -1,13 +1,11 @@
 package cs340.getpet.http.rest;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -33,88 +31,71 @@ public abstract class RestHttpHandler implements HttpHandler {
 
     @Override
     public final void handle(HttpExchange exchange) throws IOException {
-        final String absolutePath = exchange.getRequestURI().getPath();
-        assert absolutePath.startsWith(basePath);
-        final String endpointPath = absolutePath.substring(basePath.length());
+        final String endpointPath = exchange.getRequestURI().getPath().substring(basePath.length());
 
-        int responseCode = -1;
-        try {
-            boolean endpointFound = false;
-            
-            for (Endpoint endpoint : endpoints) {
-                PathVariables pathVariables = endpoint.path.match(endpointPath);
+        // find endpoint with which to handle the exchange
+        PathVariables pathMatch = null;
+        MethodHandler<?, ?> requestHandler = null;
+        for (Endpoint endpoint : endpoints) {
+            pathMatch = endpoint.path.match(endpointPath);
+            requestHandler = endpoint.getHandlerForMethod(exchange.getRequestMethod());
 
-                if (endpointFound = pathVariables != null) {
-                    Response<?> resp = handleRequest(exchange.getRequestMethod(), pathVariables, exchange.getRequestBody(), endpoint);
-                    String json = gson.toJson(resp.body);
+            if (pathMatch != null)
+                break;
+        }
 
-                    exchange.sendResponseHeaders(responseCode = resp.code, json.length() == 0 ? -1 : json.length());
-                    exchange.getResponseBody().write(json.getBytes(StandardCharsets.UTF_8));
-                    break;
-                }
-            }
+        // generate the response
+        Response<?> resp;
+        try (InputStreamReader body = new InputStreamReader(exchange.getRequestBody())) {
+            if (pathMatch == null)
+                throw new RestException(RestException.Code.NOT_FOUND);
 
-            if (!endpointFound)
-                throw new RestException(RestException.Code.UNKNOWN_ENDPOINT);
+            resp = handleAndValidateRequest(pathMatch, body, requestHandler);
         } catch (RestException e) {
-            if (e.code == RestException.Code.INTERNAL) {
+            if (e.code == RestException.Code.INTERNAL)
                 // Something went wrong but the code is handling it properly
-                logger.info("Internal exception while handling request", e);
-                responseCode = 500;
-            } else {
+                logger.error("Internal exception while handling request", e);
+            else
                 // The client gave a bad request
-                responseCode = 400;
-            }
-                
-            // Build JSON response with error message
-            JsonObject resp = new JsonObject();
-            resp.addProperty("message", e.getMessage());
-            String json = gson.toJson(resp);
+                logger.info("Client-caused exception while handling request", e);
 
-            // Send response
-            exchange.sendResponseHeaders(responseCode, json.length() == 0 ? -1 : json.length());
-            exchange.getResponseBody().write(json.getBytes(StandardCharsets.UTF_8));
+            resp = Response.withBody(e.code.httpResponseCode(), new ErrorResponse(e.getMessage()));
         } catch (RuntimeException e) {
             // Something went wrong with the code, and an exception went unhandled
-            logger.info("Unhandled runtime exception - this is a bug!", e);
-            throw e;  
+            logger.error("Unhandled runtime exception - this is a bug!", e);
+            exchange.close();
+            throw e;
+        }
+
+        // send the response
+        try {
+            String json = gson.toJson(resp.body);
+
+            exchange.sendResponseHeaders(resp.code, json.length() == 0 ? -1 : json.length());
+            exchange.getResponseBody().write(json.getBytes(StandardCharsets.UTF_8));
         } finally {
-            logger.info("HTTP " + responseCode + ": " + absolutePath);
             exchange.close();
         }
     }
 
-    private Response<?> handleRequest(String method, PathVariables pathVariables, InputStream inputStream, Endpoint endpoint) throws RestException, IOException {
-        try (InputStreamReader body = new InputStreamReader(inputStream)) {
-            switch (method) {
-                case "GET":
-                    return handleRequestWithHandler(pathVariables, body, endpoint.getHandler);
-                case "POST":
-                    return handleRequestWithHandler(pathVariables, body, endpoint.postHandler);
-                case "PUT":
-                    return handleRequestWithHandler(pathVariables, body, endpoint.putHandler);
-                case "DELETE":
-                    return handleRequestWithHandler(pathVariables, body, endpoint.deleteHandler);
-                default:
-                    throw new RestException(RestException.Code.UNKNOWN_METHOD);
-            }
+    private <Req extends RequestBody, Resp extends ResponseBody> Response<Resp> handleAndValidateRequest(
+            PathVariables pathVariables, Reader body, MethodHandler<Req, Resp> requestHandler) throws RestException {
+        try {
+            Req req = gson.fromJson(body, requestHandler.requestClass);
+            validateRequest(req);
+            return requestHandler.handler.handle(new Request<>(pathVariables, req));
+        } catch (JsonSyntaxException e) {
+            throw new RestException(RestException.Code.INVALID_STRUCTURE, e);
+        } catch (ValidationException e) {
+            throw new RestException(RestException.Code.INVALID_DATA, e);
         }
     }
 
-    private <Req extends RequestBody, Resp extends ResponseBody> Response<Resp> handleRequestWithHandler(PathVariables pathVariables, Reader body, MethodHandler<Req, Resp> requestHandler) throws RestException {
-        Req req;
+    private <Req extends RequestBody> void validateRequest(Req request) throws ValidationException {
         try {
-            req = gson.fromJson(body, requestHandler.requestClass);
-        } catch (JsonSyntaxException | NumberFormatException e) {
-            throw new RestException(RestException.Code.INVALID_STRUCTURE, e);
+            request.validate();
+        } catch (RuntimeException e) {
+            throw new ValidationException("Uncaught exception while validating request", e);
         }
-
-        if (req != null)
-            try {
-                req.validate();
-            } catch (ValidationException e) {
-                throw new RestException(RestException.Code.INVALID_DATA, e);
-            }
-        return requestHandler.handler.handle(new Request<>(pathVariables, req));
     }
 }
