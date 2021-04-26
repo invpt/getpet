@@ -82,7 +82,8 @@ public abstract class RestHttpHandler implements HttpHandler {
             PathVariables pathVariables, Reader body, MethodHandler<Req, Resp> requestHandler) throws RestException {
         try {
             Req req = gson.fromJson(body, requestHandler.requestClass);
-            validateRequest(req);
+            if (requestHandler.requestClass != RequestBody.EmptyRequest.class)
+                validateRequest(req);
             return requestHandler.handler.handle(new Request<>(pathVariables, req));
         } catch (JsonSyntaxException e) {
             throw new RestException(RestException.Code.INVALID_STRUCTURE, e);

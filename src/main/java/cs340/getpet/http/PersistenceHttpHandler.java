@@ -104,7 +104,8 @@ final class AnimalSearchRequest implements RequestBody {
     public void validate() throws ValidationException {
         Validator.assertNonNull(query, "Query must not be null");
         Validator.assertMatches(query.breed, "^[a-zA-Z ]{0,50}$", "Breed must be alphabetic and 50 characters or less.");
-        Validator.assertFalse(query.cageNumber < 0, "Cage number cannot be negative");
+        if (query.cageNumber != null)
+            Validator.assertFalse(query.cageNumber < 0, "Cage number cannot be negative");
     }
 }
 
@@ -142,7 +143,7 @@ final class AnimalPutRequest implements RequestBody {
     @Override
     public void validate() throws ValidationException {
         Validator.assertNonNull(animal, "Animal must not be null");
-        Validator.assertNull(animal.intakeNumber, "Animal must not contain an intake number; those are auto-assigned");
+        Validator.assertNull(animal.intakeNumber, "Animal intake number cannot be changed");
         Validator.assertFalse(animal.cageNumber < 0, "Cage number cannot be negative");
         Validator.assertNonNull(animal.species, "Animal must have species");
         Validator.assertNonNull(animal.breed, "Animal must have breed");

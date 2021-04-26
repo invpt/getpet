@@ -34,9 +34,12 @@ const onSubmit = ev => {
     ev.preventDefault();
 
     let updateRequest = { animal: readForm(document.getElementById('detailsForm')) };
+    
+    let intakeNumber = updateRequest.animal.intakeNumber;
+    delete updateRequest.animal.intakeNumber;
 
     apiCall({
-        endpoint: `/animal/${updateRequest.animal.intakeNumber}`,
+        endpoint: `/animal/${intakeNumber}`,
         method: 'PUT',
         body: updateRequest,
     })

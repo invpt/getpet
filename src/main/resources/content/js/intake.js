@@ -5,7 +5,7 @@ const onSubmit = ev => {
 
     let intakeRequest = { animal: readForm(document.getElementById('intakeForm')) };
 
-    intakeRequest.animal.intakeNumber = -1;
+    delete intakeRequest.animal.intakeNumber;
 
     apiCall({
         endpoint: `/animal/new`,
