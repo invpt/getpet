@@ -45,7 +45,7 @@ public abstract class RestHttpHandler implements HttpHandler {
                 PathVariables pathVariables = endpoint.path.match(endpointPath);
 
                 if (endpointFound = pathVariables != null) {
-                    Response<?> resp = handleFor(exchange.getRequestMethod(), pathVariables, exchange.getRequestBody(), endpoint);
+                    Response<?> resp = handleRequest(exchange.getRequestMethod(), pathVariables, exchange.getRequestBody(), endpoint);
                     String json = gson.toJson(resp.body);
 
                     exchange.sendResponseHeaders(responseCode = resp.code, json.length() == 0 ? -1 : json.length());
@@ -84,24 +84,24 @@ public abstract class RestHttpHandler implements HttpHandler {
         }
     }
 
-    private Response<?> handleFor(String method, PathVariables pathVariables, InputStream inputStream, Endpoint endpoint) throws RestException, IOException {
+    private Response<?> handleRequest(String method, PathVariables pathVariables, InputStream inputStream, Endpoint endpoint) throws RestException, IOException {
         try (InputStreamReader body = new InputStreamReader(inputStream)) {
             switch (method) {
                 case "GET":
-                    return fuck(pathVariables, body, endpoint.getHandler);
+                    return handleRequestWithHandler(pathVariables, body, endpoint.getHandler);
                 case "POST":
-                    return fuck(pathVariables, body, endpoint.postHandler);
+                    return handleRequestWithHandler(pathVariables, body, endpoint.postHandler);
                 case "PUT":
-                    return fuck(pathVariables, body, endpoint.putHandler);
+                    return handleRequestWithHandler(pathVariables, body, endpoint.putHandler);
                 case "DELETE":
-                    return fuck(pathVariables, body, endpoint.deleteHandler);
+                    return handleRequestWithHandler(pathVariables, body, endpoint.deleteHandler);
                 default:
                     throw new RestException(RestException.Code.UNKNOWN_METHOD);
             }
         }
     }
 
-    private <Req extends RequestBody, Resp extends ResponseBody> Response<Resp> fuck(PathVariables pathVariables, Reader body, MethodHandler<Req, Resp> requestHandler) throws RestException {
+    private <Req extends RequestBody, Resp extends ResponseBody> Response<Resp> handleRequestWithHandler(PathVariables pathVariables, Reader body, MethodHandler<Req, Resp> requestHandler) throws RestException {
         Req req;
         try {
             req = gson.fromJson(body, requestHandler.requestClass);
