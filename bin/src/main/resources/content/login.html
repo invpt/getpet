@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+        <title>Login</title>
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/login-style.css" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" />
+	</head>
+	<body>
+  
+		<header>
+		  <h3>Login</h3>
+		</header>
+		
+		<div class="credentialsFlex">
+			<p id="errorMessage" style="visibility: hidden; max-width:none; max-height: 0; color: red;">Login failed: Invalid username or password!</p>
+			<form class="credentials" id="credentials">
+				<div class="option" name="username" type="text">
+					<label for="username">Username</label>
+					<input type="text" name="username" id="username" />
+				</div>
+				
+				<div class="option" name="password" type="password">
+					<label for="password">Password</label>
+					<input type="password" name="password" id="password" />
+				</div>
+
+				<button type="submit" class="button submit" style="margin-top:3px;">Login</button>
+			</form>
+		</div>
+
+        <script src="/js/main.js"></script>
+        <script src="/js/login.js"></script>
+	</body>
+</html>
+	  

@@ -1,0 +1,45 @@
+.flexible{
+  display:flex;
+  flex-wrap:nowrap;
+  flex-direction:row;
+  justify-content:flex-start;
+  align-items:flex-start; 
+}
+
+.flexForm{
+    width: 100%;
+  display:flex;
+  flex-wrap:nowrap;
+  flex-direction:column;
+  align-items:center;
+  
+  margin-top:15px;
+}
+
+form {
+  background-color: #dadada;
+  border-style:solid;
+  border-width:2px;
+  border-color:#acacac;
+  border-radius: 10px;
+
+  display:flex;
+  flex-wrap:nowrap;
+  flex-direction:column;
+  justify-content:center;
+  align-content:center;
+
+  width:400px;
+  padding:10px;
+}
+
+#optionName, #optionBreed, #optionWeight{
+    width:360px;
+}
+#optionIntakeNumber{
+    width:172px;
+}
+
+#optionCageNumber{
+    width:169px;
+}

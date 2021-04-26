@@ -112,4 +112,36 @@ public class TestPersistence {
         // Assert that it no longer exists
         Assertions.assertNull(persistence.getAnimal(PREEXISTING_INTAKE_NUMBER));
     }
+	
+	@Test
+	public void testEmptyQuery() throws PersistenceException{
+		 Persistence persistence = new Persistence(":memory:");
+		// Empty Query
+		SearchQuery empty = new SearchQuery(null, null, null, null, null ,null , false, false);
+		
+		Assertions.assertEquals(persistence.search(empty).length, 9);
+	}
+	
+	@Test
+	public void testDuplicate() throws PersistenceException {
+		 Persistence persistence = new Persistence(":memory:");
+		 int animal = persistence.newAnimal(testingAnimals[0]);
+		 int duplicate = persistence.newAnimal(testingAnimals[1]);
+		 Assertions.assertNotEquals(duplicate, animal);
+	}
+	
+	@Test
+	public void testAddDelete() throws PersistenceException {
+		 Persistence persistence = new Persistence(":memory:");
+		 int animal = persistence.newAnimal(testingAnimals[0]);
+		 persistence.deleteAnimal(animal);
+		 Assertions.assertNull(animal);
+	}
+	
+	@Test
+	public void testAddTwice() throws PersistenceException {
+		 Persistence persistence = new Persistence(":memory:");
+		 int animal = persistence.newAnimal(persistence.getAnimal(1));
+		 //  not sure exactly what I need to assert here
+	}
 }
