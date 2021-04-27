@@ -1,1 +1,0 @@
-mvn -Dexec.mainClass="cs340.getpet.GetPet" compile exec:java

@@ -1,1 +1,0 @@
-requirePrivilegeLevel('any');
