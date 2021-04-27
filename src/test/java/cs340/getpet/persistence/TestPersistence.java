@@ -126,7 +126,7 @@ public class TestPersistence {
 	public void testDuplicate() throws PersistenceException {
 		 Persistence persistence = new Persistence(":memory:");
 		 int animal = persistence.newAnimal(testingAnimals[0]);
-		 int duplicate = persistence.newAnimal(testingAnimals[1]);
+		 int duplicate = persistence.newAnimal(testingAnimals[0]);
 		 Assertions.assertNotEquals(duplicate, animal);
 	}
 	
@@ -134,14 +134,14 @@ public class TestPersistence {
 	public void testAddDelete() throws PersistenceException {
 		 Persistence persistence = new Persistence(":memory:");
 		 int animal = persistence.newAnimal(testingAnimals[0]);
-		 persistence.deleteAnimal(animal);
-		 Assertions.assertNull(animal);
+		 Assertions.assertTrue(persistence.deleteAnimal(animal));
+		 Assertions.assertNull(persistence.getAnimal(animal));
 	}
 	
 	@Test
-	public void testAddTwice() throws PersistenceException {
+	public void testAddPreexisting() throws PersistenceException {
 		 Persistence persistence = new Persistence(":memory:");
 		 int animal = persistence.newAnimal(persistence.getAnimal(1));
-		 //  not sure exactly what I need to assert here
+         Assertions.assertEquals(persistence.getAnimal(1), persistence.getAnimal(animal));
 	}
 }
