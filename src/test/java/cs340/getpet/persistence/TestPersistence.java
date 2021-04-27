@@ -148,7 +148,7 @@ public class TestPersistence {
 	@Test
 	public void testSpecific() throws PersistenceException {
 		Persistence persistence = new Persistence(":memory:");
-		SearchQuery animal = new SearchQuery(Species.DOG, Gender.MALE,"Shiba Inu", Color.GOLD, Size.MEDIUM, 5, true, true);
+		SearchQuery animal = new SearchQuery(Species.DOG, new Gender[] { Gender.MALE}, "Shiba Inu", new Color[] { Color.GOLD }, new Size[] { Size.MEDIUM }, 2, true, true);
 		Assertions.assertEquals(persistence.search(animal).length, 1);
 	}
 	
@@ -170,7 +170,7 @@ public class TestPersistence {
 	
 	@Test
 	public void testAddAnimalSecondTime() throws PersistenceException {
-		Persistence persistence = new Persistence(":memeory:");
+		Persistence persistence = new Persistence(":memory:");
 		Assertions.assertNotEquals(persistence.newAnimal(persistence.getAnimal(1)),1);
 	}
 	
