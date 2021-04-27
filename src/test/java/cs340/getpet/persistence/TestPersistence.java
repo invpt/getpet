@@ -1,5 +1,7 @@
 package cs340.getpet.persistence;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -201,5 +203,44 @@ public class TestPersistence {
         Assertions.assertTrue(persistence.deleteAnimal(intakeNumber));
 
         Assertions.assertNull(persistence.getAnimal(intakeNumber));
+    }
+
+    @Test
+    public void testGetCages() throws PersistenceException {
+        Persistence persistence = new Persistence(":memory:");
+
+        Cage[] expected = new Cage[] {
+            new Cage(0, 1, 0),
+            new Cage(1, 0, 1),
+            new Cage(2, 2, 2),
+            new Cage(8, 1, 0),
+            new Cage(9, 1, 0),
+            new Cage(13, 1, 0)
+        };
+
+        Cage[] actual = persistence.getCages();
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetCagesNewAnimal() throws PersistenceException {
+        Persistence persistence = new Persistence(":memory:");
+
+        persistence.newAnimal(testingAnimals[1]);
+
+        Cage[] expected = new Cage[] {
+            new Cage(0, 1, 0),
+            new Cage(1, 0, 1),
+            new Cage(2, 2, 2),
+            new Cage(6, 0, 1),
+            new Cage(8, 1, 0),
+            new Cage(9, 1, 0),
+            new Cage(13, 1, 0)
+        };
+
+        Cage[] actual = persistence.getCages();
+
+        Assertions.assertArrayEquals(expected, actual);
     }
 }
