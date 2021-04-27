@@ -152,5 +152,26 @@ public class TestPersistence {
 		Assertions.assertEquals(persistence.search(animal).length, 1);
 	}
 	
+	@Test
+	public void testAddAnimalTwice() throws PersistenceException {
+		Persistence persistence = new Persistence(":memory:");
+		int intakeOne = persistence.newAnimal(testingAnimals[0]);
+		int intakeTwo = persistence.newAnimal(testingAnimals[0]);
+		Assertions.assertNotEquals(intakeOne, intakeTwo);
+	}
+	
+	@Test
+	public void testAddAnimalThenDelete() throws PersistenceException {
+		Persistence persistence = new Persistence(":memory:");
+		int intakeOne = persistence.newAnimal(testingAnimals[0]);
+		persistence.deleteAnimal(intakeOne);
+		Assertions.assertNull(persistence.getAnimal(intakeOne));
+	}
+	
+	@Test
+	public void testAddAnimalSecondTime() throws PersistenceException {
+		Persistence persistence = new Persistence(":memeory:");
+		Assertions.assertNotEquals(persistence.newAnimal(persistence.getAnimal(1)),1);
+	}
 	
 }
