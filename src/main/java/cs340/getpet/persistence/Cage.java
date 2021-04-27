@@ -22,4 +22,15 @@ public final class Cage {
         this.dogCount = dogCount;
         this.catCount = catCount;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Cage) {
+            Cage otherCage = (Cage) other;
+
+            return cageNumber == otherCage.cageNumber
+                    && dogCount == otherCage.dogCount
+                    && catCount == otherCage.catCount;
+        } else return false;
+    }
 }
