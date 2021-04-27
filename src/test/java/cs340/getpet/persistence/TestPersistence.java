@@ -21,6 +21,19 @@ public class TestPersistence {
                 .name("Doge")
                 .missing(false)
                 .build(),
+        new Animal.Builder()
+                .cageNumber(6)
+                .species(Species.CAT)
+                .breed("Tabby")
+                .size(Size.SMALL)
+                .colors(new Color[] { Color.GOLD, Color.WHITE })
+                .gender(Gender.MALE)
+                .weight(22.0)
+                .vaccinated(true)
+                .spayNeuter(true)
+                .name("Garfield")
+                .missing(false)
+                .build(),
     };
 
     @Test
@@ -174,4 +187,19 @@ public class TestPersistence {
 		Assertions.assertNotEquals(persistence.newAnimal(persistence.getAnimal(1)),1);
 	}
 	
+    @Test
+    public void testAddUpdateDelete() throws PersistenceException {
+        Persistence persistence = new Persistence(":memory:");
+        
+        int intakeNumber = persistence.newAnimal(testingAnimals[0]);
+
+        Assertions.assertTrue(persistence.updateAnimal(intakeNumber, testingAnimals[1]));
+
+        Assertions.assertNotEquals(testingAnimals[0], persistence.getAnimal(intakeNumber));
+        Assertions.assertEquals(testingAnimals[1], persistence.getAnimal(intakeNumber));
+
+        Assertions.assertTrue(persistence.deleteAnimal(intakeNumber));
+
+        Assertions.assertNull(persistence.getAnimal(intakeNumber));
+    }
 }
