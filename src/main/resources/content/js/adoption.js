@@ -8,6 +8,7 @@ const fillDetails = response => {
     if (animal) {
         document.getElementById('animalName').innerText = animal.name;
         document.getElementById('animalIntakeNumber').innerText = animal.intakeNumber;
+        document.getElementById('animalCageNumber').innerText = animal.cageNumber;
     }
 }
 
