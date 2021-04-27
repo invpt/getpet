@@ -113,8 +113,7 @@ public class Animal {
         if (o instanceof Animal) {
             Animal a = (Animal) o;
 
-            return (intakeNumber == null || intakeNumber.equals(a.intakeNumber))
-                    && cageNumber == a.cageNumber
+            return cageNumber == a.cageNumber
                     && species == a.species
                     && vaccinated == a.vaccinated
                     && breed.equals(a.breed)
