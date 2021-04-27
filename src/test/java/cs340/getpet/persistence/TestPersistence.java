@@ -144,4 +144,13 @@ public class TestPersistence {
 		 int animal = persistence.newAnimal(persistence.getAnimal(1));
          Assertions.assertEquals(persistence.getAnimal(1), persistence.getAnimal(animal));
 	}
+	
+	@Test
+	public void testSpecific() throws PersistenceException {
+		Persistence persistence = new Persistence(":memory:");
+		SearchQuery animal = new SearchQuery(Species.DOG, Gender.MALE,"Shiba Inu", Color.GOLD, Size.MEDIUM, 5, true, true);
+		Assertions.assertEquals(persistence.search(animal).length, 1);
+	}
+	
+	
 }
